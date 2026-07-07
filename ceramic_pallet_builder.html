@@ -199,14 +199,12 @@
 
             const bL = parseFloat(document.getElementById('pbBoxLen').value) || 0;
             const bW = parseFloat(document.getElementById('pbBoxWid').value) || 0;
-            const bH = parseFloat(document.getElementById('pbBoxHeight').value) || 0;
+            const bH = parseFloat(document.getElementById('pbBoxHei').value) || 0;
             const bWt = parseFloat(document.getElementById('pbBoxWeight').value) || 0;
 
             if(pL<=0 || pW<=0 || pMaxH<=0 || bL<=0 || bW<=0 || bH<=0) return;
 
-            // Check configuration A (Length to Length)
             const colsA = Math.floor(pL / bL); const rowsA = Math.floor(pW / bW); const perLayerA = colsA * rowsA;
-            // Check configuration B (Length to Width - Rotated)
             const colsB = Math.floor(pL / bW); const rowsB = Math.floor(pW / bL); const perLayerB = colsB * rowsB;
 
             let finalCols, finalRows, boxesPerLayer;
@@ -293,14 +291,12 @@
                 };
             }
 
-            // Render Pallet Wood Base
             ctx3d.strokeStyle = 'rgba(148, 163, 184, 0.4)';
             ctx3d.lineWidth = 1.5;
             let p0 = project3D(0,0,0), pL_pt = project3D(pL,0,0), pW_pt = project3D(0,pW,0), pLW_pt = project3D(pL,pW,0);
             ctx3d.beginPath(); ctx3d.moveTo(p0.x, p0.y); ctx3d.lineTo(pL_pt.x, pL_pt.y); ctx3d.lineTo(pLW_pt.x, pLW_pt.y); ctx3d.lineTo(pW_pt.x, pW_pt.y); ctx3d.closePath();
             ctx3d.fillStyle = '#334155'; ctx3d.fill(); ctx3d.stroke();
 
-            // Render Boxes
             ctx3d.strokeStyle = 'rgba(15, 23, 42, 0.3)';
             ctx3d.lineWidth = 0.5;
 
@@ -314,17 +310,14 @@
                         let cA_b = project3D(x, y, z); let cB_b = project3D(x + itemDrawL, y, z);
                         let cC_b = project3D(x + itemDrawL, y + itemDrawW, z); let cD_b = project3D(x, y + itemDrawW, z);
 
-                        // Top
                         ctx3d.fillStyle = '#fbbf24'; ctx3d.beginPath();
                         ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cD.x, cD.y);
                         ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
 
-                        // Right Face
                         ctx3d.fillStyle = '#d97706'; ctx3d.beginPath();
                         ctx3d.moveTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cC_b.x, cC_b.y); ctx3d.lineTo(cB_b.x, cB_b.y);
                         ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
 
-                        // Left Face
                         ctx3d.fillStyle = '#b45309'; ctx3d.beginPath();
                         ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cD.x, cD.y); ctx3d.lineTo(cD_b.x, cD_b.y); ctx3d.lineTo(cA_b.x, cA_b.y);
                         ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
