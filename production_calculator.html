@@ -64,15 +64,22 @@
 
   /* Print styles: only the printable summary shows on paper */
   @media print{
+    @page{ size:A4; margin:10mm; }
     header, .no-print { display:none !important; }
-    body{background:#fff;color:#000;}
-    .card{background:#fff;box-shadow:none;border:1px solid #000;color:#000;}
-    .card h2{color:#000;}
+    body{background:#fff;color:#000;font-size:11px;}
+    .card{background:#fff;box-shadow:none;border:1px solid #999;padding:10px 12px;margin-bottom:8px;color:#000;page-break-inside:avoid;border-radius:6px;}
+    .card h2{color:#000;font-size:.95rem;margin:0 0 8px;padding-bottom:4px;}
     th{background:#eee;color:#000;}
+    th,td{padding:4px 6px;font-size:10.5px;}
+    .sum-item{padding:2px 0;font-size:10.5px;}
     .sum-item .v, .sum-item .k{color:#000;}
+    .sum-item .k{font-size:.62rem;}
     .print-only{display:block !important;}
+    #orderSummaryGrid{grid-template-columns:repeat(4,1fr) !important;column-gap:10px;}
     main{max-width:100%;margin:0;padding:0;}
-    .delivery-box{background:#eee !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .delivery-box{background:#eee !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:10px 14px;}
+    .delivery-box .date{font-size:1.1rem;}
+    .day-input{border:1px solid #999;background:#fff;color:#000;width:40px;font-size:10.5px;padding:2px;}
   }
 </style>
 </head>
@@ -159,9 +166,12 @@
   </div>
 
   <div class="delivery-box">
-    <div>
-      <div class="label">🚚 Confirmed Delivery Date</div>
-      <div class="date" id="deliveryDateBig">—</div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img id="qrCode" width="76" height="76" style="border-radius:8px;background:#fff;padding:4px;" alt="QR code with order details">
+      <div>
+        <div class="label">🚚 Confirmed Delivery Date</div>
+        <div class="date" id="deliveryDateBig">—</div>
+      </div>
     </div>
     <div class="actions no-print">
       <button class="btn" id="printBtn">🖨️ Print</button>
@@ -248,6 +258,14 @@ function renderOrderSummary(){
   ];
   const grid = document.getElementById('orderSummaryGrid');
   grid.innerHTML = rows.map(([k,v])=>`<div class="sum-item"><span class="k">${k}</span><span class="v">${v || '—'}</span></div>`).join('');
+  updateQrCode(d);
+}
+
+function updateQrCode(d){
+  const qrText = `Order: ${d.orderNo||'-'}\nCustomer: ${d.customerName||'-'}\nItem: ${d.itemName||d.itemCode||'-'}\nQty: ${d.salesQty||'-'}\nDelivery: ${d.deliveryDate||'-'}`;
+  const url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=2&data=' + encodeURIComponent(qrText);
+  const img = document.getElementById('qrCode');
+  if(img) img.src = url;
 }
 
 function renderTimelineSkeleton(){
