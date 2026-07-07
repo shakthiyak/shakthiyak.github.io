@@ -79,8 +79,9 @@
             align-items: center;
             justify-content: center;
             padding: 60px 20px;
-            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), 
-                        url('https://images.unsplash.com/photo-1565192647048-f997ed879ab9?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+            /* 🌟 Ceramic Industrial Production Facility Image */
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.95)), 
+                        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
         }
 
         .hero-container {
@@ -159,6 +160,28 @@
             color: #94a3b8;
             line-height: 1.6;
             font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        /* 👔 LinkedIn Button Style */
+        .linkedin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #0077b5;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 181, 0.2);
+        }
+
+        .linkedin-btn:hover {
+            background-color: #005987;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 119, 181, 0.3);
         }
 
         /* 🛠 Tool Card Preview (The Calculator Section) */
@@ -210,16 +233,23 @@
             margin-bottom: 25px;
         }
 
+        /* 🏺 Real Ceramic Moulding / Slip Casting Image Replacement */
         .tool-image {
             flex: 1;
-            height: 250px;
-            background: linear-gradient(rgba(30, 41, 59, 0.2), rgba(15, 23, 42, 0.4)),
-                        url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop') no-repeat center center/cover;
+            height: 280px;
+            background: linear-gradient(rgba(30, 41, 59, 0.1), rgba(15, 23, 42, 0.3)),
+                        url('https://images.unsplash.com/photo-1595304192806-a28a2a89a08e?q=80&w=600&auto=format&fit=crop') no-repeat center center/cover;
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* 🚀 Call To Action Button */
+        /* 🚀 Action Buttons Group */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         .cta-btn {
             display: inline-flex;
             align-items: center;
@@ -241,6 +271,28 @@
             background: linear-gradient(to right, #38bdf8, #2563eb);
         }
 
+        /* 📥 Download Button Style */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #10b981;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
         /* 👣 Premium Minimal Footer */
         footer {
             padding: 40px 0;
@@ -255,12 +307,12 @@
             .hero-container, .tool-card { flex-direction: column; text-align: center; }
             .tool-info { text-align: center; }
             .profile-img { width: 240px; height: 240px; }
+            .btn-group { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌐 Premium Navigation -->
     <nav>
         <div class="logo">
             SC. <span>Portfolio</span>
@@ -271,41 +323,47 @@
         </ul>
     </nav>
 
-    <!-- 📸 Hero Personal Section -->
     <div class="hero">
         <div class="hero-container">
             
-            <!-- 🧍‍♂️ ඔයාගේ සැබෑ පින්තූරය සම්බන්ධ වන ස්ථානය -->
             <div class="profile-img-container">
-                <img src="my-profile.png" alt="Shakthi Chathuranga" class="profile-img">
+                <img src="my-profile.jpg" alt="Shakthi Chathuranga" class="profile-img">
             </div>
 
             <div class="hero-content">
                 <div class="profile-badge">👋 Welcome to My Professional Space</div>
                 <h1>Hi, I'm <span>Shakthi Chathuranga</span><br>Production & Data Automation Specialist</h1>
                 <p>කර්මාන්තශාලීය දත්ත කළමනාකරණය, Yield Calculations සහ ERP Automation (VBA/Excel) හරහා නිෂ්පාදන ක්‍රියාවලීන් වඩාත් කාර්යක්ෂම සහ ක්‍රමවත් කිරීමට මා විසින් නිර්මාණය කරන ලද මධ්‍යගත පද්ධතිය.</p>
+                
+                <a href="https://www.linkedin.com" target="_blank" class="linkedin-btn">
+                    💼 Connect on LinkedIn
+                </a>
             </div>
 
         </div>
     </div>
 
-    <!-- 🛠 Embedded Built-In System Tool Section -->
     <div class="tools-section">
         <div class="tool-card">
             <div class="tool-info">
                 <span class="tool-tag">Internal Core System Tool</span>
                 <h2>Ceramic Production Calculator</h2>
-                <p>Clay Loss %, Firing Yield % සහ සාධක සලකා බලමින්, කර්මාන්තශාලාවේ නිෂ්පාදන දින ගණන සහ නිවැරදිම Confirmed Delivery Date එක සජීවීව တွက်တွက် බලන, Google Sheet එකට කෙලින්ම Data Sync වෙන ප්‍රධාන කළමනාකරණ මෙවලම.</p>
+                <p>Clay Loss %, Firing Yield % සහ සාධක සලකා බලමින්, කර්මාන්තශාලාවේ නිෂ්පාදන දින ගණන සහ නිවැරදිම Confirmed Delivery Date එක සජීවීව တွက်တွက် බලන ප්‍රධාන කළමනාකරණ මෙවලම.</p>
                 
-                <a href="production_calculator.html" target="_blank" class="cta-btn">
-                    Launch Production Calculator Tool 🚀
-                </a>
+                <div class="btn-group">
+                    <a href="production_calculator.html" target="_blank" class="cta-btn">
+                        Launch Web Tool 🚀
+                    </a>
+                    
+                    <a href="https://drive.google.com" target="_blank" class="download-btn">
+                        📥 Download Excel (.xlsm)
+                    </a>
+                </div>
             </div>
             <div class="tool-image"></div>
         </div>
     </div>
 
-    <!-- 👣 Footer -->
     <footer>
         &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
     </footer>
