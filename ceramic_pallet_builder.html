@@ -3,84 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ceramic Pallet Builder</title>
+    <title>Pallet Builder (Boxes) | Shakthi Chathuranga</title>
+    <meta name="description" content="Interactive 2D/3D pallet loading and stacking optimization tool.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22>SC</text></svg>">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #2ecc71;
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --border-color: #cbd5e1;
+            --bg-color: #0f172a;
+            --card-bg: linear-gradient(135deg, #1e293b, #0f172a);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
 
-        .header-area {
-            width: 100%;
-            max-width: 1100px;
+        /* Navigation Bar - Synchronized Theme */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+            background: linear-gradient(to right, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
+        .nav-tabs a {
+            display: flex; align-items: center; padding: 0 20px; text-decoration: none;
+            color: var(--text-muted); font-weight: 500; height: 100%; transition: all 0.3s ease;
+            border-bottom: 3px solid transparent; white-space: nowrap;
+        }
+        .nav-tabs a:hover, .nav-tabs a.active { color: var(--accent-blue); border-bottom: 3px solid var(--accent-blue); }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 26px;
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
+
+        .tool-header h1 { font-size: 28px; font-weight: 700; color: #ffffff; }
 
         .back-btn {
-            background-color: #7f8c8d;
-            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
             font-size: 14px;
-            font-weight: bold;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.2s;
         }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent-blue); }
 
-        .back-btn:hover {
-            background-color: #95a5a6;
-        }
-
+        /* Main Workspace Structure */
         .cpb-main-container {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            max-width: 1100px;
-            width: 100%;
-            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 20px;
         }
 
         .cpb-controls {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            min-width: 300px;
+            gap: 18px;
+            min-width: 320px;
         }
 
         .section-title {
-            margin: 0 0 5px 0;
-            font-size: 16px;
-            color: var(--primary-color);
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            color: var(--accent-blue);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
         }
 
         .cpb-input-grid {
@@ -92,189 +115,198 @@
         .cpb-input-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
         }
 
         .cpb-input-group label {
-            font-weight: 600;
-            color: #475569;
+            font-weight: 500;
+            color: var(--text-muted);
             font-size: 13px;
         }
 
         .cpb-input-group input {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             font-size: 14px;
-            background: #f8fafc;
-            transition: border 0.2s;
+            background: rgba(15, 23, 42, 0.6);
+            color: #ffffff;
+            transition: all 0.2s;
         }
 
         .cpb-input-group input:focus {
-            border-color: #3498db;
+            border-color: var(--accent-blue);
             outline: none;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1);
         }
 
-        .cpb-btn {
-            background-color: var(--accent-color);
-            color: white;
+        .cta-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(to right, #0ea5e9, #2563eb);
+            color: #ffffff;
             border: none;
             padding: 14px;
-            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
+            transition: all 0.3s ease;
             margin-top: 10px;
-            transition: background 0.2s, transform 0.1s;
         }
+        .cta-btn:hover { transform: translateY(-2px); background: linear-gradient(to right, #38bdf8, #2563eb); }
 
-        .cpb-btn:hover {
-            background-color: #27ae60;
-        }
-
-        .cpb-btn:active {
-            transform: scale(0.98);
-        }
-
+        /* Computed Data Blocks */
         .cpb-stats {
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 5px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 12px;
         }
 
         .cpb-stat-row {
             display: flex;
             justify-content: space-between;
-            margin: 6px 0;
+            margin: 8px 0;
+            font-size: 14px;
+            color: var(--text-muted);
         }
 
         .cpb-stats span {
-            font-weight: bold;
-            color: #38bdf8;
+            font-weight: 600;
+            color: #4ade80;
         }
+        .cpb-stats span.highlight { color: var(--accent-blue); }
 
+        /* Previews Framework Panels */
         .cpb-visualizer {
             flex: 2;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .cpb-view-box {
             flex: 1;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
-            min-width: 280px;
+            min-width: 290px;
         }
 
         .cpb-view-box h4 {
-            margin: 0 0 10px 0;
-            color: #64748b;
-            font-size: 14px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .cpb-view-box canvas {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
             width: 100%;
             height: auto;
         }
 
-        @media (max-width: 850px) {
-            .cpb-main-container {
-                flex-direction: column;
-            }
-            .header-area {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
+        @media (max-width: 900px) {
+            .cpb-main-container { flex-direction: column; }
+            .tool-header { flex-direction: column; gap: 15px; text-align: center; }
+            nav { padding: 0 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-area">
-        <h1>🧱 Ceramic Pallet Builder</h1>
-        <a href="tools.html" class="back-btn">← Back to Tools</a>
-    </div>
+    <nav>
+        <a href="index.html" class="logo">SC. <span>Portal</span></a>
+        <ul class="nav-tabs">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tools.html" class="active">Production Tools</a></li>
+        </ul>
+    </nav>
 
-    <div class="cpb-main-container">
-        <div class="cpb-controls">
-            <div class="section-title">Pallet Dimensions</div>
-            <div class="cpb-input-grid">
-                <div class="cpb-input-group">
-                    <label>Pallet Length (mm)</label>
-                    <input type="number" id="cpbPalletLen" value="1200">
+    <div class="page-container">
+        
+        <div class="tool-header">
+            <h1>🧱 Pallet Builder (Boxes)</h1>
+            <a href="tools.html" class="back-btn">← Back to Tools</a>
+        </div>
+
+        <div class="cpb-main-container">
+            <div class="cpb-controls">
+                <div class="section-title">Pallet Platform Size</div>
+                <div class="cpb-input-grid">
+                    <div class="cpb-input-group">
+                        <label>Pallet Length (mm)</label>
+                        <input type="number" id="cpbPalletLen" value="1200">
+                    </div>
+                    <div class="cpb-input-group">
+                        <label>Pallet Width (mm)</label>
+                        <input type="number" id="cpbPalletWid" value="1000">
+                    </div>
                 </div>
+                
+                <div class="section-title">Box Outer Dimensions</div>
+                <div class="cpb-input-grid">
+                    <div class="cpb-input-group">
+                        <label>Box Length (mm)</label>
+                        <input type="number" id="cpbBoxLen" value="400">
+                    </div>
+                    <div class="cpb-input-group">
+                        <label>Box Width (mm)</label>
+                        <input type="number" id="cpbBoxWid" value="300">
+                    </div>
+                    <div class="cpb-input-group">
+                        <label>Box Height (mm)</label>
+                        <input type="number" id="cpbBoxHei" value="200">
+                    </div>
+                    <div class="cpb-input-group">
+                        <label>Box Gross Weight (kg)</label>
+                        <input type="number" id="cpbBoxWeight" value="22">
+                    </div>
+                </div>
+                
+                <div class="section-title">Volumetric Loading</div>
                 <div class="cpb-input-group">
-                    <label>Pallet Width (mm)</label>
-                    <input type="number" id="cpbPalletWid" value="1000">
+                    <label>Number of Layers</label>
+                    <input type="number" id="cpbLayers" value="5">
+                </div>
+                
+                <button class="cta-btn" onclick="runPalletBuilderEngine()">Calculate & Build Layout 🚀</button>
+                
+                <div class="section-title" style="margin-top: 5px;">Computed Layout Data</div>
+                <div class="cpb-stats">
+                    <div class="cpb-stat-row">Boxes per Layer: <span id="cpbOutLayerBoxes" class="highlight">0</span></div>
+                    <div class="cpb-stat-row">Total Boxes Loaded: <span id="cpbOutTotalBoxes" class="highlight">0</span></div>
+                    <div class="cpb-stat-row">Total Stacking Height: <span id="cpbOutHeight">0</span> mm</div>
+                    <div class="cpb-stat-row">Total Cargo Mass Weight: <span id="cpbOutWeight">0</span> kg</div>
+                    <div class="cpb-stat-row">Pallet Area Utilization: <span id="cpbOutEfficiency" style="color: #38bdf8;">0</span>%</div>
                 </div>
             </div>
-            
-            <div class="section-title">Box Dimensions & Specification</div>
-            <div class="cpb-input-grid">
-                <div class="cpb-input-group">
-                    <label>Box Length (mm)</label>
-                    <input type="number" id="cpbBoxLen" value="400">
+
+            <div class="cpb-visualizer">
+                <div class="cpb-view-box">
+                    <h4>2D Loading Blueprint (Top View)</h4>
+                    <canvas id="cpbCanvas2D" width="400" height="320"></canvas>
                 </div>
-                <div class="cpb-input-group">
-                    <label>Box Width (mm)</label>
-                    <input type="number" id="cpbBoxWid" value="300">
+                <div class="cpb-view-box">
+                    <h4>3D Isometric Stacking Model</h4>
+                    <canvas id="cpbCanvas3D" width="400" height="320"></canvas>
                 </div>
-                <div class="cpb-input-group">
-                    <label>Box Height (mm)</label>
-                    <input type="number" id="cpbBoxHei" value="200">
-                </div>
-                <div class="cpb-input-group">
-                    <label>Box Weight (kg)</label>
-                    <input type="number" id="cpbBoxWeight" value="22">
-                </div>
-            </div>
-            
-            <div class="section-title">Stacking Height</div>
-            <div class="cpb-input-group">
-                <label>Number of Layers</label>
-                <input type="number" id="cpbLayers" value="5">
-            </div>
-            
-            <button class="cpb-btn" onclick="runCeramicPalletBuilder()">Generate Layout</button>
-            
-            <div class="section-title" style="margin-top: 10px;">Calculation Results</div>
-            <div class="cpb-stats">
-                <div class="cpb-stat-row">Boxes per Layer: <span id="cpbOutLayerBoxes">0</span></div>
-                <div class="cpb-stat-row">Total Boxes Stacked: <span id="cpbOutTotalBoxes">0</span></div>
-                <div class="cpb-stat-row">Total Height: <span id="cpbOutHeight">0</span> mm</div>
-                <div class="cpb-stat-row">Total Cargo Weight: <span id="cpbOutWeight">0</span> kg</div>
-                <div class="cpb-stat-row">Pallet Surface Efficiency: <span id="cpbOutEfficiency">0</span>%</div>
             </div>
         </div>
 
-        <div class="cpb-visualizer">
-            <div class="cpb-view-box">
-                <h4>2D Floor Plan (Top View)</h4>
-                <canvas id="cpbCanvas2D" width="400" height="320"></canvas>
-            </div>
-            <div class="cpb-view-box">
-                <h4>3D Stacking View (Isometric)</h4>
-                <canvas id="cpbCanvas3D" width="400" height="320"></canvas>
-            </div>
-        </div>
     </div>
 
     <script>
-        function runCeramicPalletBuilder() {
-            // 1. Get Values
+        function runPalletBuilderEngine() {
+            // 1. Core Inputs Extractor
             const pL = parseFloat(document.getElementById('cpbPalletLen').value) || 0;
             const pW = parseFloat(document.getElementById('cpbPalletWid').value) || 0;
             const bL = parseFloat(document.getElementById('cpbBoxLen').value) || 0;
@@ -283,7 +315,7 @@
             const bWt = parseFloat(document.getElementById('cpbBoxWeight').value) || 0;
             const layers = parseInt(document.getElementById('cpbLayers').value) || 0;
 
-            // 2. Grid Arrangement Logic
+            // 2. Compute Layout Structure Mathematical Logic
             const cols = Math.floor(pL / bL);
             const rows = Math.floor(pW / bW);
             const boxesPerLayer = cols * rows;
@@ -292,34 +324,35 @@
             const heightTotal = layers * bH;
             const efficiency = pL * pW > 0 ? (((boxesPerLayer * bL * bW) / (pL * pW)) * 100).toFixed(1) : 0;
 
-            // 3. Update Text Values
+            // 3. UI Analytics Dashboard Pipeline Updater
             document.getElementById('cpbOutLayerBoxes').innerText = boxesPerLayer;
             document.getElementById('cpbOutTotalBoxes').innerText = totalBoxes;
             document.getElementById('cpbOutHeight').innerText = heightTotal;
             document.getElementById('cpbOutWeight').innerText = totalWeight.toLocaleString();
             document.getElementById('cpbOutEfficiency').innerText = efficiency;
 
-            // 4. Render 2D Canvas
+            // 4. Render 2D Viewport Logic
             const c2d = document.getElementById('cpbCanvas2D');
             const ctx2d = c2d.getContext('2d');
-            ctx2d.clearRect(0, 0, c2d.width, c2d.height);
+            ctx2d.fillStyle = '#0f172a';
+            ctx2d.fillRect(0, 0, c2d.width, c2d.height);
 
             if(pL > 0 && pW > 0) {
-                const scale2d = Math.min((c2d.width - 30) / pL, (c2d.height - 30) / pW);
+                const scale2d = Math.min((c2d.width - 40) / pL, (c2d.height - 40) / pW);
                 const oX2d = (c2d.width - (pL * scale2d)) / 2;
                 const oY2d = (c2d.height - (pW * scale2d)) / 2;
 
-                // Draw Wood Pallet Base
-                ctx2d.fillStyle = '#d7ccc8';
+                // Draw Wood Platform Frame Base
+                ctx2d.fillStyle = '#3e2723';
                 ctx2d.fillRect(oX2d, oY2d, pL * scale2d, pW * scale2d);
-                ctx2d.strokeStyle = '#8d6e63';
+                ctx2d.strokeStyle = '#5d4037';
                 ctx2d.lineWidth = 2;
                 ctx2d.strokeRect(oX2d, oY2d, pL * scale2d, pW * scale2d);
 
-                // Draw Box Grid Layout
-                ctx2d.fillStyle = '#cfd8dc';
-                ctx2d.strokeStyle = '#455a64';
-                ctx2d.lineWidth = 1;
+                // Draw 2D Blocks Array Grid Layer
+                ctx2d.fillStyle = 'rgba(56, 189, 248, 0.15)';
+                ctx2d.strokeStyle = '#38bdf8';
+                ctx2d.lineWidth = 1.5;
                 for (let r = 0; r < rows; r++) {
                     for (let c = 0; c < cols; c++) {
                         let bx = oX2d + (c * bL * scale2d);
@@ -330,32 +363,45 @@
                 }
             }
 
-            // 5. Render 3D Isometric View
+            // 5. Advanced Render 3D Engine Model (Auto-Scaling Matrix)
             const c3d = document.getElementById('cpbCanvas3D');
             const ctx3d = c3d.getContext('2d');
-            ctx3d.clearRect(0, 0, c3d.width, c3d.height);
+            ctx3d.fillStyle = '#0f172a';
+            ctx3d.fillRect(0, 0, c3d.width, c3d.height);
 
             if(pL > 0 && pW > 0 && boxesPerLayer > 0) {
-                const scale3d = Math.min(c3d.width / (pL + pW), c3d.height / (pW + (layers * bH * 1.3))) * 0.72;
+                const cos30 = Math.cos(Math.PI / 6);
+                const sin30 = Math.sin(Math.PI / 6);
+
+                // Compute bounding matrix for perfect isometric sizing boundaries
+                const isoWidth = (pL + pW) * cos30;
+                const isoHeight = (pL + pW) * sin30 + (layers * bH);
+
+                // Dynamic viewport scale factor
+                const scale3d = Math.min((c3d.width * 0.82) / isoWidth, (c3d.height * 0.82) / isoHeight);
+                
+                // Centering translation coefficients formulas
+                const centerX = c3d.width / 2 - ((pL - pW) / 2) * cos30 * scale3d;
+                const baselineY = c3d.height / 2 - ((pL + pW) * sin30 - (layers * bH)) * scale3d / 2;
                 
                 function project(x, y, z) {
                     return {
-                        x: c3d.width / 2 + (x - y) * Math.cos(Math.PI / 6) * scale3d,
-                        y: c3d.height * 0.75 + (x + y) * Math.sin(Math.PI / 6) * scale3d - (z * scale3d)
+                        x: centerX + (x - y) * cos30 * scale3d,
+                        y: baselineY + (x + y) * sin30 * scale3d - (z * scale3d)
                     };
                 }
 
-                // Pallet Base 3D
-                ctx3d.fillStyle = '#8d6e63';
+                // Render 3D Base Wood Pallet Slate
+                ctx3d.fillStyle = '#5d4037';
                 ctx3d.beginPath();
                 let pt0 = project(0, 0, 0); let pt1 = project(pL, 0, 0);
                 let pt2 = project(pL, pW, 0); let pt3 = project(0, pW, 0);
                 ctx3d.moveTo(pt0.x, pt0.y); ctx3d.lineTo(pt1.x, pt1.y); ctx3d.lineTo(pt2.x, pt2.y); ctx3d.lineTo(pt3.x, pt3.y);
                 ctx3d.closePath(); ctx3d.fill();
-                ctx3d.strokeStyle = '#5d4037'; ctx3d.stroke();
+                ctx3d.strokeStyle = '#3e2723'; ctx3d.stroke();
 
-                // Stacking Boxes (Bottom Layer to Top Layer)
-                ctx3d.strokeStyle = '#37474f';
+                // Build Stacks Rendering System Layers Iteration
+                ctx3d.strokeStyle = 'rgba(0,0,0,0.18)';
                 ctx3d.lineWidth = 1;
                 for (let h = 0; h < layers; h++) {
                     for (let r = rows - 1; r >= 0; r--) {
@@ -363,34 +409,4 @@
                             let x = c * bL; let y = r * bW; let z = h * bH;
 
                             let pA = project(x, y, z + bH); let pB = project(x + bL, y, z + bH);
-                            let pC = project(x + bL, y + bW, z + bH); let pD = project(x, y + bW, z + bH);
-                            let pA_bot = project(x, y, z); let pB_bot = project(x + bL, y, z);
-                            let pC_bot = project(x + bL, y + bW, z); let pD_bot = project(x, y + bW, z);
-
-                            // Top Face
-                            ctx3d.fillStyle = '#ffe082'; ctx3d.beginPath();
-                            ctx3d.moveTo(pA.x, pA.y); ctx3d.lineTo(pB.x, pB.y); ctx3d.lineTo(pC.x, pC.y); ctx3d.lineTo(pD.x, pD.y);
-                            ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
-
-                            // Right Face Shadow
-                            ctx3d.fillStyle = '#ffca28'; ctx3d.beginPath();
-                            ctx3d.moveTo(pB.x, pB.y); ctx3d.lineTo(pC.x, pC.y); ctx3d.lineTo(pC_bot.x, pC_bot.y); ctx3d.lineTo(pB_bot.x, pB_bot.y);
-                            ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
-
-                            // Left Face Shadow
-                            ctx3d.fillStyle = '#ffb300'; ctx3d.beginPath();
-                            ctx3d.moveTo(pA.x, pA.y); ctx3d.lineTo(pD.x, pD.y); ctx3d.lineTo(pD_bot.x, pD_bot.y); ctx3d.lineTo(pA_bot.x, pA_bot.y);
-                            ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
-                        }
-                    }
-                }
-            }
-        }
-
-        // Initialize App on Load
-        document.addEventListener("DOMContentLoaded", function() {
-            runCeramicPalletBuilder();
-        });
-    </script>
-</body>
-</html>
+                            let pC = project(x + bL, y + bW, z + bH); let pD = project(x, y + bW, z + bH
