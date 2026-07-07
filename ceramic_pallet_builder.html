@@ -111,3 +111,231 @@
                     <div class="pb-input-group">
                         <label>Length (mm)</label>
                         <input type="number" id="pbPalletLen" value="1200" oninput="setCustomPreset()">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Width (mm)</label>
+                        <input type="number" id="pbPalletWid" value="1000" oninput="setCustomPreset()">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Max Stack Height (mm)</label>
+                        <input type="number" id="pbMaxHeight" value="1400">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Max Weight Cap (kg)</label>
+                        <input type="number" id="pbMaxWeight" value="1500">
+                    </div>
+                </div>
+                
+                <div class="section-title">Carton / Box Metrics</div>
+                <div class="pb-input-grid">
+                    <div class="pb-input-group">
+                        <label>Box Length (mm)</label>
+                        <input type="number" id="pbBoxLen" value="400">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Box Width (mm)</label>
+                        <input type="number" id="pbBoxWid" value="300">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Box Height (mm)</label>
+                        <input type="number" id="pbBoxHei" value="250">
+                    </div>
+                    <div class="pb-input-group">
+                        <label>Gross Weight (kg)</label>
+                        <input type="number" id="pbBoxWeight" value="18">
+                    </div>
+                </div>
+                
+                <button class="cta-btn" onclick="runPalletEngine()">Calculate & Build Layout 🚀</button>
+                
+                <div class="section-title">Stacking Efficiency Insights</div>
+                <div class="pb-stats">
+                    <div class="pb-stat-row">Total Boxes Loaded: <span id="pbOutTotalBoxes" class="highlight">0 Cartons</span></div>
+                    <div class="pb-stat-row">Total Layers Achieved: <span id="pbOutLayers" style="color:#ffffff;">0 Layers</span></div>
+                    <div class="pb-stat-row">Boxes Per Layer: <span id="pbOutPerLayer">0 units</span></div>
+                    <div class="pb-stat-row">Total Cargo Weight: <span id="pbOutWeight">0</span> / <span id="pbMaxWeightLimit" style="color:var(--text-muted)">0</span> kg</div>
+                    <div class="pb-stat-row">Volumetric Efficiency: <span id="pbOutVolEfficiency" style="color:#38bdf8;">0%</span></div>
+                    <div class="pb-stat-row">Status Guard: <span id="pbWeightWarning">Safe Load Range</span></div>
+                </div>
+            </div>
+
+            <div class="pb-visualizer">
+                <div class="pb-view-box">
+                    <h4>2D Layer Floor Grid Plan View (Optimal Alignment)</h4>
+                    <canvas id="pbCanvas2D" width="750" height="250"></canvas>
+                </div>
+                <div class="pb-view-box">
+                    <h4>3D Isometric Volumetric Stack View</h4>
+                    <canvas id="pbCanvas3D" width="750" height="380"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const palletPresets = {
+            "industrial": { l: 1200, w: 1000 },
+            "euro":       { l: 1200, w: 800 }
+        };
+
+        function applyPalletPreset() {
+            const type = document.getElementById('pbPreset').value;
+            if(type !== 'custom') {
+                document.getElementById('pbPalletLen').value = palletPresets[type].l;
+                document.getElementById('pbPalletWid').value = palletPresets[type].w;
+                runPalletEngine();
+            }
+        }
+
+        function setCustomPreset() {
+            document.getElementById('pbPreset').value = 'custom';
+        }
+
+        function runPalletEngine() {
+            const pL = parseFloat(document.getElementById('pbPalletLen').value) || 0;
+            const pW = parseFloat(document.getElementById('pbPalletWid').value) || 0;
+            const pMaxH = parseFloat(document.getElementById('pbMaxHeight').value) || 0;
+            const pMaxWt = parseFloat(document.getElementById('pbMaxWeight').value) || 0;
+
+            const bL = parseFloat(document.getElementById('pbBoxLen').value) || 0;
+            const bW = parseFloat(document.getElementById('pbBoxWid').value) || 0;
+            const bH = parseFloat(document.getElementById('pbBoxHeight').value) || 0;
+            const bWt = parseFloat(document.getElementById('pbBoxWeight').value) || 0;
+
+            if(pL<=0 || pW<=0 || pMaxH<=0 || bL<=0 || bW<=0 || bH<=0) return;
+
+            // Check configuration A (Length to Length)
+            const colsA = Math.floor(pL / bL); const rowsA = Math.floor(pW / bW); const perLayerA = colsA * rowsA;
+            // Check configuration B (Length to Width - Rotated)
+            const colsB = Math.floor(pL / bW); const rowsB = Math.floor(pW / bL); const perLayerB = colsB * rowsB;
+
+            let finalCols, finalRows, boxesPerLayer;
+            let itemDrawL = bL, itemDrawW = bW;
+
+            if(perLayerB > perLayerA) {
+                finalCols = colsB; finalRows = rowsB; boxesPerLayer = perLayerB;
+                itemDrawL = bW; itemDrawW = bL;
+            } else {
+                finalCols = colsA; finalRows = rowsA; boxesPerLayer = perLayerA;
+            }
+
+            const layers = Math.floor(pMaxH / bH);
+            const totalBoxes = boxesPerLayer * layers;
+            const cargoTotalWeight = totalBoxes * bWt;
+
+            const weightWarningEl = document.getElementById('pbWeightWarning');
+            document.getElementById('pbMaxWeightLimit').innerText = pMaxWt.toLocaleString();
+
+            if(cargoTotalWeight > pMaxWt) {
+                weightWarningEl.innerText = "❌ OVERWEIGHT OVERLOAD ALERT";
+                weightWarningEl.style.color = "#ef4444";
+            } else {
+                weightWarningEl.innerText = "✅ Safe Weight Range";
+                weightWarningEl.style.color = "#4ade80";
+            }
+
+            const palletVol = pL * pW * pMaxH;
+            const cargoVol = totalBoxes * bL * bW * bH;
+            const volEff = palletVol > 0 ? ((cargoVol / palletVol) * 100).toFixed(1) : 0;
+
+            document.getElementById('pbOutTotalBoxes').innerText = totalBoxes.toLocaleString() + " Cartons";
+            document.getElementById('pbOutLayers').innerText = layers + " Layers";
+            document.getElementById('pbOutPerLayer').innerText = boxesPerLayer + " units / layer";
+            document.getElementById('pbOutWeight').innerText = cargoTotalWeight.toLocaleString();
+            document.getElementById('pbOutVolEfficiency').innerText = volEff + "%";
+
+            // DRAW 2D
+            const c2d = document.getElementById('pbCanvas2D');
+            const ctx2d = c2d.getContext('2d');
+            ctx2d.clearRect(0, 0, c2d.width, c2d.height);
+
+            const scale2d = Math.min((c2d.width - 40) / pL, (c2d.height - 40) / pW);
+            const oX2d = (c2d.width - (pL * scale2d)) / 2;
+            const oY2d = (c2d.height - (pW * scale2d)) / 2;
+
+            ctx2d.fillStyle = 'rgba(30, 41, 59, 0.7)';
+            ctx2d.fillRect(oX2d, oY2d, pL * scale2d, pW * scale2d);
+            ctx2d.strokeStyle = '#94a3b8';
+            ctx2d.lineWidth = 2;
+            ctx2d.strokeRect(oX2d, oY2d, pL * scale2d, pW * scale2d);
+
+            ctx2d.fillStyle = 'rgba(56, 189, 248, 0.25)';
+            ctx2d.strokeStyle = '#38bdf8';
+            ctx2d.lineWidth = 1;
+            for(let r=0; r<finalRows; r++) {
+                for(let c=0; c<finalCols; c++) {
+                    let bx = oX2d + (c * itemDrawL * scale2d);
+                    let by = oY2d + (r * itemDrawW * scale2d);
+                    ctx2d.fillRect(bx, by, itemDrawL * scale2d, itemDrawW * scale2d);
+                    ctx2d.strokeRect(bx, by, itemDrawL * scale2d, itemDrawW * scale2d);
+                }
+            }
+
+            // DRAW 3D ISOMETRIC
+            const c3d = document.getElementById('pbCanvas3D');
+            const ctx3d = c3d.getContext('2d');
+            ctx3d.clearRect(0, 0, c3d.width, c3d.height);
+
+            const cos30 = Math.cos(Math.PI / 6);
+            const sin30 = Math.sin(Math.PI / 6);
+
+            const isoW = (pL + pW) * cos30;
+            const isoH = (pL + pW) * sin30 + pMaxH;
+
+            const scale3d = Math.min((c3d.width * 0.75) / isoW, (c3d.height * 0.75) / isoH);
+            const cX = c3d.width / 2 - ((pL - pW) / 2) * cos30 * scale3d;
+            const bY = c3d.height / 2 - ((pL + pW) * sin30 - pMaxH) * scale3d / 2;
+
+            function project3D(x, y, z) {
+                return {
+                    x: cX + (x - y) * cos30 * scale3d,
+                    y: bY + (x + y) * sin30 * scale3d - (z * scale3d)
+                };
+            }
+
+            // Render Pallet Wood Base
+            ctx3d.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+            ctx3d.lineWidth = 1.5;
+            let p0 = project3D(0,0,0), pL_pt = project3D(pL,0,0), pW_pt = project3D(0,pW,0), pLW_pt = project3D(pL,pW,0);
+            ctx3d.beginPath(); ctx3d.moveTo(p0.x, p0.y); ctx3d.lineTo(pL_pt.x, pL_pt.y); ctx3d.lineTo(pLW_pt.x, pLW_pt.y); ctx3d.lineTo(pW_pt.x, pW_pt.y); ctx3d.closePath();
+            ctx3d.fillStyle = '#334155'; ctx3d.fill(); ctx3d.stroke();
+
+            // Render Boxes
+            ctx3d.strokeStyle = 'rgba(15, 23, 42, 0.3)';
+            ctx3d.lineWidth = 0.5;
+
+            for (let h = 0; h < layers; h++) {
+                for (let r = finalRows - 1; r >= 0; r--) {
+                    for (let c = 0; c < finalCols; c++) {
+                        let x = c * itemDrawL; let y = r * itemDrawW; let z = h * bH;
+
+                        let cA = project3D(x, y, z + bH); let cB = project3D(x + itemDrawL, y, z + bH);
+                        let cC = project3D(x + itemDrawL, y + itemDrawW, z + bH); let cD = project3D(x, y + itemDrawW, z + bH);
+                        let cA_b = project3D(x, y, z); let cB_b = project3D(x + itemDrawL, y, z);
+                        let cC_b = project3D(x + itemDrawL, y + itemDrawW, z); let cD_b = project3D(x, y + itemDrawW, z);
+
+                        // Top
+                        ctx3d.fillStyle = '#fbbf24'; ctx3d.beginPath();
+                        ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cD.x, cD.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+
+                        // Right Face
+                        ctx3d.fillStyle = '#d97706'; ctx3d.beginPath();
+                        ctx3d.moveTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cC_b.x, cC_b.y); ctx3d.lineTo(cB_b.x, cB_b.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+
+                        // Left Face
+                        ctx3d.fillStyle = '#b45309'; ctx3d.beginPath();
+                        ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cD.x, cD.y); ctx3d.lineTo(cD_b.x, cD_b.y); ctx3d.lineTo(cA_b.x, cA_b.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+                    }
+                }
+            }
+        }
+
+        window.onload = function() {
+            runPalletEngine();
+        };
+    </script>
+</body>
+</html>
