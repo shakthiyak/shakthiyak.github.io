@@ -79,7 +79,7 @@
             align-items: center;
             justify-content: center;
             padding: 60px 20px;
-            /* 🌟 Ceramic Industrial Production Facility Image */
+            /* 🌟 Ceramic Industrial Production Facility Image Background */
             background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.95)), 
                         url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
         }
@@ -106,7 +106,9 @@
             width: 320px;
             height: 320px;
             border-radius: 50%;
+            /* 🌟 පින්තූරය කැපෙන්නේ නැතුව රවුම ඇතුළට හරියටම පෙනෙන්න මෙන්න මේ පේළි දෙක සකස් කළා */
             object-fit: cover;
+            object-position: center 20%;
             border: 4px solid rgba(56, 189, 248, 0.2);
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
             transition: transform 0.3s ease;
@@ -171,9 +173,9 @@
             background-color: #0077b5;
             color: white;
             text-decoration: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 119, 181, 0.2);
         }
@@ -233,7 +235,7 @@
             margin-bottom: 25px;
         }
 
-        /* 🏺 Real Ceramic Moulding / Slip Casting Image Replacement */
+        /* 🏺 Real Ceramic Moulding / Slip Casting Image Visual */
         .tool-image {
             flex: 1;
             height: 280px;
@@ -271,26 +273,21 @@
             background: linear-gradient(to right, #38bdf8, #2563eb);
         }
 
-        /* 📥 Download Button Style */
+        /* 📥 Download Button Style (Disabled / Coming Soon Style) */
         .download-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background: #10b981;
-            color: #ffffff;
+            background: #334155;
+            color: #94a3b8;
             text-decoration: none;
             padding: 16px 32px;
             font-size: 16px;
             font-weight: 600;
             border-radius: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .download-btn:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            cursor: not-allowed;
+            opacity: 0.7;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         /* 👣 Premium Minimal Footer */
@@ -335,7 +332,7 @@
                 <h1>Hi, I'm <span>Shakthi Chathuranga</span><br>Production & Data Automation Specialist</h1>
                 <p>කර්මාන්තශාලීය දත්ත කළමනාකරණය, Yield Calculations සහ ERP Automation (VBA/Excel) හරහා නිෂ්පාදන ක්‍රියාවලීන් වඩාත් කාර්යක්ෂම සහ ක්‍රමවත් කිරීමට මා විසින් නිර්මාණය කරන ලද මධ්‍යගත පද්ධතිය.</p>
                 
-                <a href="https://www.linkedin.com" target="_blank" class="linkedin-btn">
+                <a href="https://www.linkedin.com/in/shakthi-chathuranga/" target="_blank" class="linkedin-btn">
                     💼 Connect on LinkedIn
                 </a>
             </div>
@@ -355,8 +352,8 @@
                         Launch Web Tool 🚀
                     </a>
                     
-                    <a href="https://drive.google.com" target="_blank" class="download-btn">
-                        📥 Download Excel (.xlsm)
+                    <a href="javascript:void(0);" class="download-btn" title="Link will be updated soon">
+                        📥 Excel Tool (Coming Soon)
                     </a>
                 </div>
             </div>
