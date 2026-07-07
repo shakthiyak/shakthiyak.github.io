@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container Loading Calculator | Shakthi Chathuranga</title>
-    <meta name="description" content="Advanced 2D/3D container volumetric loading and cargo optimization tool.">
-
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22>SC</text></svg>">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0f172a;
@@ -18,29 +14,20 @@
             --text-muted: #94a3b8;
             --accent-blue: #38bdf8;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
-
-        /* Navigation Bar Sync */
+        
         nav {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 0 50px; display: flex; justify-content: space-between; align-items: center; height: 80px;
+            position: sticky; top: 0; z-index: 1000;
         }
         .logo {
             font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
             background: linear-gradient(to right, #38bdf8, #0ea5e9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-decoration: none;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;
         }
         .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
         .nav-tabs a {
@@ -50,172 +37,45 @@
         }
         .nav-tabs a:hover, .nav-tabs a.active { color: var(--accent-blue); border-bottom: 3px solid var(--accent-blue); }
 
-        .page-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .tool-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
+        .page-container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; }
+        .tool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .tool-header h1 { font-size: 28px; font-weight: 700; color: #ffffff; }
-
         .back-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-main);
+            text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: all 0.2s;
         }
         .back-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent-blue); }
 
-        /* Workspace Grid Splitter */
-        .clc-main-container {
-            display: flex;
-            gap: 25px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            border-radius: 20px;
-        }
-
-        .clc-controls {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            min-width: 340px;
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.75px;
-            color: var(--accent-blue);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 6px;
-        }
-
-        .clc-input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .clc-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .clc-input-group label {
-            font-weight: 500;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
+        .clc-main-container { display: flex; gap: 25px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 20px; }
+        .clc-controls { flex: 1; display: flex; flex-direction: column; gap: 18px; min-width: 340px; }
+        .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.75px; color: var(--accent-blue); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 6px; }
+        .clc-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .clc-input-group { display: flex; flex-direction: column; gap: 6px; }
+        .clc-input-group label { font-weight: 500; color: var(--text-muted); font-size: 13px; }
         .clc-input-group input, .clc-input-group select {
-            padding: 11px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            font-size: 14px;
-            background: rgba(15, 23, 42, 0.6);
-            color: #ffffff;
-            transition: all 0.2s;
+            padding: 11px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-size: 14px; background: rgba(15, 23, 42, 0.6); color: #ffffff;
         }
-
         .clc-input-group select option { background: #1e293b; color: #fff; }
-
-        .clc-input-group input:focus, .clc-input-group select:focus {
-            border-color: var(--accent-blue);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1);
-        }
-
+        
         .cta-btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(to right, #0ea5e9, #2563eb);
-            color: #ffffff;
-            border: none;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px; background: linear-gradient(to right, #0ea5e9, #2563eb);
+            color: #ffffff; border: none; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px;
         }
         .cta-btn:hover { transform: translateY(-2px); background: linear-gradient(to right, #38bdf8, #2563eb); }
 
-        /* Output Summary Cards */
-        .clc-stats {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            padding: 18px;
-            border-radius: 12px;
-        }
-
-        .clc-stat-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
+        .clc-stats { background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); padding: 18px; border-radius: 12px; }
+        .clc-stat-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: var(--text-muted); }
         .clc-stats span { font-weight: 600; color: #4ade80; }
         .clc-stats span.highlight { color: var(--accent-blue); }
 
-        /* Visualizations Framing */
-        .clc-visualizer {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .clc-view-box {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-
-        .clc-view-box h4 {
-            margin-bottom: 12px;
-            color: var(--text-muted);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-align: left;
-        }
-
-        .clc-view-box canvas {
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            width: 100%;
-            height: auto;
-        }
+        .clc-visualizer { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+        .clc-view-box { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
+        .clc-view-box h4 { margin-bottom: 12px; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .clc-view-box canvas { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; width: 100%; height: auto; }
 
         @media (max-width: 1024px) {
             .clc-main-container { flex-direction: column; }
             .tool-header { flex-direction: column; gap: 15px; text-align: center; }
-            nav { padding: 0 20px; }
         }
     </style>
 </head>
@@ -230,7 +90,6 @@
     </nav>
 
     <div class="page-container">
-        
         <div class="tool-header">
             <h1>🚢 Container Loading Calculator</h1>
             <a href="tools.html" class="back-btn">← Back to Tools</a>
@@ -238,7 +97,6 @@
 
         <div class="clc-main-container">
             <div class="clc-controls">
-                
                 <div class="section-title">Container Specifications</div>
                 <div class="clc-input-group">
                     <label>Select Container Preset Type</label>
@@ -291,13 +149,13 @@
                 
                 <button class="cta-btn" onclick="runContainerLoadingEngine()">Optimize & Calculate Loading 🚀</button>
                 
-                <div class="section-title" style="margin-top: 5px;">Utilization Analytics</div>
+                <div class="section-title">Utilization Analytics</div>
                 <div class="clc-stats">
                     <div class="clc-stat-row">Total Cargo Stowed: <span id="clcOutTotalItems" class="highlight">0 Units</span></div>
                     <div class="clc-stat-row">Total Cargo Weight: <span id="clcOutWeight">0</span> / <span id="clcMaxWeightLimit" style="color:var(--text-muted)">0</span> kg</div>
                     <div class="clc-stat-row">Volumetric Efficiency: <span id="clcOutVolEfficiency" style="color:#38bdf8;">0%</span></div>
                     <div class="clc-stat-row">Floor Area Efficiency: <span id="clcOutAreaEfficiency">0%</span></div>
-                    <div class="clc-stat-row">Status Guard: <span id="clcWeightWarning" style="color:#4ade80;">Safe Load Range</span></div>
+                    <div class="clc-stat-row">Status Guard: <span id="clcWeightWarning">Safe Load Range</span></div>
                 </div>
             </div>
 
@@ -312,11 +170,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Preset Mapping Vector
         const containerPresets = {
             "20ft":   { l: 5898,  w: 2352, h: 2393, wt: 21600 },
             "40ft":   { l: 12032, w: 2352, h: 2393, wt: 26500 },
@@ -339,7 +195,6 @@
         }
 
         function runContainerLoadingEngine() {
-            // Extract Inputs Specs
             const cL = parseFloat(document.getElementById('clcContLen').value) || 0;
             const cW = parseFloat(document.getElementById('clcContWid').value) || 0;
             const cH = parseFloat(document.getElementById('clcContHei').value) || 0;
@@ -352,26 +207,22 @@
 
             if(cL<=0 || cW<=0 || cH<=0 || iL<=0 || iW<=0 || iH<=0) return;
 
-            // Compute Dual-Orientation Geometric Best-Fit Matrix Layout
-            // Orientation Alpha (Length along Length)
             const cL_A = Math.floor(cL / iL); const cW_A = Math.floor(cW / iW); const cH_A = Math.floor(cH / iH);
             const total_A = cL_A * cW_A * cH_A;
 
-            // Orientation Beta (Width along Length - rotated 90 deg)
             const cL_B = Math.floor(cL / iW); const cW_B = Math.floor(cW / iL); const cH_B = Math.floor(cH / iH);
             const total_B = cL_B * cW_B * cH_B;
 
-            let finalCols, finalRows, finalLayers, finalTotal, chosenOri = 'A';
+            let finalCols, finalRows, finalLayers, finalTotal;
             let itemDrawL = iL, itemDrawW = iW;
 
             if(total_B > total_A) {
-                finalCols = cL_B; finalRows = cW_B; finalLayers = cH_B; finalTotal = total_B; chosenOri = 'B';
+                finalCols = cL_B; finalRows = cW_B; finalLayers = cH_B; finalTotal = total_B;
                 itemDrawL = iW; itemDrawW = iL;
             } else {
                 finalCols = cL_A; finalRows = cW_A; finalLayers = cH_A; finalTotal = total_A;
             }
 
-            // Weight Constraints Safety Checks Guard Logic
             const cargoTotalWeight = finalTotal * iWt;
             const weightWarningEl = document.getElementById('clcWeightWarning');
             document.getElementById('clcMaxWeightLimit').innerText = cMaxWt.toLocaleString();
@@ -384,7 +235,6 @@
                 weightWarningEl.style.color = "#4ade80";
             }
 
-            // Efficiency Volumetric Algorithms Calculations
             const containerVol = cL * cW * cH;
             const cargoVol = finalTotal * iL * iW * iH;
             const volEff = containerVol > 0 ? ((cargoVol / containerVol) * 100).toFixed(1) : 0;
@@ -393,31 +243,27 @@
             const cargoArea = (finalCols * itemDrawL) * (finalRows * itemDrawW);
             const areaEff = containerArea > 0 ? ((cargoArea / containerArea) * 100).toFixed(1) : 0;
 
-            // Update DOM Dashboard UI Nodes
-            document.getElementById('clcOutTotalItems').innerText = `${finalTotal.toLocaleString()} Units`;
+            document.getElementById('clcOutTotalItems').innerText = finalTotal.toLocaleString() + " Units";
             document.getElementById('clcOutWeight').innerText = cargoTotalWeight.toLocaleString();
-            document.getElementById('clcOutVolEfficiency').innerText = `${volEff}%`;
-            document.getElementById('clcOutAreaEfficiency').innerText = `${areaEff}%`;
+            document.getElementById('clcOutVolEfficiency').innerText = volEff + "%";
+            document.getElementById('clcOutAreaEfficiency').innerText = areaEff + "%";
 
-            // -------------------- RENDER 2D VIEWPORT --------------------
+            // 2D DRAW
             const c2d = document.getElementById('clcCanvas2D');
             const ctx2d = c2d.getContext('2d');
             ctx2d.clearRect(0, 0, c2d.width, c2d.height);
 
-            // Responsive Scaling Computations for 2D Viewport Box Matrix
             const scale2d = Math.min((c2d.width - 40) / cL, (c2d.height - 40) / cW);
             const oX2d = (c2d.width - (cL * scale2d)) / 2;
             const oY2d = (c2d.height - (cW * scale2d)) / 2;
 
-            // Draw Container Shell Perimeter Base
             ctx2d.fillStyle = 'rgba(30, 41, 59, 0.7)';
             ctx2d.fillRect(oX2d, oY2d, cL * scale2d, cW * scale2d);
             ctx2d.strokeStyle = '#94a3b8';
-            ctx2d.lineWidth = 2.5;
+            ctx2d.lineWidth = 2;
             ctx2d.strokeRect(oX2d, oY2d, cL * scale2d, cW * scale2d);
 
-            // Draw Internal Cargo Array Fill Wireframe Grid
-            ctx2d.fillStyle = 'rgba(14, 165, 233, 0.18)';
+            ctx2d.fillStyle = 'rgba(14, 165, 233, 0.2)';
             ctx2d.strokeStyle = '#0ea5e9';
             ctx2d.lineWidth = 1;
             for(let r=0; r<finalRows; r++) {
@@ -425,4 +271,77 @@
                     let bx = oX2d + (c * itemDrawL * scale2d);
                     let by = oY2d + (r * itemDrawW * scale2d);
                     ctx2d.fillRect(bx, by, itemDrawL * scale2d, itemDrawW * scale2d);
-                    ctx2d.strokeRect(bx, by, itemDrawL * scale2d, itemDrawW * scale2
+                    ctx2d.strokeRect(bx, by, itemDrawL * scale2d, itemDrawW * scale2d);
+                }
+            }
+
+            // 3D DRAW
+            const c3d = document.getElementById('clcCanvas3D');
+            const ctx3d = c3d.getContext('2d');
+            ctx3d.clearRect(0, 0, c3d.width, c3d.height);
+
+            const cos30 = Math.cos(Math.PI / 6);
+            const sin30 = Math.sin(Math.PI / 6);
+
+            const isoW = (cL + cW) * cos30;
+            const isoH = (cL + cW) * sin30 + cH;
+
+            const scale3d = Math.min((c3d.width * 0.85) / isoW, (c3d.height * 0.85) / isoH);
+            const cX = c3d.width / 2 - ((cL - cW) / 2) * cos30 * scale3d;
+            const bY = c3d.height / 2 - ((cL + cW) * sin30 - cH) * scale3d / 2;
+
+            function project3D(x, y, z) {
+                return {
+                    x: cX + (x - y) * cos30 * scale3d,
+                    y: bY + (x + y) * sin30 * scale3d - (z * scale3d)
+                };
+            }
+
+            ctx3d.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+            ctx3d.lineWidth = 1.5;
+            
+            let p0 = project3D(0,0,0), pL = project3D(cL,0,0), pW = project3D(0,cW,0), pLW = project3D(cL,cW,0);
+            let p0_h = project3D(0,0,cH), pL_h = project3D(cL,0,cH), pW_h = project3D(0,cW,cH), pLW_h = project3D(cL,cW,cH);
+
+            ctx3d.beginPath(); ctx3d.moveTo(p0.x, p0.y); ctx3d.lineTo(pL.x, pL.y); ctx3d.lineTo(pLW.x, pLW.y); ctx3d.lineTo(pW.x, pW.y); ctx3d.closePath(); ctx3d.stroke();
+            ctx3d.beginPath(); ctx3d.moveTo(p0_h.x, p0_h.y); ctx3d.lineTo(pL_h.x, pL_h.y); ctx3d.lineTo(pLW_h.x, pLW_h.y); ctx3d.lineTo(pW_h.x, pW_h.y); ctx3d.closePath(); ctx3d.stroke();
+            ctx3d.beginPath(); ctx3d.moveTo(p0.x, p0.y); ctx3d.lineTo(p0_h.x, p0_h.y); ctx3d.stroke();
+            ctx3d.beginPath(); ctx3d.moveTo(pL.x, pL.y); ctx3d.lineTo(pL_h.x, pL_h.y); ctx3d.stroke();
+            ctx3d.beginPath(); ctx3d.moveTo(pW.x, pW.y); ctx3d.lineTo(pW_h.x, pW_h.y); ctx3d.stroke();
+            ctx3d.beginPath(); ctx3d.moveTo(pLW.x, pLW.y); ctx3d.lineTo(pLW_h.x, pLW_h.y); ctx3d.stroke();
+
+            ctx3d.strokeStyle = 'rgba(15, 23, 42, 0.2)';
+            ctx3d.lineWidth = 0.5;
+
+            for (let h = 0; h < finalLayers; h++) {
+                for (let r = finalRows - 1; r >= 0; r--) {
+                    for (let c = 0; c < finalCols; c++) {
+                        let x = c * itemDrawL; let y = r * itemDrawW; let z = h * iH;
+
+                        let cA = project3D(x, y, z + iH); let cB = project3D(x + itemDrawL, y, z + iH);
+                        let cC = project3D(x + itemDrawL, y + itemDrawW, z + iH); let cD = project3D(x, y + itemDrawW, z + iH);
+                        let cA_b = project3D(x, y, z); let cB_b = project3D(x + itemDrawL, y, z);
+                        let cC_b = project3D(x + itemDrawL, y + itemDrawW, z); let cD_b = project3D(x, y + itemDrawW, z);
+
+                        ctx3d.fillStyle = '#67e8f9'; ctx3d.beginPath();
+                        ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cD.x, cD.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+
+                        ctx3d.fillStyle = '#0284c7'; ctx3d.beginPath();
+                        ctx3d.moveTo(cB.x, cB.y); ctx3d.lineTo(cC.x, cC.y); ctx3d.lineTo(cC_b.x, cC_b.y); ctx3d.lineTo(cB_b.x, cB_b.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+
+                        ctx3d.fillStyle = '#0369a1'; ctx3d.beginPath();
+                        ctx3d.moveTo(cA.x, cA.y); ctx3d.lineTo(cD.x, cD.y); ctx3d.lineTo(cD_b.x, cD_b.y); ctx3d.lineTo(cA_b.x, cA_b.y);
+                        ctx3d.closePath(); ctx3d.fill(); ctx3d.stroke();
+                    }
+                }
+            }
+        }
+
+        window.onload = function() {
+            runContainerLoadingEngine();
+        };
+    </script>
+</body>
+</html>
