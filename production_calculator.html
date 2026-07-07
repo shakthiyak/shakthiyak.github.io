@@ -87,6 +87,21 @@
   </div>
 
   <div class="card">
+    <h2>🔗 Google Sheet Sync (optional)</h2>
+    <div class="grid" style="grid-template-columns:2fr 1fr;">
+      <div>
+        <label>Google Apps Script Web App URL</label>
+        <input id="gsheetUrl" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:8px;">
+        <button class="btn secondary" id="saveGsheetUrl">💾 Save URL</button>
+        <button class="btn secondary" id="testGsheet">🧪 Test</button>
+      </div>
+    </div>
+    <div class="hint" id="gsheetStatus">Not connected. Every "Save Order" will also send a copy to your Google Sheet once this is set up.</div>
+  </div>
+
+  <div class="card">
     <h2>📋 Order Reference</h2>
     <div class="grid">
       <div><label>Order No</label><input id="orderNo"></div>
@@ -218,16 +233,72 @@ ITEM_MASTER.forEach(it=>{
 });
 dl.appendChild(frag);
 
-/* ============ STORAGE HELPERS ============ */
+/* ============ STORAGE HELPERS ============
+   Uses the browser's localStorage so this works as a standalone
+   GitHub Pages site (no server / no external database).
+   NOTE: data is saved only on THIS browser + THIS device.
+   It will NOT sync across phone/computer, and clearing browser
+   data/cache will erase it. Use "Export CSV" regularly as a backup. */
 const DB_KEY = 'ceramic_orders_db';
 async function loadOrders(){
   try{
-    const r = await window.storage.get(DB_KEY, false);
-    return r && r.value ? JSON.parse(r.value) : [];
-  }catch(e){ return []; }
+    const raw = localStorage.getItem(DB_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ console.error(e); return []; }
 }
 async function saveOrders(list){
-  try{ await window.storage.set(DB_KEY, JSON.stringify(list), false); }catch(e){ console.error(e); }
+  try{ localStorage.setItem(DB_KEY, JSON.stringify(list)); }
+  catch(e){ console.error(e); alert('Save failed: browser storage might be full or blocked.'); }
+}
+
+/* ============ GOOGLE SHEET SYNC (optional) ============ */
+const GSHEET_KEY = 'ceramic_gsheet_url';
+
+function loadGsheetUrl(){
+  return localStorage.getItem(GSHEET_KEY) || '';
+}
+function initGsheetUI(){
+  const url = loadGsheetUrl();
+  document.getElementById('gsheetUrl').value = url;
+  document.getElementById('gsheetStatus').textContent = url
+    ? '✓ Connected: new saves will also sync to your Google Sheet.'
+    : 'Not connected. Every "Save Order" will also send a copy to your Google Sheet once this is set up.';
+}
+
+document.getElementById('saveGsheetUrl').addEventListener('click', ()=>{
+  const url = document.getElementById('gsheetUrl').value.trim();
+  localStorage.setItem(GSHEET_KEY, url);
+  initGsheetUI();
+  alert(url ? 'Google Sheet URL saved.' : 'Google Sheet URL cleared.');
+});
+
+document.getElementById('testGsheet').addEventListener('click', async ()=>{
+  const url = document.getElementById('gsheetUrl').value.trim();
+  if(!url){ alert('Paste the Apps Script Web App URL first.'); return; }
+  try{
+    await syncToGsheet({docNo:'TEST', orderNo:'TEST', customerName:'Connection Test', lastModified:new Date().toISOString()}, url);
+    alert('Test sent! Check your Google Sheet\'s "Orders" tab for a row with Doc No "TEST" (you can delete that test row after).');
+  }catch(err){
+    alert('Could not reach that URL. Double-check it ends in /exec and deployment access is set to "Anyone".');
+  }
+});
+
+// Apps Script needs a no-cors "simple" request (text/plain) to avoid CORS
+// preflight issues, since Apps Script doesn't respond to OPTIONS requests.
+// We can't read the response back, so we just fire-and-forget.
+async function syncToGsheet(data, urlOverride){
+  const url = urlOverride || loadGsheetUrl();
+  if(!url) return;
+  try{
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(data)
+    });
+  }catch(e){
+    console.error('Google Sheet sync failed:', e);
+  }
 }
 
 /* ============ TAB SWITCHING ============ */
@@ -495,6 +566,7 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
   const isUpdate = idx>=0;
   if(isUpdate) orders[idx] = data; else orders.push(data);
   await saveOrders(orders);
+  await syncToGsheet(data);
   alert((isUpdate?'Order Updated Successfully! ':'Order Saved Successfully! ')+'Doc No: '+docNo+'\n\nDeveloped by: Shakthi Chathuranga');
   document.getElementById('newBtn').click();
 });
@@ -599,8 +671,8 @@ document.getElementById('clearAllBtn').addEventListener('click', async ()=>{
   setVal('docNo', await nextDocNo());
   setVal('stockQty','0');
   calcAll();
+  initGsheetUI();
 })();
 </script>
 </body>
 </html>
-
