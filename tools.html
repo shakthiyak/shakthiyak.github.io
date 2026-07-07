@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Tools | Shakthi Chathuranga</title>
+    <meta name="description" content="A collection of production and operations tools built by Shakthi Chathuranga for ceramic manufacturing workflows.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22>SC</text></svg>">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; }
+
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+            background: linear-gradient(to right, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
+        .nav-tabs a {
+            display: flex; align-items: center; padding: 0 20px; text-decoration: none;
+            color: #94a3b8; font-weight: 500; height: 100%; transition: all 0.3s ease;
+            border-bottom: 3px solid transparent; white-space: nowrap;
+        }
+        .nav-tabs a:hover, .nav-tabs a.active { color: #38bdf8; border-bottom: 3px solid #38bdf8; }
+
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px 20px 20px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: 34px; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
+        .page-header p { font-size: 15px; color: #94a3b8; max-width: 600px; margin: 0 auto; }
+
+        .tools-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover { transform: translateY(-5px); border-color: rgba(56, 189, 248, 0.3); }
+
+        .tool-icon { font-size: 32px; margin-bottom: 16px; }
+        .tool-card h2 { font-size: 20px; color: #ffffff; margin-bottom: 10px; }
+        .tool-card p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 22px; }
+
+        .tool-status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+        .status-live { color: #4ade80; background: rgba(34, 197, 94, 0.1); }
+        .status-soon { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(to right, #0ea5e9, #2563eb);
+            color: #ffffff; text-decoration: none; padding: 12px 24px;
+            font-size: 14px; font-weight: 600; border-radius: 10px;
+            transition: all 0.3s ease; align-self: flex-start;
+        }
+        .cta-btn:hover { transform: translateY(-2px); background: linear-gradient(to right, #38bdf8, #2563eb); }
+
+        .disabled-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #334155; color: #94a3b8; text-decoration: none;
+            padding: 12px 24px; font-size: 14px; font-weight: 600;
+            border-radius: 10px; cursor: not-allowed; opacity: 0.7; align-self: flex-start;
+        }
+
+        /* Placeholder card for future tools */
+        .tool-card.upcoming {
+            border-style: dashed;
+            border-color: rgba(255, 255, 255, 0.15);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .tool-card.upcoming .tool-icon { opacity: 0.5; }
+        .tool-card.upcoming h2 { color: #64748b; }
+        .tool-card.upcoming p { margin-bottom: 0; }
+
+        footer {
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #64748b;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">SC. <span>Portal</span></a>
+        <ul class="nav-tabs">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tools.html" class="active">Production Tools</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-header">
+        <h1>Production Tools</h1>
+        <p>A growing set of small tools built to solve real problems on the ceramic production floor — starting with a delivery date & yield calculator, with more on the way.</p>
+    </div>
+
+    <div class="tools-container">
+
+        <!-- Tool 1: Live -->
+        <div class="tool-card">
+            <div>
+                <div class="tool-icon">🧮</div>
+                <span class="tool-status status-live">● Live</span>
+                <h2>Ceramic Production Calculator</h2>
+                <p>Factors in Clay Loss %, Firing Yield %, and dynamic variables to estimate required production days and instantly secure a Confirmed Delivery Date.</p>
+            </div>
+            <a href="production_calculator.html" target="_blank" class="cta-btn">Launch Tool 🚀</a>
+        </div>
+
+        <!-- Tool 2: Coming soon -->
+        <div class="tool-card">
+            <div>
+                <div class="tool-icon">📊</div>
+                <span class="tool-status status-soon">● Coming Soon</span>
+                <h2>Excel Production Tracker</h2>
+                <p>A downloadable Excel-based tracker for daily production, inventory, and manpower KPIs — for teams that prefer offline reporting.</p>
+            </div>
+            <a href="javascript:void(0);" class="disabled-btn" title="Coming soon">📥 Coming Soon</a>
+        </div>
+
+        <!-- Placeholder card to signal more tools will be added here -->
+        <div class="tool-card upcoming">
+            <div class="tool-icon">➕</div>
+            <h2>More Tools Coming</h2>
+            <p>New production & operations tools will appear here as they're built.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
+    </footer>
+
+</body>
+</html>
