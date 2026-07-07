@@ -207,7 +207,7 @@
         /* 🛠 Core Competencies Grid */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1max));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
             margin-bottom: 80px;
         }
@@ -255,10 +255,18 @@
             justify-content: space-between;
         }
 
+        .panel-header-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
         .panel-info h2 {
             font-size: 24px;
             color: #ffffff;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .panel-info p {
@@ -274,8 +282,19 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: block;
+        }
+
+        /* 🏢 [ADDED] Premium Corporate Brand Badge Style */
+        .company-badge-img {
+            height: 50px;
+            width: auto;
+            background: #ffffff;
+            padding: 6px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            object-fit: contain;
         }
 
         .visual-box {
@@ -368,11 +387,13 @@
             .hero-container, .featured-grid, .certs-list { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
             .stats-bar { justify-content: center; }
             .btn-group { justify-content: center; }
+            .panel-header-layout { flex-direction: column; align-items: center; text-align: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- 🌐 Premium Navigation Bar -->
     <nav>
         <div class="logo">SC. <span>Portal</span></div>
         <ul class="nav-tabs">
@@ -381,6 +402,7 @@
         </ul>
     </nav>
 
+    <!-- 📸 Hero Personal Section -->
     <div class="hero">
         <div class="hero-container">
             <div class="profile-img-container">
@@ -391,6 +413,7 @@
                 <h1>Hi, I'm <span>Shakthi Chathuranga</span><br>Production Planning & ERP Specialist</h1>
                 <p>පිඟන් මැටි නිෂ්පාදන ක්‍ෂේත්‍රයේ (Ceramic Manufacturing) වසර 12 ක ජාත්‍යන්තර පළපුරුද්දක් සහිත, කර්මාන්තශාලීය දත්ත කළමනාකරණය, Yield Calculations සහ ERP Automation (VBA/Excel) හරහා සමස්ත නිෂ්පාදන ක්‍රියාවලීන් ඩිජිටලීකරණය කරන විශේෂඥයෙකි.</p>
                 
+                <!-- 📊 Executive Stats Bar -->
                 <div class="stats-bar">
                     <div class="stat-item"><h3>12+ Years</h3><p>UAE Industrial Exp</p></div>
                     <div class="stat-item"><h3>3+ Core</h3><p>ERP Ecosystems</p></div>
@@ -404,8 +427,10 @@
         </div>
     </div>
 
+    <!-- ⚡ Main Executive Content -->
     <div class="main-container">
         
+        <!-- 🛠 Section 1: Core Competencies -->
         <h2 class="section-title">Core Competencies</h2>
         <div class="skills-grid">
             <div class="skill-card">
@@ -426,17 +451,26 @@
             </div>
         </div>
 
+        <!-- 🏢 Section 2: Split Dashboard (Project vs Tool) -->
         <div class="featured-grid">
             
+            <!-- Card A: Major Project Highlight with General Ceramics Logo Included -->
             <div class="panel-card">
-                <div class="panel-info">
-                    <span class="project-tag">Major System Project</span>
-                    <h2>FACTS ERP Implementation</h2>
+                <div class="panel-header-layout">
+                    <div class="panel-info">
+                        <span class="project-tag">Major System Project</span>
+                        <h2>FACTS ERP Implementation</h2>
+                    </div>
+                    <!-- 🏢 [VERBATIM REFERENCE] General Ceramics Official Logo Brand Badge -->
+                    <img src="General Ceramics Logo.jpg" alt="General Ceramics Logo" class="company-badge-img">
+                </div>
+                <div class="panel-info" style="margin-top: -15px;">
                     <p>නිෂ්පාදන අංශය සහ Software Programmers කණ්ඩායම අතර ප්‍රධාන සම්බන්ධීකාරක ලෙස ක්‍රියා කරමින් නව නිපැයුම් පද්ධතිය සාර්ථකව කර්මාන්තශාලාව තුළ ස්ථාපනය කිරීම (Process Mapping & Testing).</p>
                 </div>
                 <div class="visual-box erp-img"></div>
             </div>
 
+            <!-- Card B: The Web Tool we built -->
             <div class="panel-card">
                 <div class="panel-info">
                     <span class="project-tag">Internal Core System Tool</span>
@@ -452,6 +486,7 @@
 
         </div>
 
+        <!-- 📜 Section 3: Global Certifications Showcase -->
         <h2 class="section-title">Professional Certifications</h2>
         <div class="certs-container">
             <div class="certs-list">
@@ -488,6 +523,7 @@
 
     </div>
 
+    <!-- 👣 Footer -->
     <footer>
         &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
     </footer>
