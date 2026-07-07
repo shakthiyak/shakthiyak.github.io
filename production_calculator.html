@@ -4,63 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ceramic Production · Delivery Date Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --clay:#b5651d; --clay-dark:#8a4c15; --cream:#faf6f0; --ink:#2b2420;
-    --line:#e6ddd2; --ok:#2e7d32; --warn:#c62828; --panel:#ffffff;
+    --bg:#0f172a; --panel:#1e293b; --panel-2:#151f32;
+    --accent:#38bdf8; --accent-2:#0ea5e9; --accent-3:#818cf8;
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --line:rgba(255,255,255,0.08); --ok:#22c55e; --warn:#f87171;
   }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--cream);color:var(--ink);}
-  header{background:linear-gradient(135deg,var(--clay),var(--clay-dark));color:#fff;padding:18px 24px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
-  header h1{margin:0;font-size:1.4rem;}
-  header p{margin:4px 0 0;opacity:.9;font-size:.85rem;}
+  body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  header{background:rgba(15,23,42,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:18px 24px;}
+  header h1{margin:0;font-size:1.4rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+  header p{margin:4px 0 0;color:var(--muted);font-size:.85rem;}
   main{max-width:1000px;margin:20px auto;padding:0 16px 60px;}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-  .card h2{margin:0 0 14px;font-size:1.05rem;color:var(--clay-dark);border-bottom:1px solid var(--line);padding-bottom:8px;}
+  .card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;}
+  .card h2{margin:0 0 14px;font-size:1.05rem;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:8px;font-weight:600;}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
-  label{display:block;font-size:.78rem;font-weight:600;color:#6b5f52;margin-bottom:4px;}
-  input,select,textarea{width:100%;padding:8px 10px;border:1px solid #d8cfc2;border-radius:6px;font-size:.9rem;background:#fffdfb;font-family:inherit;}
-  input:focus,select:focus{outline:2px solid var(--clay);border-color:var(--clay);}
-  input[readonly]{background:#f1ece4;color:#7a6f63;}
-  .btn{background:var(--clay);color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9rem;}
-  .btn:hover{background:var(--clay-dark);}
-  .btn.secondary{background:#fff;color:var(--clay-dark);border:1px solid var(--clay);}
+  label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:4px;}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;background:rgba(15,23,42,0.6);color:var(--ink);font-family:inherit;}
+  input::placeholder{color:var(--dim);}
+  input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent);}
+  input[readonly]{background:rgba(255,255,255,0.03);color:var(--muted);}
+  .btn{background:linear-gradient(to right,var(--accent-2),#2563eb);color:#fff;border:none;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.9rem;}
+  .btn:hover{background:linear-gradient(to right,var(--accent),#2563eb);transform:translateY(-1px);}
+  .btn.secondary{background:#334155;color:var(--ink);border:1px solid var(--line);}
+  .btn.secondary:hover{background:#3f4f66;}
   .btn.whatsapp{background:#25D366;}
   .btn.whatsapp:hover{background:#1ebe5a;}
   .btn.email{background:#546e7a;}
   .btn.email:hover{background:#455a64;}
   table{width:100%;border-collapse:collapse;font-size:.85rem;}
   th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;}
-  th{background:#f6efe6;color:#6b5f52;font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;}
+  th{background:rgba(56,189,248,0.08);color:var(--accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;}
   .timeline td:nth-child(2),.timeline td:nth-child(3){text-align:center;}
-  .delivery-box{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;border-radius:10px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .day-input{width:64px;text-align:center;font-weight:800;color:var(--accent);background:rgba(56,189,248,0.1);border:2px solid var(--accent);border-radius:8px;padding:5px 4px;}
+  .day-input:focus{outline:2px solid var(--accent-3);}
+  .day-input.locked{background:rgba(255,255,255,0.04);border-color:var(--line);color:var(--muted);font-weight:600;}
+  .sum-item{font-size:.85rem;padding:4px 0;border-bottom:1px dashed var(--line);}
+  .sum-item .k{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;display:block;}
+  .sum-item .v{font-weight:700;color:var(--ink);}
+  .delivery-box{background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border-radius:16px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
   .delivery-box .date{font-size:1.6rem;font-weight:800;}
   .delivery-box .label{font-size:.8rem;opacity:.9;text-transform:uppercase;letter-spacing:.05em;}
   .actions{display:flex;gap:10px;flex-wrap:wrap;}
   .datalist-wrap{position:relative;}
-  .hint{font-size:.75rem;color:#8a7f72;margin-top:3px;}
-  footer{text-align:center;color:#a8998a;font-size:.78rem;padding:20px;}
+  .hint{font-size:.75rem;color:var(--muted);margin-top:3px;}
+  footer{text-align:center;color:var(--dim);font-size:.78rem;padding:20px;}
   details{margin-top:6px;}
-  summary{cursor:pointer;color:var(--clay-dark);font-weight:600;font-size:.85rem;}
-  .fieldkey{font-family:monospace;background:#f1ece4;padding:1px 6px;border-radius:4px;font-size:.8rem;}
-  .status-msg{font-size:.8rem;margin-top:8px;padding:8px 10px;border-radius:6px;}
-  .status-msg.ok{background:#e6f4ea;color:var(--ok);}
-  .status-msg.err{background:#fdecea;color:var(--warn);}
+  summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:.85rem;}
+  .fieldkey{font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;font-size:.8rem;color:var(--accent-3);}
+  .status-msg{font-size:.8rem;margin-top:8px;padding:8px 10px;border-radius:8px;}
+  .status-msg.ok{background:rgba(34,197,94,0.12);color:var(--ok);}
+  .status-msg.err{background:rgba(248,113,113,0.12);color:var(--warn);}
+  a{color:var(--accent);}
+  .print-only{display:none;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:.85rem;}
+  .backlink:hover{color:var(--accent);}
 
   /* Print styles: only the printable summary shows on paper */
   @media print{
     header, .no-print { display:none !important; }
-    body{background:#fff;}
-    .card{box-shadow:none;border:1px solid #000;}
+    body{background:#fff;color:#000;}
+    .card{background:#fff;box-shadow:none;border:1px solid #000;color:#000;}
+    .card h2{color:#000;}
+    th{background:#eee;color:#000;}
+    .sum-item .v, .sum-item .k{color:#000;}
+    .print-only{display:block !important;}
     main{max-width:100%;margin:0;padding:0;}
+    .delivery-box{background:#eee !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>🏺 Ceramic Production · Delivery Date Calculator</h1>
-  <p>Order details in → Process timeline out → Print or Share the result</p>
+<header style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+  <div>
+    <h1>🏺 Ceramic Production · Delivery Date Calculator</h1>
+    <p>Order details in → Process timeline out → Print or Share the result</p>
+  </div>
+  <a class="backlink no-print" href="https://shakthiyak.github.io/">← Back to Portfolio</a>
 </header>
 
 <main>
@@ -108,9 +131,9 @@
       <div><label>Mould Ready? (Yes/No)</label>
         <select id="mouldReady"><option>No</option><option>Yes</option></select>
       </div>
-      <div><label>Clay / Green Loss %</label><input id="clayLoss" type="number" step="0.01" readonly></div>
-      <div><label>Firing Yield %</label><input id="firingYield" type="number" step="0.01" readonly></div>
-      <div><label>Firing Loss %</label><input id="firingLoss" type="number" step="0.01" readonly></div>
+      <div><label>Clay / Green Loss %</label><input id="clayLoss" type="number" step="0.0001"></div>
+      <div><label>Firing Yield %</label><input id="firingYield" type="number" step="0.0001"></div>
+      <div><label>Firing Loss %</label><input id="firingLoss" type="number" step="0.0001"></div>
       <div><label>Required Casting (before firing loss)</label><input id="reqCasting" readonly></div>
       <div><label>Required Casting Qty</label><input id="reqCastingQty" readonly></div>
       <div><label>Daily Casting Qty</label><input id="dailyCasting" type="number" min="1" value="100"></div>
@@ -119,6 +142,11 @@
         <select id="skipSunday"><option>Yes</option><option>No</option></select>
       </div>
     </div>
+  </div>
+
+  <div class="card print-only" id="orderSummary">
+    <h2>🧾 Order Summary</h2>
+    <div class="grid" id="orderSummaryGrid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));row-gap:6px;"></div>
   </div>
 
   <div class="card" id="printSummary">
@@ -144,49 +172,19 @@
   </div>
 
   <div class="card no-print">
-    <h2>🔗 Send to Google Form (optional record-keeping)</h2>
+    <h2>🔗 Google Form Sync</h2>
     <p class="hint" style="margin-top:0;">
-      This sends the order data straight into a Google Form (which auto-fills a linked Google Sheet) — no Google account
-      permission screens, no Apps Script deployment. One-way only: it sends data out, it does not read anything back.
+      Already connected to your Google Form — every click adds/updates a row in your linked Google Sheet.
+      One-way only, no Google account permission needed.
     </p>
-    <details>
-      <summary>How to set this up (one-time, ~5 min)</summary>
-      <ol style="font-size:.85rem;line-height:1.7;">
-        <li>Go to <b>forms.google.com</b> → create a new blank form.</li>
-        <li>Add one "Short answer" question for each field you want to capture. Suggested fields:
-          Doc No, Order No, Order Date, Customer Name, P.O. No, Status, Item Code, Item Name, Sales Qty,
-          Stock Qty, Balance to Make, Total Production Days, Delivery Date. (You can add more from the
-          full field list below.)</li>
-        <li>Once all questions are added, click the <b>⋮ (three dots)</b> menu top-right → <b>"Get pre-filled link"</b>.</li>
-        <li>This opens your form in fill-in mode. For <u>each question</u>, type the exact matching
-          <b>field key</b> (shown below) as the answer — e.g. type <span class="fieldkey">customerName</span>
-          into the "Customer Name" question box. This is just a temporary marker so this app can match your
-          questions automatically; it won't appear in real submissions.</li>
-        <li>Click <b>"Get Link"</b> at the bottom, then <b>copy</b> that long link.</li>
-        <li>Paste it in the box below and click <b>"Detect Fields"</b>.</li>
-      </ol>
-      <details>
-        <summary>Full list of available field keys</summary>
-        <div class="hint" id="fieldKeyList" style="line-height:1.8;"></div>
-      </details>
-    </details>
-    <div class="grid" style="grid-template-columns:2fr 1fr;margin-top:12px;">
-      <div>
-        <label>Paste your Google Form pre-filled link</label>
-        <input id="gformLink" type="hidden" value="https://docs.google.com/forms/d/e/1FAIpQLScEDv5QELuYtlOODKTqfKBZAPzPnTlrg4a-8YQIpFWmUl09lw/viewform?usp=pp_url&entry.2045479705=docNo&entry.435413920=orderNo&entry.1998028078=orderDate&entry.510578087=quoteNo&entry.934095217=customerName&entry.222535600=poNo&entry.596952189=status&entry.221602364=itemCode&entry.636121822=itemName&entry.1814740863=category&entry.863576037=colour&entry.2084237975=family&entry.2039896138=ls&entry.1028364486=clayLoss&entry.1869923256=firingYield&entry.2109289846=firingLoss&entry.1489654612=salesQty&entry.1268716120=stockQty&entry.189671400=balanceToMake&entry.38314248=reqCasting&entry.1404135589=reqCastingQty&entry.273178309=mouldReady&entry.733901400=dailyCasting&entry.490151312=castingDays&entry.1951394151=skipSunday&entry.1234806201=totalProdDays&entry.1882150465=deliveryDate">
-      </div>
-      <div style="display:flex;align-items:flex-end;gap:8px;">
-        <button class="btn secondary" id="detectFieldsBtn">🔍 Detect Fields</button>
-      </div>
-    </div>
-    <div id="gformStatus" class="hint">Not connected yet.</div>
-    <div class="actions" style="margin-top:10px;">
+    <div class="actions">
       <button class="btn secondary" id="sendToFormBtn">📨 Send This Order to Google Form</button>
     </div>
     <div id="sendStatus"></div>
   </div>
 
 </main>
+
 
 <footer>Developed by Shakthi Chathuranga · Ceramic Production Delivery Date Calculator</footer>
 
@@ -237,6 +235,37 @@ function setVal(id,v){ document.getElementById(id).value = v; }
 
 let lastCalc = null;
 
+function renderOrderSummary(){
+  const d = collectFormData();
+  const rows = [
+    ['Doc No', d.docNo], ['Order No', d.orderNo], ['Order Date', d.orderDate], ['Quote No', d.quoteNo],
+    ['Customer Name', d.customerName], ['P.O. No', d.poNo], ['Status', d.status],
+    ['Item Code', d.itemCode], ['Item Name', d.itemName], ['Category', d.category], ['Colour', d.colour],
+    ['Family', d.family], ['L/S', d.ls],
+    ['Sales Order Qty', d.salesQty], ['Stock Qty', d.stockQty], ['Balance to Make', d.balanceToMake],
+    ['Mould Ready?', d.mouldReady], ['Daily Casting Qty', d.dailyCasting], ['Casting Days', d.castingDays],
+    ['Skip Sunday?', d.skipSunday]
+  ];
+  const grid = document.getElementById('orderSummaryGrid');
+  grid.innerHTML = rows.map(([k,v])=>`<div class="sum-item"><span class="k">${k}</span><span class="v">${v || '—'}</span></div>`).join('');
+}
+
+function renderTimelineSkeleton(){
+  const tbody = document.getElementById('timelineBody');
+  tbody.innerHTML = STAGES.map(stage=>{
+    const dayCell = stage.key==='casting'
+      ? `<input class="day-input locked" id="day-${stage.key}" type="text" value="${stage.days!=null?stage.days:0}" readonly title="Auto-calculated from Required Casting Qty ÷ Daily Casting Qty">`
+      : `<input class="day-input" id="day-${stage.key}" type="number" min="0" step="1" value="${stage.days}" title="Click to change">`;
+    return `<tr><td>${stage.label}${stage.gate?' <span class="hint" style="display:inline;">(skipped if Mould Ready)</span>':''}</td>`+
+           `<td>${dayCell}</td><td id="cum-${stage.key}">0</td><td id="exp-${stage.key}">—</td></tr>`;
+  }).join('');
+  STAGES.forEach(stage=>{
+    if(stage.key==='casting') return;
+    document.getElementById('day-'+stage.key).addEventListener('input', calcAll);
+    document.getElementById('day-'+stage.key).addEventListener('change', calcAll);
+  });
+}
+
 function calcAll(){
   const orderDateStr = getVal('orderDate');
   const mouldReady = getVal('mouldReady');
@@ -258,15 +287,21 @@ function calcAll(){
 
   const castingDays = dailyCasting>0 ? roundUp(reqCastingQty/dailyCasting) : 0;
   setVal('castingDays', castingDays||0);
-
-  const tbody = document.getElementById('timelineBody');
-  tbody.innerHTML = '';
+  const castingDayInput = document.getElementById('day-casting');
+  if(castingDayInput) castingDayInput.value = castingDays||0;
 
   if(!orderDateStr){
     document.getElementById('deliveryDateBig').textContent='Enter Order Date';
     document.getElementById('sundaysCount').textContent='0';
     document.getElementById('totalProdDays').textContent='0';
+    STAGES.forEach(stage=>{
+      const cumEl = document.getElementById('cum-'+stage.key);
+      const expEl = document.getElementById('exp-'+stage.key);
+      if(cumEl) cumEl.textContent='0';
+      if(expEl) expEl.textContent='—';
+    });
     lastCalc = null;
+    renderOrderSummary();
     return;
   }
 
@@ -274,7 +309,7 @@ function calcAll(){
   let cumulative=0, deliveryDate=null, sundaysTotal=0;
 
   STAGES.forEach(stage=>{
-    const dayCount = stage.key==='casting' ? castingDays : stage.days;
+    const dayCount = stage.key==='casting' ? castingDays : (parseFloat(getVal('day-'+stage.key))||0);
     const effectiveDays = stage.gate ? (mouldReady==='No' ? dayCount : 0) : dayCount;
     cumulative += effectiveDays;
 
@@ -286,9 +321,8 @@ function calcAll(){
     }
     sundaysTotal = sundaysInStage;
 
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${stage.label}</td><td>${dayCount!=null?dayCount:'—'}</td><td>${cumulative}</td><td>${fmtDateDisplay(expected)}</td>`;
-    tbody.appendChild(tr);
+    document.getElementById('cum-'+stage.key).textContent = cumulative;
+    document.getElementById('exp-'+stage.key).textContent = fmtDateDisplay(expected);
 
     if(stage.key==='buffer') deliveryDate = expected;
   });
@@ -298,6 +332,7 @@ function calcAll(){
   document.getElementById('deliveryDateBig').textContent = fmtDateDisplay(deliveryDate);
 
   lastCalc = {balance, reqCasting, reqCastingQty, castingDays, cumulative, sundaysTotal, deliveryDate};
+  renderOrderSummary();
 }
 
 /* ============ ITEM LOOKUP ============ */
@@ -321,9 +356,13 @@ document.getElementById('itemCode').addEventListener('input',(e)=>{
   calcAll();
 });
 
-['orderDate','mouldReady','skipSunday','salesQty','stockQty','dailyCasting'].forEach(id=>{
+['orderDate','mouldReady','skipSunday','salesQty','stockQty','dailyCasting','clayLoss','firingYield','firingLoss'].forEach(id=>{
   document.getElementById(id).addEventListener('input', calcAll);
   document.getElementById(id).addEventListener('change', calcAll);
+});
+['docNo','orderNo','quoteNo','customerName','poNo','status'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderOrderSummary);
+  document.getElementById(id).addEventListener('change', renderOrderSummary);
 });
 
 /* ============ COLLECT DATA / CLEAR ============ */
@@ -341,12 +380,15 @@ function collectFormData(){
   };
 }
 const FIELD_KEYS = Object.keys(collectFormData());
-document.getElementById('fieldKeyList').innerHTML = FIELD_KEYS.map(k=>`<span class="fieldkey">${k}</span>`).join(' ');
 
 document.getElementById('newBtn').addEventListener('click',()=>{
   document.querySelectorAll('input:not([readonly])').forEach(i=>i.value='');
   setVal('stockQty','0'); setVal('mouldReady','No'); setVal('dailyCasting','100'); setVal('skipSunday','Yes');
   ['itemName','category','colour','family','ls','clayLoss','firingYield','firingLoss','reqCasting','reqCastingQty','castingDays','balanceToMake'].forEach(id=>setVal(id,''));
+  STAGES.forEach(stage=>{
+    if(stage.key==='casting') return;
+    setVal('day-'+stage.key, stage.days);
+  });
   calcAll();
 });
 
@@ -356,11 +398,20 @@ document.getElementById('printBtn').addEventListener('click', ()=> window.print(
 /* ============ SHARE TEXT BUILDER ============ */
 function buildShareText(){
   const d = collectFormData();
-  return `🏺 Ceramic Production Order\n\n`+
-    `Order No: ${d.orderNo}\nCustomer: ${d.customerName}\nItem: ${d.itemName} (${d.itemCode})\n`+
-    `Sales Qty: ${d.salesQty} | Balance to Make: ${d.balanceToMake}\n`+
-    `Total Production Days: ${d.totalProdDays}\n`+
-    `🚚 Delivery Date: ${d.deliveryDate}\n`;
+  return `🏺 CERAMIC PRODUCTION ORDER\n`+
+    `================================\n`+
+    `Doc No: ${d.docNo||'-'}\nOrder No: ${d.orderNo||'-'}\nOrder Date: ${d.orderDate||'-'}\n`+
+    `Quote No: ${d.quoteNo||'-'}\nCustomer: ${d.customerName||'-'}\nP.O. No: ${d.poNo||'-'}\nStatus: ${d.status||'-'}\n`+
+    `--------------------------------\n`+
+    `Item Code: ${d.itemCode||'-'}\nItem Name: ${d.itemName||'-'}\nCategory: ${d.category||'-'}\n`+
+    `Colour: ${d.colour||'-'}\nFamily: ${d.family||'-'}\nL/S: ${d.ls||'-'}\n`+
+    `--------------------------------\n`+
+    `Sales Order Qty: ${d.salesQty||'-'}\nStock Qty: ${d.stockQty||'-'}\nBalance to Make: ${d.balanceToMake||'-'}\n`+
+    `Mould Ready?: ${d.mouldReady||'-'}\nDaily Casting Qty: ${d.dailyCasting||'-'}\nCasting Days: ${d.castingDays||'-'}\n`+
+    `Skip Sunday?: ${d.skipSunday||'-'}\n`+
+    `--------------------------------\n`+
+    `Total Production Days: ${d.totalProdDays||'-'}\n`+
+    `🚚 DELIVERY DATE: ${d.deliveryDate||'-'}\n`;
 }
 
 document.getElementById('whatsappBtn').addEventListener('click', ()=>{
@@ -378,79 +429,40 @@ document.getElementById('emailBtn').addEventListener('click', ()=>{
   window.location.href = 'mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text);
 });
 
-/* ============ GOOGLE FORM INTEGRATION (no Apps Script needed) ============ */
-const GFORM_KEY = 'ceramic_gform_config';
-
-function loadGformConfig(){
-  try{ return JSON.parse(localStorage.getItem(GFORM_KEY) || 'null'); }catch(e){ return null; }
-}
-function saveGformConfig(cfg){ localStorage.setItem(GFORM_KEY, JSON.stringify(cfg)); }
-
-function refreshGformStatus(){
-  const cfg = loadGformConfig();
-  const el = document.getElementById('gformStatus');
-  if(cfg && cfg.actionUrl && Object.keys(cfg.map).length){
-    el.textContent = `✓ Connected — ${Object.keys(cfg.map).length} field(s) mapped.`;
-    el.className = 'hint';
-  } else {
-    el.textContent = 'Not connected yet.';
+/* ============ GOOGLE FORM INTEGRATION (pre-configured, no Apps Script needed) ============ */
+const GFORM_CONFIG = {
+  actionUrl: "https://docs.google.com/forms/d/e/1FAIpQLScEDv5QELuYtlOODKTqfKBZAPzPnTlrg4a-8YQIpFWmUl09lw/formResponse",
+  map: {
+    "docNo":"entry.2045479705","orderNo":"entry.435413920","orderDate":"entry.1998028078","quoteNo":"entry.510578087",
+    "customerName":"entry.934095217","poNo":"entry.222535600","status":"entry.596952189","itemCode":"entry.221602364",
+    "itemName":"entry.636121822","category":"entry.1814740863","colour":"entry.863576037","family":"entry.2084237975",
+    "ls":"entry.2039896138","clayLoss":"entry.1028364486","firingYield":"entry.1869923256","firingLoss":"entry.2109289846",
+    "salesQty":"entry.1489654612","stockQty":"entry.1268716120","balanceToMake":"entry.189671400","reqCasting":"entry.38314248",
+    "reqCastingQty":"entry.1404135589","mouldReady":"entry.273178309","dailyCasting":"entry.733901400","castingDays":"entry.490151312",
+    "skipSunday":"entry.1951394151","totalProdDays":"entry.1234806201","deliveryDate":"entry.1882150465"
   }
-}
-
-document.getElementById('detectFieldsBtn').addEventListener('click', ()=>{
-  const link = document.getElementById('gformLink').value.trim();
-  const statusEl = document.getElementById('gformStatus');
-  if(!link){ statusEl.textContent='Paste the pre-filled link first.'; return; }
-  try{
-    const url = new URL(link);
-    const map = {};
-    for(const [key, value] of url.searchParams.entries()){
-      if(key.startsWith('entry.') && FIELD_KEYS.includes(value.trim())){
-        map[value.trim()] = key;
-      }
-    }
-    if(Object.keys(map).length===0){
-      statusEl.innerHTML = '✗ No matching fields found. Make sure you typed the exact field keys (e.g. <span class="fieldkey">customerName</span>) as answers before copying the link.';
-      statusEl.className = 'status-msg err';
-      return;
-    }
-    const actionUrl = url.origin + url.pathname.replace(/viewform$/, 'formResponse');
-    saveGformConfig({actionUrl, map});
-    statusEl.innerHTML = `✓ Detected ${Object.keys(map).length} field(s): `+Object.keys(map).map(k=>`<span class="fieldkey">${k}</span>`).join(' ');
-    statusEl.className = 'status-msg ok';
-  }catch(e){
-    statusEl.textContent = '✗ That doesn\'t look like a valid link.';
-    statusEl.className = 'status-msg err';
-  }
-});
+};
 
 document.getElementById('sendToFormBtn').addEventListener('click', async ()=>{
-  const cfg = loadGformConfig();
   const statusEl = document.getElementById('sendStatus');
-  if(!cfg || !cfg.actionUrl){
-    statusEl.innerHTML = '<div class="status-msg err">Set up the Google Form connection above first (Detect Fields).</div>';
-    return;
-  }
   const data = collectFormData();
   const params = new URLSearchParams();
-  Object.entries(cfg.map).forEach(([fieldKey, entryId])=>{
+  Object.entries(GFORM_CONFIG.map).forEach(([fieldKey, entryId])=>{
     params.append(entryId, data[fieldKey] !== undefined ? data[fieldKey] : '');
   });
   try{
-    await fetch(cfg.actionUrl, {method:'POST', mode:'no-cors', body:params});
+    await fetch(GFORM_CONFIG.actionUrl, {method:'POST', mode:'no-cors', body:params});
     statusEl.innerHTML = '<div class="status-msg ok">✓ Sent to Google Form. Check your linked Google Sheet (Form Responses) to confirm.</div>';
   }catch(e){
-    statusEl.innerHTML = '<div class="status-msg err">✗ Could not send. Check your internet connection and the form link.</div>';
+    statusEl.innerHTML = '<div class="status-msg err">✗ Could not send. Check your internet connection.</div>';
   }
 });
 
 /* ============ INIT ============ */
 (function init(){
   setVal('stockQty','0');
+  renderTimelineSkeleton();
   calcAll();
-  const cfg = loadGformConfig();
-  if(cfg) document.getElementById('gformLink').value = '';
-  refreshGformStatus();
 })();
 </script>
 </body>
