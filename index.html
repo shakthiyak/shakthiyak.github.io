@@ -256,7 +256,7 @@
             border-radius: 10px; cursor: not-allowed; opacity: 0.7;
         }
 
-        /* 🧭 Career Timeline (trimmed) */
+        /* 🧭 Career Timeline (short) */
         .timeline {
             position: relative; max-width: 900px; margin: 0 auto 80px auto;
             padding-left: 30px; border-left: 2px solid rgba(56, 189, 248, 0.25);
@@ -294,7 +294,7 @@
         .certs-more a { color: #38bdf8; text-decoration: none; font-weight: 600; }
         .certs-more a:hover { text-decoration: underline; }
 
-        /* 💬 Testimonials */
+        /* 💬 Testimonials & Recognition */
         .testimonials-grid {
             display: grid;
             grid-template-columns: 1.3fr 1fr;
@@ -334,6 +334,54 @@
             color: #64748b;
             font-weight: 400;
             margin-top: 3px;
+        }
+
+        /* 🏆 Awards Styling */
+        .awards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .award-subcard {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 22px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .award-subcard:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-2px);
+        }
+        .award-year-badge {
+            position: absolute;
+            top: 20px;
+            right: 22px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .award-subcard h4 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 4px;
+            padding-right: 60px;
+        }
+        .award-subcard .award-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .award-subcard p {
+            font-size: 13.5px;
+            color: #94a3b8;
+            line-height: 1.6;
         }
 
         /* 📇 Contact */
@@ -485,7 +533,7 @@
             </div>
         </div>
 
-        <!-- 📜 Certifications (featured, trimmed) -->
+        <!-- 📜 Certifications -->
         <h2 class="section-title">Professional Certifications</h2>
         <div class="certs-container">
             <div class="certs-list">
@@ -521,9 +569,10 @@
             <div class="certs-more">+ 4 more certifications — see full list on <a href="Shakthi_Chathuranga_CV.pdf" target="_blank">CV</a></div>
         </div>
 
-        <!-- 💬 Testimonials -->
-        <h2 class="section-title">What Colleagues Say</h2>
+        <!-- 💬 Testimonials & Recognition -->
+        <h2 class="section-title">Recognition & Testimonials</h2>
         <div class="testimonials-grid">
+            <!-- Left Column: Rathna's Big Testimonial -->
             <div class="testimonial-card">
                 <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 8C6.5 8 4 10.5 4 13.5S6.5 19 9.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C15.3 9.5 12.7 8 9.5 8zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 19 19.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C25.3 9.5 22.7 8 19.5 8z" transform="translate(-4,-8)"/></svg>
                 <p class="quote">In over 23 years of hiring, managing, and developing people, I can count on one hand the professionals who have genuinely impressed me at every level. Shakthi is one of them. I have worked with Shakthi for 12 years at General Ceramics JSC Sharjah, and I will be straightforward: I do not want to lose him. But great talent deserves great opportunity, and that is exactly why I am writing this.
@@ -535,12 +584,33 @@
                 The project that best captures who he is: Shakthi single-handedly led the development and deployment of a custom Production Control ERP system for our facility. He built the entire workflow from scratch — mapping processes, working hand-in-hand with developers, troubleshooting, and ensuring a smooth, disruption-free rollout. That project required technical skill, creative thinking, and real ownership. He brought all three.
                 <br><br>
                 Shakthi is talented, dedicated, creative, and the kind of colleague who makes the people around him better. He will be an asset to any team lucky enough to have him and a very difficult act to follow. You will not regret bringing him on board.</p>
-                <div class="testimonial-author">Rathna Kumara <span>Production Planner · General Ceramics Co. Sharjah J.S.C</span></div>
+                <div class="testimonial-author">Rathna Kumara <span>Production Planner &middot; General Ceramics Co. Sharjah J.S.C</span></div>
             </div>
-            <div class="testimonial-card">
-                <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 8C6.5 8 4 10.5 4 13.5S6.5 19 9.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C15.3 9.5 12.7 8 9.5 8zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 19 19.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C25.3 9.5 22.7 8 19.5 8z" transform="translate(-4,-8)"/></svg>
-                <p class="quote">I had the pleasure of working closely with Shakthi in a challenging environment. His exceptional skills, dedication, and attention to detail were instrumental in its success. I highly recommend Shakthi here for their dedication, professionalism, and ability to deliver results.</p>
-                <div class="testimonial-author">Pubudu Sampath Rathnayake <span>Virtual System Solutions (Pvt) Ltd</span></div>
+
+            <!-- Right Column: Pubudu's Testimonial + Awards Group -->
+            <div class="awards-container">
+                <!-- Pubudu's Testimonial -->
+                <div class="testimonial-card">
+                    <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 8C6.5 8 4 10.5 4 13.5S6.5 19 9.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C15.3 9.5 12.7 8 9.5 8zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 19 19.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C25.3 9.5 22.7 8 19.5 8z" transform="translate(-4,-8)"/></svg>
+                    <p class="quote">I had the pleasure of working closely with Shakthi in a challenging environment. His exceptional skills, dedication, and attention to detail were instrumental in its success. I highly recommend Shakthi here for their dedication, professionalism, and ability to deliver results.</p>
+                    <div class="testimonial-author">Pubudu Sampath Rathnayake <span>Virtual System Solutions (Pvt) Ltd</span></div>
+                </div>
+
+                <!-- Award 1: 12 Years Distinguished Service -->
+                <div class="award-subcard">
+                    <span class="award-year-badge">🏆 2026</span>
+                    <h4>12 Years of Distinguished Service</h4>
+                    <div class="award-meta">General Ceramics Co. Sharjah J.S.C &middot; MIS Dept.</div>
+                    <p>Awarded in grateful recognition of twelve years of unwavering dedication, exceptional talent, and milestones in ERP Leadership, Technical Support Setup, and COVID-19 Response.</p>
+                </div>
+
+                <!-- Award 2: Outstanding Achievement -->
+                <div class="award-subcard">
+                    <span class="award-year-badge">⭐ 2018</span>
+                    <h4>Outstanding Achievement Award</h4>
+                    <div class="award-meta">General Ceramics Ltd &middot; UAE</div>
+                    <p>Presented in appreciation of outstanding dedication and hard work committed to accomplishing corporate manufacturing objectives.</p>
+                </div>
             </div>
         </div>
 
