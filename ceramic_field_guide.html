@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceramic Sanitaryware · Field Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel-2:#151f32;
+    --accent:#38bdf8; --accent-2:#0ea5e9; --accent-3:#818cf8;
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --line:rgba(255,255,255,0.08); --ok:#22c55e; --warn:#f87171;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+  header{background:rgba(15,23,42,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 24px;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  header .brand{font-weight:700;font-size:1.05rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  nav.top-nav{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;}
+  nav.top-nav a{color:var(--muted);text-decoration:none;}
+  nav.top-nav a:hover{color:var(--accent);}
+  main{max-width:1000px;margin:0 auto;padding:0 20px 80px;}
+
+  .hero{padding:70px 0 50px;text-align:left;}
+  .hero .eyebrow{color:var(--accent);font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;}
+  .hero h1{font-size:2.4rem;font-weight:800;margin:0 0 16px;line-height:1.15;}
+  .hero h1 span{background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--muted);font-size:1.05rem;max-width:640px;margin:0;}
+
+  section{padding:56px 0;border-top:1px solid var(--line);}
+  section h2{font-size:1.5rem;font-weight:700;margin:0 0 8px;}
+  section .section-sub{color:var(--muted);font-size:.95rem;margin:0 0 32px;max-width:640px;}
+
+  /* Process timeline */
+  .process{display:flex;flex-direction:column;gap:0;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:20px;position:relative;padding-bottom:28px;}
+  .step:last-child{padding-bottom:0;}
+  .step .num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent-2),var(--accent-3));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;position:relative;z-index:2;}
+  .step .line{position:absolute;left:19px;top:40px;bottom:-28px;width:2px;background:var(--line);}
+  .step:last-child .line{display:none;}
+  .step .content{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .step .content h3{margin:0 0 6px;font-size:1.05rem;}
+  .step .content p{margin:0;color:var(--muted);font-size:.9rem;}
+  .step .tag{display:inline-block;font-size:.68rem;font-weight:700;color:var(--accent);background:rgba(56,189,248,0.1);padding:2px 8px;border-radius:6px;margin-left:8px;letter-spacing:.03em;}
+
+  /* Single-page horizontal flow */
+  .flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:10px;}
+  .flow-step{flex:1;min-width:130px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 14px;position:relative;text-align:center;}
+  .flow-step .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent-2),var(--accent-3));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;color:#fff;margin:0 auto 10px;}
+  .flow-step h3{margin:0 0 6px;font-size:.92rem;}
+  .flow-step p{margin:0;color:var(--muted);font-size:.76rem;line-height:1.45;}
+  .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:1.2rem;padding:0 4px;flex-shrink:0;}
+  @media (max-width:900px){
+    .flow{flex-direction:column;}
+    .flow-arrow{transform:rotate(90deg);padding:6px 0;}
+  }
+
+  /* Comparison cards */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:640px){.compare{grid-template-columns:1fr;}}
+  .compare-card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:14px;padding:22px;}
+  .compare-card h3{margin:0 0 4px;font-size:1.1rem;color:var(--accent);}
+  .compare-card .full-name{color:var(--dim);font-size:.78rem;margin-bottom:14px;}
+  .compare-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem;}
+  .compare-card li{margin-bottom:6px;}
+
+  /* Product grid */
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .product-chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.88rem;}
+  .product-chip .icon{font-size:1.3rem;display:block;margin-bottom:6px;}
+  .product-chip .name{font-weight:600;}
+  .product-chip .body-type{color:var(--dim);font-size:.72rem;}
+
+  /* Machinery cards */
+  .machine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+  .machine-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .machine-card h3{margin:0 0 6px;font-size:1rem;color:var(--accent-3);}
+  .machine-card p{margin:0;color:var(--muted);font-size:.85rem;}
+
+  /* Glossary */
+  .glossary-search{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:rgba(15,23,42,0.6);color:var(--ink);font-size:.95rem;margin-bottom:20px;}
+  .glossary-search:focus{outline:2px solid var(--accent);}
+  .glossary-list{display:grid;gap:2px;}
+  .gterm{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px;}
+  .gterm .term{font-weight:700;color:var(--accent);font-size:.92rem;}
+  .gterm .def{color:var(--muted);font-size:.86rem;margin-top:4px;}
+  .gterm.hidden{display:none;}
+
+  /* Metrics */
+  .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .metric-card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;}
+  .metric-card .value{font-size:1.6rem;font-weight:800;color:var(--accent);}
+  .metric-card .label{color:var(--muted);font-size:.82rem;margin-top:4px;}
+  .metric-card .note{color:var(--dim);font-size:.72rem;margin-top:8px;}
+
+  .callout{background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:12px;padding:16px 20px;font-size:.88rem;color:var(--muted);margin-top:24px;}
+  .callout b{color:var(--ink);}
+
+  footer{text-align:center;color:var(--dim);font-size:.8rem;padding:30px 20px;border-top:1px solid var(--line);}
+  a.inline-link{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">🏺 Ceramic Field Guide</div>
+  <nav class="top-nav">
+    <a href="#process">Process</a>
+    <a href="#families">Product Types</a>
+    <a href="#machinery">Machinery</a>
+    <a href="#glossary">Glossary</a>
+    <a href="#metrics">Key Metrics</a>
+    <a href="https://shakthiyak.github.io/">← Portfolio</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="eyebrow">New to the industry?</div>
+    <h1>From wet clay to a <span>finished bathroom fixture</span> — everything a newcomer needs to know.</h1>
+    <p>A practical field guide to sanitaryware ceramics manufacturing: the production flow, the product families, the machines on the floor, and the terms everyone around you already knows.</p>
+  </div>
+
+  <section id="process">
+    <h2>The Production Process</h2>
+    <p class="section-sub">A single water closet or wash basin moves through this flow, start to finish.</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="num">1</div>
+        <h3>Casting</h3>
+        <p>Slip is poured into the plaster mould, which draws out water and builds up a clay layer against the mould wall.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">2</div>
+        <h3>Dryer</h3>
+        <p>The demoulded piece is dried to remove remaining moisture before it moves further down the line.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">3</div>
+        <h3>Greenware</h3>
+        <p>The dried, unfired piece is inspected — cracks, warping, or casting defects are caught here before glazing.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">4</div>
+        <h3>Trap Glaze</h3>
+        <p>Glaze is applied to hard-to-reach areas — like the internal trapway — that the main spray pass can't cover.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">5</div>
+        <h3>Glaze</h3>
+        <p>The main glaze spray is applied, giving the piece its smooth, glossy surface once fired.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">6</div>
+        <h3>Kiln</h3>
+        <p>Fired at roughly 1150–1250°C. The clay body vitrifies and the glaze melts into its final finish.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="num">7</div>
+        <h3>Glost Ins.</h3>
+        <p>Final inspection of the glazed-and-fired piece — surface, dimensions, and first-quality vs. seconds sorting.</p>
+      </div>
+    </div>
+    <div class="callout"><b>Note:</b> exact stage names and sequence vary slightly by factory — this reflects the general shape of the process. Your own plant's SOPs are always the source of truth.</div>
+  </section>
+
+  <section id="families">
+    <h2>Product Families</h2>
+    <p class="section-sub">Almost everything on the floor is made from one of two clay bodies. Which one depends on the size, shape, and complexity of the piece.</p>
+    <div class="compare">
+      <div class="compare-card">
+        <h3>VC</h3>
+        <div class="full-name">Vitreous China</div>
+        <ul>
+          <li>Dense, low-porosity body once fired</li>
+          <li>Typical products: wash basins, pedestals, cisterns/tanks, lids, most modern water closets</li>
+          <li>Generally finer detail, smoother finish</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h3>FFC</h3>
+        <div class="full-name">Fine Fire Clay</div>
+        <ul>
+          <li>Slightly more porous than VC before glazing seals it</li>
+          <li>Typical products: larger basins, kitchen/utility sinks, some water closets, bidets</li>
+          <li>Historically favoured for bigger or more complex shapes less prone to warping</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="products">
+    <h2>Common Product Types</h2>
+    <p class="section-sub">The vocabulary you'll hear on any sanitaryware floor.</p>
+    <div class="product-grid">
+      <div class="product-chip"><span class="icon">🚽</span><span class="name">Water Closet (WC)</span><div class="body-type">VC or FFC</div></div>
+      <div class="product-chip"><span class="icon">🪣</span><span class="name">Wash Basin</span><div class="body-type">VC or FFC</div></div>
+      <div class="product-chip"><span class="icon">🦵</span><span class="name">Pedestal</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🚰</span><span class="name">Cistern / Tank</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🔲</span><span class="name">Lid / Seat Cover</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🛁</span><span class="name">Bidet</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🚿</span><span class="name">Shower Tray</span><div class="body-type">FFC</div></div>
+      <div class="product-chip"><span class="icon">🧽</span><span class="name">Sink</span><div class="body-type">FFC</div></div>
+      <div class="product-chip"><span class="icon">🧍</span><span class="name">Urinal</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🕳️</span><span class="name">Squatting Pan</span><div class="body-type">VC</div></div>
+      <div class="product-chip"><span class="icon">🧴</span><span class="name">Accessories</span><div class="body-type">Soap holders, paper holders</div></div>
+    </div>
+  </section>
+
+  <section id="machinery">
+    <h2>Machinery You'll Hear Named</h2>
+    <p class="section-sub">Equipment brand names get used like common nouns on the floor — worth knowing what each one actually does.</p>
+    <div class="machine-grid">
+      <div class="machine-card">
+        <h3>SACMI</h3>
+        <p>Italian manufacturer best known in this industry for pressure-casting systems — machines that inject slip under pressure for a faster, more consistent cycle than traditional gravity casting into plaster moulds.</p>
+      </div>
+      <div class="machine-card">
+        <h3>GAROLL</h3>
+        <p>Associated with robotic glazing lines — automated spray booths that apply glaze with more consistent, repeatable coverage than manual spraying.</p>
+      </div>
+      <div class="machine-card">
+        <h3>UNIMAC</h3>
+        <p>Equipment supplier whose name comes up around handling and auxiliary systems on the production line. Exact scope varies by plant — worth confirming locally what your factory's UNIMAC units specifically do.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Kiln (Tunnel / Shuttle)</h3>
+        <p>Not a brand — the firing furnace itself. Tunnel kilns move ware continuously through fixed heat zones; shuttle kilns fire one batch at a time in a chamber. Either way, this is where vitrification happens.</p>
+      </div>
+    </div>
+    <div class="callout">Machine names and their exact roles vary by plant and supplier contracts — treat these as general orientation, not a substitute for your own factory's equipment list.</div>
+  </section>
+
+  <section id="glossary">
+    <h2>Glossary</h2>
+    <p class="section-sub">Type to filter.</p>
+    <input class="glossary-search" id="glossarySearch" placeholder="Search a term, e.g. 'shrinkage'...">
+    <div class="glossary-list" id="glossaryList">
+      <div class="gterm"><div class="term">Slip</div><div class="def">Liquid clay body used for casting — clay and minerals suspended in water.</div></div>
+      <div class="gterm"><div class="term">Greenware / GWI</div><div class="def">Unfired ("green") ceramic ware, and the Green Ware Inspection step that checks it before further processing.</div></div>
+      <div class="gterm"><div class="term">Trap Glaze</div><div class="def">Glaze manually or robotically applied to hard-to-reach internal areas (like a WC trapway) before the main spray pass.</div></div>
+      <div class="gterm"><div class="term">Spray</div><div class="def">The main glaze application stage, typically done in a spray booth.</div></div>
+      <div class="gterm"><div class="term">Glost</div><div class="def">Ware that has been glazed and fired — "glost inspection" is the post-firing quality check.</div></div>
+      <div class="gterm"><div class="term">Vitrification</div><div class="def">The process during firing where the clay body becomes dense and glass-like, giving fired ceramic its strength and low porosity.</div></div>
+      <div class="gterm"><div class="term">Shrinkage</div><div class="def">The size reduction from wet clay to fired piece, from both drying and firing. Mould dimensions must account for it up front.</div></div>
+      <div class="gterm"><div class="term">Firing Loss / Firing Yield</div><div class="def">The proportion of material lost (or retained) during firing — used to work backward from a finished-piece target to how much green material must be cast.</div></div>
+      <div class="gterm"><div class="term">VC (Vitreous China)</div><div class="def">A dense, low-porosity ceramic body — see Product Families above.</div></div>
+      <div class="gterm"><div class="term">FFC (Fine Fire Clay)</div><div class="def">A ceramic body typically used for larger or more complex shapes — see Product Families above.</div></div>
+      <div class="gterm"><div class="term">WIP (Work in Progress)</div><div class="def">Pieces that have entered production but haven't yet reached finished/packed status.</div></div>
+      <div class="gterm"><div class="term">AQL (Acceptable Quality Level)</div><div class="def">A statistical sampling standard (ISO 2859) used to decide how many units from a batch to inspect, and how many defects are tolerable before rejecting the lot.</div></div>
+      <div class="gterm"><div class="term">OEE (Overall Equipment Effectiveness)</div><div class="def">A standard efficiency metric: Availability × Performance × Quality, used to measure how well a machine or kiln is actually being used.</div></div>
+      <div class="gterm"><div class="term">ERP (Enterprise Resource Planning)</div><div class="def">Company-wide software for production, inventory, and finance. Common systems in this industry include FACTS, xAct, Infos, and SAP.</div></div>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <h2>Numbers You'll See Everywhere</h2>
+    <p class="section-sub">These show up in planning sheets constantly — here's what they mean in plain terms.</p>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="value">Shrinkage %</div>
+        <div class="label">Green-to-fired size reduction</div>
+        <div class="note">Mould design must oversize the pattern to compensate.</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">Firing Loss %</div>
+        <div class="label">Material lost during firing</div>
+        <div class="note">Used to calculate how much must be cast to hit a finished-goods target.</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">Casting Yield</div>
+        <div class="label">Good pieces per cast, after defects</div>
+        <div class="note">Drives how many casting days a given order needs.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Field guide for newcomers to ceramic sanitaryware manufacturing · Built by Shakthi Chathuranga</footer>
+
+<script>
+document.getElementById('glossarySearch').addEventListener('input', (e)=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.gterm').forEach(el=>{
+    const text = el.textContent.toLowerCase();
+    el.classList.toggle('hidden', q && !text.includes(q));
+  });
+});
+</script>
+
+</body>
+</html>
