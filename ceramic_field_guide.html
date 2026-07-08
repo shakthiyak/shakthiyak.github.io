@@ -15,11 +15,71 @@
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
-  header{background:rgba(15,23,42,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 24px;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-  header .brand{font-weight:700;font-size:1.05rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  nav.top-nav{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;}
-  nav.top-nav a{color:var(--muted);text-decoration:none;}
-  nav.top-nav a:hover{color:var(--accent);}
+  
+  /* 🌐 Fixed Premium Navigation Bar */
+  nav {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 0 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+  }
+
+  .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+  }
+
+  .logo span {
+      background: linear-gradient(to right, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+  }
+
+  .nav-tabs {
+      display: flex !important;
+      flex-direction: row !important;
+      list-style: none !important;
+      height: 100%;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+  }
+
+  .nav-tabs li {
+      list-style: none !important;
+      height: 100%;
+      display: flex;
+      align-items: center;
+  }
+
+  .nav-tabs a {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 15px;
+      height: 100%;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+  }
+
+  .nav-tabs a:hover, .nav-tabs a.active {
+      color: var(--accent);
+      border-bottom: 3px solid var(--accent);
+  }
+
   main{max-width:1000px;margin:0 auto;padding:0 20px 80px;}
 
   .hero{padding:70px 0 50px;text-align:left;}
@@ -51,6 +111,7 @@
   .flow-step h3{margin:0 0 6px;font-size:.92rem;}
   .flow-step p{margin:0;color:var(--muted);font-size:.76rem;line-height:1.45;}
   .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:1.2rem;padding:0 4px;flex-shrink:0;}
+  
   @media (max-width:900px){
     .flow{flex-direction:column;}
     .flow-arrow{transform:rotate(90deg);padding:6px 0;}
@@ -99,22 +160,26 @@
 
   footer{text-align:center;color:var(--dim);font-size:.8rem;padding:30px 20px;border-top:1px solid var(--line);}
   a.inline-link{color:var(--accent);}
+
+  @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-tabs { display: none !important; }
+  }
 </style>
 </head>
 <body>
 
- <!-- 🌐 Navigation -->
-    <nav>
-        <div class="logo">SC. <span>Portal</span></div>
-        <ul class="nav-tabs">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="tools.html">Tools</a></li>
-            <li><a href="ceramic_news.html">Ceramic News</a></li>
-            <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
-            <li><a href="#" class="active">Ceramic Field Guide</a></li>
-           
-        </ul>
-    </nav>
+ <!-- 🌐 Premium Navigation Bar -->
+ <nav>
+     <div class="logo">SC. <span>Portal</span></div>
+     <ul class="nav-tabs">
+         <li><a href="index.html">Home</a></li>
+         <li><a href="tools.html">Tools</a></li>
+         <li><a href="ceramic_news.html">Ceramic News</a></li>
+         <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+         <li><a href="#" class="active">Ceramic Field Guide</a></li>
+     </ul>
+ </nav>
 
 <main>
 
