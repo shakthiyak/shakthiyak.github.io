@@ -297,7 +297,7 @@
         /* 💬 Testimonials & Recognition */
         .testimonials-grid {
             display: grid;
-            grid-template-columns: 1.3fr 1fr;
+            grid-template-columns: 1.2fr 1fr;
             gap: 25px;
             margin-bottom: 80px;
             align-items: start;
@@ -336,7 +336,7 @@
             margin-top: 3px;
         }
 
-        /* 🏆 Awards Styling */
+        /* 🏆 Awards Styling & Layout Updates */
         .awards-container {
             display: flex;
             flex-direction: column;
@@ -347,17 +347,23 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 22px;
-            position: relative;
             transition: all 0.3s ease;
         }
         .award-subcard:hover {
             border-color: rgba(56, 189, 248, 0.3);
             transform: translateY(-2px);
         }
+        .award-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .award-title-area {
+            flex: 1;
+        }
         .award-year-badge {
-            position: absolute;
-            top: 20px;
-            right: 22px;
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.2);
             color: #38bdf8;
@@ -365,24 +371,75 @@
             border-radius: 9999px;
             font-size: 11px;
             font-weight: 600;
+            white-space: nowrap;
+            align-self: flex-start;
         }
         .award-subcard h4 {
             font-size: 16px;
             color: #ffffff;
             margin-bottom: 4px;
-            padding-right: 60px;
         }
         .award-subcard .award-meta {
             font-size: 12px;
             color: #64748b;
-            margin-bottom: 12px;
             font-weight: 500;
         }
         .award-subcard p {
             font-size: 13.5px;
             color: #94a3b8;
             line-height: 1.6;
+            margin-bottom: 15px;
         }
+
+        /* 📸 Award Image Previews */
+        .award-img-preview {
+            width: 100%;
+            height: 140px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .award-img-preview:hover {
+            opacity: 0.85;
+            transform: scale(1.01);
+        }
+
+        /* 🔍 Lightbox Pop-up Modal */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 25px; right: 35px;
+            color: #94a3b8;
+            font-size: 35px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover { color: #ffffff; }
 
         /* 📇 Contact */
         .contact-container {
@@ -404,7 +461,6 @@
             padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.05);
             color: #64748b; font-size: 13px; text-align: center; margin-top: 60px;
         }
-        footer .footer-meta { margin-top: 6px; color: #475569; }
 
         @media (max-width: 968px) {
             .hero-container, .featured-grid, .certs-list, .testimonials-grid { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
@@ -598,20 +654,41 @@
 
                 <!-- Award 1: 12 Years Distinguished Service -->
                 <div class="award-subcard">
-                    <span class="award-year-badge">🏆 2026</span>
-                    <h4>12 Years of Distinguished Service</h4>
-                    <div class="award-meta">General Ceramics Co. Sharjah J.S.C &middot; MIS Dept.</div>
+                    <div class="award-header">
+                        <div class="award-title-area">
+                            <h4>12 Years of Distinguished Service</h4>
+                            <div class="award-meta">General Ceramics Co. Sharjah J.S.C &middot; MIS Dept.</div>
+                        </div>
+                        <span class="award-year-badge">🏆 2026</span>
+                    </div>
                     <p>Awarded in grateful recognition of twelve years of unwavering dedication, exceptional talent, and milestones in ERP Leadership, Technical Support Setup, and COVID-19 Response.</p>
+                    <!-- Trophy Image Embedded -->
+                    <img src="award-12years.png" alt="12 Years Distinguished Service Trophy" class="award-img-preview" onclick="openLightbox(this.src)">
                 </div>
 
                 <!-- Award 2: Outstanding Achievement -->
                 <div class="award-subcard">
-                    <span class="award-year-badge">⭐ 2018</span>
-                    <h4>Outstanding Achievement Award</h4>
-                    <div class="award-meta">General Ceramics Ltd &middot; UAE</div>
+                    <div class="award-header">
+                        <div class="award-title-area">
+                            <h4>Outstanding Achievement Award</h4>
+                            <div class="award-meta">General Ceramics Ltd &middot; UAE</div>
+                        </div>
+                        <span class="award-year-badge">⭐ 2018</span>
+                    </div>
                     <p>Presented in appreciation of outstanding dedication and hard work committed to accomplishing corporate manufacturing objectives.</p>
+                    <!-- Row for 2018 Shield and Ceremony Photo -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <img src="award-2018.jpg" alt="Outstanding Achievement Shield" class="award-img-preview" onclick="openLightbox(this.src)">
+                        <img src="award-ceremony.jpg" alt="Award Ceremony Event" class="award-img-preview" onclick="openLightbox(this.src)">
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 🔍 Lightbox Modal Elements -->
+        <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-content" id="lightbox-img">
         </div>
 
         <!-- 📇 Contact -->
@@ -633,6 +710,26 @@
     <footer>
         &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
     </footer>
+
+    <!-- 🛠 Lightbox Script -->
+    <script>
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = src;
+            lightbox.classList.add('show');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('show');
+        }
+
+        // Close on ESC key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
 
 </body>
 </html>
