@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceramic Industry Live News Insights | Shakthi Chathuranga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* 🌐 Premium Navigation Bar */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            gap: 10px;
+        }
+
+        .nav-tabs a {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-weight: 500;
+            height: 100%;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tabs a:hover, .nav-tabs a.active {
+            color: #38bdf8;
+            border-bottom: 3px solid #38bdf8;
+        }
+
+        /* 📰 News Layout Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            min-height: 80vh;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .header-section h1 span {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-section p {
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        /* Loading Spinner */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+            color: #94a3b8;
+        }
+
+        .spinner {
+            border: 4px solid rgba(56, 189, 248, 0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border-left-color: #38bdf8;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* News Grid Layout */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
+        }
+
+        .news-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-tag {
+            color: #38bdf8;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .news-title {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-desc {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .read-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: auto;
+            transition: color 0.2s ease;
+        }
+
+        .read-btn:hover {
+            color: #0ea5e9;
+        }
+
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; }
+            .nav-tabs { display: none; } /* On mobile header links can be collapsed or minimal */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌐 Premium Navigation Bar -->
+    <nav>
+        <div class="logo">SC. <span>Portal</span></div>
+        <ul class="nav-tabs">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="#" class="active">Ceramic News</a></li>
+        </ul>
+    </nav>
+
+    <!-- ⚡ Main Content Wrapper -->
+    <div class="main-container">
+        
+        <div class="header-section">
+            <h1>Global <span>Ceramic Industry</span> Updates</h1>
+            <p>Live global manufacturing news, market trends, and technological insights.</p>
+        </div>
+
+        <!-- Dynamic Loader -->
+        <div id="loading" class="loading-container">
+            <div class="spinner"></div>
+            <p>Fetching latest industry news updates...</p>
+        </div>
+
+        <!-- News Cards Container -->
+        <div id="news-container" class="news-grid" style="display: none;"></div>
+
+    </div>
+
+    <!-- 👣 Footer -->
+    <footer>
+        &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Using a free cross-origin RSS-to-JSON reader for Google News focused on Ceramic Manufacturing
+            const rssUrl = encodeURIComponent('https://news.google.com/rss/search?q=ceramic+manufacturing+industry+market&hl=en-US&gl=US&ceid=US:en');
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const loading = document.getElementById('loading');
+                    const container = document.getElementById('news-container');
+                    
+                    if(data.status === 'ok' && data.items.length > 0) {
+                        loading.style.display = 'none';
+                        container.style.display = 'grid';
+                        
+                        data.items.forEach(item => {
+                            // Extract clean source name if available
+                            let source = item.author || "Global Industry Update";
+                            if (item.title.includes(" - ")) {
+                                const parts = item.title.split(" - ");
+                                source = parts.pop();
+                            }
+
+                            // Format Date
+                            const pubDate = new Date(item.pubDate).toLocaleDateString('en-US', {
+                                year: 'numeric', month: 'short', day: 'numeric'
+                            });
+
+                            const card = document.createElement('div');
+                            card.className = 'news-card';
+                            card.innerHTML = `
+                                <div>
+                                    <div class="news-tag">${source}</div>
+                                    <h2 class="news-title">${item.title.split(" - ")[0]}</h2>
+                                    <p class="news-desc">${item.content.replace(/<[^>]*>/g, '').substring(0, 160)}...</p>
+                                </div>
+                                <div>
+                                    <div class="news-meta">Published: ${pubDate}</div>
+                                    <a href="${item.link}" target="_blank" class="read-btn">Read Full Article →</a>
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    } else {
+                        showFallback();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching news:', error);
+                    showFallback();
+                });
+
+            function showFallback() {
+                document.getElementById('loading').style.display = 'none';
+                const container = document.getElementById('news-container');
+                container.style.display = 'grid';
+                container.innerHTML = `
+                    <div class="news-card" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <h2 class="news-title">Unable to load live news feed right now</h2>
+                        <p class="news-desc">Please try refreshing the page or check back later. You can visit direct industry platforms below.</p>
+                        <a href="https://www.ceramicworldweb.com/" target="_blank" class="read-btn" style="justify-content: center;">Visit Ceramic World Web Direct →</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
