@@ -87,7 +87,9 @@
 
   /* results strip */
   .results-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .results-strip.strip4{grid-template-columns:repeat(4,1fr);}
   @media (max-width:800px){.results-strip{grid-template-columns:1fr;}}
+  @media (max-width:900px) and (min-width:801px){.results-strip.strip4{grid-template-columns:repeat(2,1fr);}}
   .result-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
   .result-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--dim);margin-bottom:6px;}
   .result-box .value{font-size:22px;font-weight:700;}
@@ -144,35 +146,94 @@
 
   /* PRINT SUMMARY */
   #printSummary{display:none;}
+  @page{ size:A4; margin:12mm; }
   @media print{
-    body *{visibility:hidden;}
-    #printSummary, #printSummary *{visibility:visible;}
-    #printSummary{display:block !important;position:absolute;top:0;left:0;width:100%;background:#fff;color:#111;padding:20px;}
+    html, body{ background:#fff !important; height:auto !important; }
+    nav.site-nav, .tool-page-header, .wrap{ display:none !important; }
+    #printSummary{
+      display:block !important; width:100%; background:#fff; color:#1e293b; padding:0;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;
+    }
     .no-print{display:none !important;}
   }
-  .ps-h{font-size:20px;font-weight:700;margin-bottom:4px;}
-  .ps-sub{font-size:12px;color:#555;margin-bottom:16px;}
-  .ps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;font-size:12px;}
-  .ps-grid div b{display:block;font-size:14px;}
-  .ps-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;}
-  .ps-table th,.ps-table td{border:1px solid #ccc;padding:5px 8px;text-align:left;}
-  .ps-table th{background:#eee;}
-  .ps-result{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-  .ps-result div{border:1px solid #ccc;padding:8px 10px;font-size:12px;}
-  .ps-result div b{display:block;font-size:16px;}
-  .ps-promised{border:2px solid #2563eb;padding:12px;text-align:center;font-size:16px;font-weight:700;color:#2563eb;}
+  .ps-h{font-size:19px;font-weight:700;margin-bottom:2px;color:#1d4ed8;}
+  .ps-sub{font-size:11px;color:#64748b;margin-bottom:12px;}
+  .ps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;font-size:11px;}
+  .ps-grid div{color:#64748b;}
+  .ps-grid div b{display:block;font-size:13px;color:#1e293b;}
+  .ps-table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:12px;}
+  .ps-table th,.ps-table td{border:1px solid #cbd5e1;padding:4px 6px;text-align:left;}
+  .ps-table th{background:#1d4ed8;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ps-table tr.green td:first-child{color:#16a34a;font-weight:600;}
+  .ps-table tr.red td:first-child{color:#dc2626;font-weight:600;}
+  .ps-result{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+  .ps-result div{border:1px solid #cbd5e1;padding:6px 8px;font-size:10.5px;color:#64748b;}
+  .ps-result div b{display:block;font-size:14px;color:#1d4ed8;}
+  .ps-promised{background:#1d4ed8;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:6px;padding:10px;text-align:center;font-size:15px;font-weight:700;color:#fff;}
+
+  /* SITE NAV (matches portfolio) */
+  .no-print{}
+  nav.site-nav{
+    background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0 50px; display: flex; justify-content: space-between; align-items: center; height: 80px;
+    position: sticky; top: 0; z-index: 1000; margin: -36px -20px 0; 
+  }
+  .site-logo{
+    font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(to right, #38bdf8, #0ea5e9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;
+  }
+  .site-nav-tabs{ display: flex; list-style: none; height: 100%; gap: 10px; }
+  .site-nav-tabs a{
+    display: flex; align-items: center; padding: 0 20px; text-decoration: none;
+    color: #94a3b8; font-weight: 500; height: 100%; transition: all 0.3s ease;
+    border-bottom: 3px solid transparent; white-space: nowrap; font-size:14px;
+  }
+  .site-nav-tabs a:hover, .site-nav-tabs a.active{ color: #38bdf8; border-bottom: 3px solid #38bdf8; }
+  .tool-page-header{
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:1150px;margin:0 auto;padding:32px 0 6px;
+  }
+  .tool-page-header h1{font-size:24px;font-weight:700;color:#fff;}
+  .back-to-tools{
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--ink);
+    text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .back-to-tools:hover{ background: rgba(255, 255, 255, 0.1); border-color: var(--blue); }
+  @media (max-width:900px){
+    nav.site-nav{padding:0 16px;height:64px;}
+    .site-nav-tabs{gap:2px;}
+    .site-nav-tabs a{padding:0 10px;font-size:12.5px;}
+    .tool-page-header{flex-direction:column;gap:12px;text-align:center;padding-top:20px;}
+  }
 </style>
 </head>
 <body>
+
+<nav class="site-nav no-print">
+  <a href="index.html" class="site-logo">SC. Portal</a>
+  <ul class="site-nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+  </ul>
+</nav>
+<div class="tool-page-header no-print">
+  <h1>🗓️ Promised Date Calculator</h1>
+  <a href="tools.html" class="back-to-tools">← Back to Tools</a>
+</div>
+
 <div class="wrap">
 
   <div class="topbar">
-    <div>
-      <h1>Promised <span>Date</span> Calculator</h1>
-      <div class="sub">Casting → firing yield → promised completion date</div>
-    </div>
+    <div class="sub" style="margin-top:4px;">Casting → firing yield → promised completion date</div>
     <div class="top-actions no-print">
       <span class="badge">⏱ Live calculation</span>
+      <button class="btn" id="emailBtn">✉️ Email</button>
+      <button class="btn" id="waBtn">💬 WhatsApp</button>
       <button class="btn primary" id="printBtn">🖨 Print Summary</button>
     </div>
   </div>
@@ -216,8 +277,8 @@
     <div class="section-title">Order &amp; Stock</div>
     <div class="card">
       <div class="stock-grid">
-        <div class="stock-field"><label>Order Qty</label><input type="number" id="orderQty" value="100"></div>
-        <div class="stock-field"><label>Warehouse</label><input type="number" id="wh" value="11"></div>
+        <div class="stock-field"><label>Order Qty</label><input type="number" id="orderQty" value="0"></div>
+        <div class="stock-field"><label>Warehouse</label><input type="number" id="wh" value="0"></div>
         <div class="stock-field"><label>Grinding</label><input type="number" id="gr" value="0"></div>
         <div class="stock-field"><label>Flush Test</label><input type="number" id="flush" value="0"></div>
         <div class="stock-field"><label>PHX</label><input type="number" id="phx" value="0"></div>
@@ -228,10 +289,10 @@
 
   <!-- WIP -->
   <div class="section">
-    <div class="section-title">Work-in-Progress · <span style="color:var(--green)">green = first-fire yield</span> · <span style="color:var(--red)">red = second-fire yield</span></div>
+    <div class="section-title">Work-in-Progress · <span style="color:var(--green)">green = total-fire yield</span> · <span style="color:var(--red)">red = second-fire yield</span></div>
     <div class="card" style="overflow-x:auto;">
       <table class="wip" id="wipTable">
-        <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Clay Yield / Factor</th><th>Tot. Fired</th></tr></thead>
+        <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Clay Yield</th><th>Tot. Fired</th></tr></thead>
         <tbody></tbody>
         <tfoot><tr class="totals"><td>WIP Total</td><td class="num" id="wipQtyTotal">0</td><td></td><td></td><td class="num" id="wipFiredTotal">0</td></tr></tfoot>
       </table>
@@ -241,7 +302,8 @@
   <!-- RESULTS -->
   <div class="section">
     <div class="section-title">Position</div>
-    <div class="results-strip">
+    <div class="results-strip strip4">
+      <div class="result-box"><div class="label">Finished Good Qty</div><div class="value" id="finishedGoodQty">0</div></div>
       <div class="result-box"><div class="label">FG Balance</div><div class="value" id="fgBalance">0</div></div>
       <div class="result-box"><div class="label">Total Firing Yield</div><div class="value" id="firingYield">0%</div></div>
       <div class="result-box accent"><div class="label">Casting Required</div><div class="value" id="castingReq">0</div></div>
@@ -255,9 +317,13 @@
       <div class="card">
         <div class="log-controls">
           <div class="id-field"><label>Log start date</label><input type="date" id="logStart"></div>
-          <div class="id-field"><label>Days to generate</label><input type="number" id="logDays" value="30"></div>
+          <div class="id-field"><label>Days to generate (auto)</label><input type="number" id="logDays" value="" placeholder="auto"></div>
+          <div class="id-field"><label>Daily Casting Qty</label><input type="number" id="dailyQty" placeholder="e.g. 10"></div>
           <button class="btn" id="genLog">Generate</button>
         </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:14px;">
+          <input type="checkbox" id="castWeekends" style="width:auto;"> Cast on Sundays too (default: Sunday is a day off)
+        </label>
         <table class="log">
           <thead><tr><th>Date</th><th>Day</th><th>Cast Qty</th><th>Cumulative</th><th></th></tr></thead>
           <tbody id="logBody"></tbody>
@@ -308,8 +374,14 @@
     <div>Item Name<b id="psItemName"></b></div>
     <div>Status Date<b id="psStatusDate"></b></div>
   </div>
+  <div class="ps-grid">
+    <div>1st Fire A%<b id="psF1"></b></div>
+    <div>2nd Fire A%<b id="psF2"></b></div>
+    <div>Order Qty<b id="psOrderQty"></b></div>
+    <div>Finished Good Qty<b id="psFinishedGood"></b></div>
+  </div>
   <table class="ps-table">
-    <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Factor</th><th>Tot. Fired</th></tr></thead>
+    <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Clay Yield</th><th>Tot. Fired</th></tr></thead>
     <tbody id="psWipBody"></tbody>
   </table>
   <div class="ps-result">
@@ -317,23 +389,29 @@
     <div>Total Firing Yield<b id="psFiringYield"></b></div>
     <div>Casting Required<b id="psCastingReq"></b></div>
   </div>
+  <div class="ps-result">
+    <div>Casting Finish Date<b id="psCastFinish"></b></div>
+    <div>Weekend Casting<b id="psWeekend"></b></div>
+    <div>Processing Days<b id="psProcDays"></b></div>
+  </div>
   <div class="ps-promised">Promised Date: <span id="psPromised"></span></div>
 </div>
 
 <script>
 const WIP_STAGES = [
-  { key:'uninsp',  label:'UNINSPECTION (FIRST FIRE)',      cls:'green', factor:1,    qty:0  },
-  { key:'kilnF',   label:'KILN INSIDE (FIRST FIRE)',       cls:'green', factor:1,    qty:0  },
-  { key:'kilnS',   label:'KILN INSIDE (SECOND FIRE)',      cls:'red',   factor:1,    qty:0  },
-  { key:'refireR', label:'REFIRE STOCK (READY TO LOAD)',   cls:'red',   factor:1,    qty:0  },
-  { key:'refire',  label:'REFIRE STOCK',                   cls:'red',   factor:1,    qty:0  },
-  { key:'spray',   label:'SPRAY',                          cls:'green', factor:0.98, qty:0  },
-  { key:'trap',    label:'TRAP GLAZED',                    cls:'green', factor:0.98, qty:0  },
-  { key:'greenIn', label:'GREENWARE (INSPECTED)',          cls:'green', factor:0.98, qty:0  },
-  { key:'green',   label:'GREENWARE',                      cls:'green', factor:0.9,  qty:0  },
-  { key:'dryer',   label:'DRYER INSIDE',                   cls:'green', factor:0.9,  qty:0  },
-  { key:'cast1',   label:'CASTING 1',                      cls:'green', factor:0.9,  qty:10 },
-  { key:'cast2',   label:'CASTING 2',                      cls:'green', factor:0.9,  qty:0  },
+  { key:'uninsp',   label:'UNINSPECTION (FIRST FIRE)',     cls:'green', factor:1,    qty:0, hideFactor:true },
+  { key:'kilnF',    label:'KILN INSIDE (FIRST FIRE)',      cls:'green', factor:1,    qty:0, hideFactor:true },
+  { key:'uninspS',  label:'UNINSPECTION (SECOND FIRE)',    cls:'red',   factor:1,    qty:0, hideFactor:true },
+  { key:'kilnS',    label:'KILN INSIDE (SECOND FIRE)',     cls:'red',   factor:1,    qty:0, hideFactor:true },
+  { key:'refireR',  label:'REFIRE STOCK (READY TO LOAD)',  cls:'red',   factor:1,    qty:0, hideFactor:true },
+  { key:'refire',   label:'REFIRE STOCK',                  cls:'red',   factor:1,    qty:0, hideFactor:true },
+  { key:'spray',    label:'SPRAY',                         cls:'green', factor:1,    qty:0  },
+  { key:'trap',     label:'TRAP GLAZED',                   cls:'green', factor:1,    qty:0  },
+  { key:'greenIn',  label:'GREENWARE (INSPECTED)',         cls:'green', factor:1,    qty:0  },
+  { key:'green',    label:'GREENWARE',                     cls:'green', factor:0.9,  qty:0  },
+  { key:'dryer',    label:'DRYER INSIDE',                  cls:'green', factor:0.9,  qty:0  },
+  { key:'cast1',    label:'CASTING 1',                     cls:'green', factor:0.9,  qty:0  },
+  { key:'cast2',    label:'CASTING 2',                     cls:'green', factor:0.9,  qty:0  },
 ];
 
 let logEntries = [];
@@ -357,7 +435,7 @@ WIP_STAGES.forEach(s=>{
     <td class="stage stage-name">${s.label}</td>
     <td><input type="number" min="0" value="${s.qty}" class="wQty" data-key="${s.key}"></td>
     <td><input type="number" step="0.001" value="0" class="wYield" data-key="${s.key}"></td>
-    <td><input type="number" step="0.01" value="${s.factor}" class="wFactor" data-key="${s.key}"></td>
+    <td>${s.hideFactor ? '<span style="color:var(--dim);">—</span>' : `<input type="number" step="0.01" value="${s.factor}" class="wFactor" data-key="${s.key}">`}</td>
     <td class="num" data-fired="${s.key}">–</td>
   `;
   wipBody.appendChild(tr);
@@ -394,7 +472,8 @@ function calculate(){
   WIP_STAGES.forEach(s=>{
     const qty=+document.querySelector(`.wQty[data-key="${s.key}"]`).value||0;
     const y=+document.querySelector(`.wYield[data-key="${s.key}"]`).value||0;
-    const factor=+document.querySelector(`.wFactor[data-key="${s.key}"]`).value||0;
+    const factorInput=document.querySelector(`.wFactor[data-key="${s.key}"]`);
+    const factor = factorInput ? (+factorInput.value||0) : 1;
     const fired=qty*factor*y;
     wipQtyTotal+=qty; wipFiredTotal+=fired;
     document.querySelector(`[data-fired="${s.key}"]`).textContent=fmt(fired,2);
@@ -410,17 +489,27 @@ function calculate(){
   const clayYield=castingFactor;        // = Casting 1's factor, mirrors workbook C47=A35
   const castingReq= (firingYield&&clayYield) ? (fgBalance/firingYield)/clayYield : 0;
 
+  $('finishedGoodQty').textContent=fmt(totalExpectedFG,2);
   $('fgBalance').textContent=fmt(fgBalance,2);
   $('firingYield').textContent=pct(firingYield);
   $('castingReq').textContent=fmt(castingReq,2);
 
+  // auto-calc Days to generate = Casting Required / Daily Casting Qty
+  const dailyQtyForDays=+$('dailyQty').value||0;
+  if(dailyQtyForDays>0 && castingReq>0){
+    $('logDays').value = Math.ceil(castingReq/dailyQtyForDays);
+  }
+
   renderLog(castingReq);
-  updatePrintSummary(fgBalance, firingYield, castingReq);
+  updatePrintSummary(fgBalance, firingYield, castingReq, totalExpectedFG, orderQty);
 }
 
 // ---- casting log ----
 const logBody=$('logBody');
-function isFriday(dateStr){ return new Date(dateStr+'T00:00:00').getDay()===5; }
+function isWeekendOff(dateStr){
+  if($('castWeekends').checked) return false;
+  return new Date(dateStr+'T00:00:00').getDay()===0; // Sunday
+}
 
 function renderLog(castingReq){
   logBody.innerHTML='';
@@ -431,13 +520,13 @@ function renderLog(castingReq){
   cum=0;
   sorted.forEach((e,i)=>{
     cum+=(+e.qty||0);
-    const off=isFriday(e.date);
+    const off=isWeekendOff(e.date);
     const tr=document.createElement('tr');
     if(off) tr.classList.add('off');
     if(hitIndex===i) tr.classList.add('hit');
     tr.innerHTML=`
       <td><input type="date" value="${e.date}" data-idx="${i}" class="logDate"></td>
-      <td>${off?'FRIDAY':''}</td>
+      <td>${off?'SUNDAY':''}</td>
       <td><input type="number" value="${e.qty}" data-idx="${i}" class="logQty" ${off?'disabled':''}></td>
       <td class="cum">${fmt(cum,2)}</td>
       <td><button class="rm" data-idx="${i}">×</button></td>
@@ -477,24 +566,33 @@ function renderLog(castingReq){
   }
 }
 
-function updatePrintSummary(fgBalance, firingYield, castingReq){
+function updatePrintSummary(fgBalance, firingYield, castingReq, totalExpectedFG, orderQty){
   $('psSub').textContent = 'Status as of '+($('statusDate').value||'—');
   $('psOrderId').textContent=$('orderId').value;
   $('psItemCode').textContent=$('itemCode').value||'—';
   $('psItemName').textContent=$('itemName').value||'—';
   $('psStatusDate').textContent=$('statusDate').value||'—';
+  $('psF1').textContent=$('f1apct').textContent;
+  $('psF2').textContent=$('f2apct').textContent;
+  $('psOrderQty').textContent=fmt(orderQty,0);
+  $('psFinishedGood').textContent=fmt(totalExpectedFG,2);
   $('psFgBalance').textContent=fmt(fgBalance,2);
   $('psFiringYield').textContent=pct(firingYield);
   $('psCastingReq').textContent=fmt(castingReq,2);
+  $('psCastFinish').textContent=$('castFinishDate').textContent;
+  $('psWeekend').textContent=$('castWeekends').checked?'Yes':'No (Sunday off)';
+  $('psProcDays').textContent=$('procDays').value+' days';
   $('psPromised').textContent=$('promisedDate').textContent;
 
   const body=$('psWipBody'); body.innerHTML='';
   WIP_STAGES.forEach(s=>{
     const qty=document.querySelector(`.wQty[data-key="${s.key}"]`).value;
     const y=document.querySelector(`.wYield[data-key="${s.key}"]`).value;
-    const f=document.querySelector(`.wFactor[data-key="${s.key}"]`).value;
+    const factorInput=document.querySelector(`.wFactor[data-key="${s.key}"]`);
+    const f=factorInput?factorInput.value:'—';
     const fired=document.querySelector(`[data-fired="${s.key}"]`).textContent;
     const tr=document.createElement('tr');
+    tr.className=s.cls;
     tr.innerHTML=`<td>${s.label}</td><td>${qty}</td><td>${(y*100).toFixed(1)}%</td><td>${f}</td><td>${fired}</td>`;
     body.appendChild(tr);
   });
@@ -504,11 +602,14 @@ function updatePrintSummary(fgBalance, firingYield, castingReq){
 $('genLog').addEventListener('click', ()=>{
   const start=$('logStart').value || todayISO();
   const days=+$('logDays').value || 30;
+  const dailyQty=+$('dailyQty').value || 0;
+  const castWeekends=$('castWeekends').checked;
   logEntries=[];
   let d=new Date(start+'T00:00:00');
   for(let i=0;i<days;i++){
     const iso=d.toISOString().slice(0,10);
-    logEntries.push({date:iso, qty: (d.getDay()===5)?0:6});
+    const isOff = !castWeekends && d.getDay()===0;
+    logEntries.push({date:iso, qty: isOff?0:dailyQty});
     d.setDate(d.getDate()+1);
   }
   calculate();
@@ -518,13 +619,46 @@ $('addRow').addEventListener('click', ()=>{
   const last=[...logEntries].sort((a,b)=>a.date.localeCompare(b.date)).pop();
   const base=last?new Date(last.date+'T00:00:00'):new Date();
   base.setDate(base.getDate()+1);
-  logEntries.push({date:base.toISOString().slice(0,10), qty:6});
+  const dailyQty=+$('dailyQty').value || 0;
+  logEntries.push({date:base.toISOString().slice(0,10), qty:dailyQty});
   calculate();
 });
 
 $('clearLog').addEventListener('click', ()=>{ logEntries=[]; calculate(); });
 
 $('printBtn').addEventListener('click', ()=>{ window.print(); });
+
+function buildShareText(){
+  const lines=[
+    `PROMISED DATE CALCULATOR — SUMMARY`,
+    `Order ID: ${$('orderId').value}`,
+    `Item: ${$('itemCode').value||'—'} / ${$('itemName').value||'—'}`,
+    `Status Date: ${$('statusDate').value||'—'}`,
+    ``,
+    `1st Fire A%: ${$('f1apct').textContent}   2nd Fire A%: ${$('f2apct').textContent}`,
+    `Order Qty: ${$('orderQty').value}   Finished Good Qty: ${$('finishedGoodQty').textContent}`,
+    `FG Balance: ${$('fgBalance').textContent}`,
+    `Total Firing Yield: ${$('firingYield').textContent}`,
+    `Casting Required: ${$('castingReq').textContent}`,
+    `Casting Finish Date: ${$('castFinishDate').textContent}`,
+    `Weekend Casting: ${$('castWeekends').checked?'Yes':'No (Sunday off)'}`,
+    `Processing Days: ${$('procDays').value}`,
+    ``,
+    `>> PROMISED DATE: ${$('promisedDate').textContent} <<`,
+  ];
+  return lines.join('\n');
+}
+
+$('emailBtn').addEventListener('click', ()=>{
+  const subject=encodeURIComponent(`Promised Date Summary - ${$('itemCode').value||$('orderId').value}`);
+  const body=encodeURIComponent(buildShareText());
+  window.location.href=`mailto:?subject=${subject}&body=${body}`;
+});
+
+$('waBtn').addEventListener('click', ()=>{
+  const text=encodeURIComponent(buildShareText());
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+});
 
 document.addEventListener('input',(e)=>{
   if(e.target.classList.contains('wYield')){ e.target.dataset.touched='1'; calculate(); return; }
@@ -542,8 +676,8 @@ document.addEventListener('click',(e)=>{
   }
 });
 
-// seed a starter log then calculate
-$('genLog').click();
+// log starts empty until the user clicks Generate
+calculate();
 </script>
 </body>
 </html>
