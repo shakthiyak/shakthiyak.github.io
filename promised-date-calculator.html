@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promised Date Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F2EA;
+    --card:#FFFFFF;
+    --line:#E7DFD1;
+    --ink:#2B241D;
+    --muted:#8A7F70;
+    --clay:#C1592B;
+    --clay-dim:#F1DBCC;
+    --ember:#9C3B2A;
+    --ember-dim:#F2DAD3;
+    --sage:#57694F;
+    --sage-dim:#DEE6D6;
+    --gold-edge:#C1592B;
+    --shadow: 0 1px 2px rgba(43,36,29,0.04), 0 6px 20px rgba(43,36,29,0.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+
+  /* Header */
+  .header{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    flex-wrap:wrap;gap:14px;
+    margin-bottom:26px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+  }
+  .header h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(26px,4vw,34px);
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .header .sub{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:4px;
+  }
+  .order-tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    background:var(--ink);
+    color:var(--bg);
+    padding:6px 12px;
+    border-radius:3px;
+    white-space:nowrap;
+  }
+  .order-tag input{
+    background:transparent;border:none;color:inherit;font-family:inherit;font-size:inherit;
+    width:110px;
+  }
+
+  /* Section */
+  .section{margin-bottom:22px;}
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:14px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--clay);
+    margin:0 0 10px 2px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:720px){
+    .grid2, .grid3{grid-template-columns:1fr;}
+  }
+
+  /* Fire cards */
+  .fire-card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;}
+  .fire-card.f1{border-left:4px solid var(--sage);}
+  .fire-card.f2{border-left:4px solid var(--ember);}
+  .fire-card h3{
+    font-size:12px;text-transform:uppercase;letter-spacing:0.06em;
+    margin:0 0 10px;color:var(--muted);font-weight:600;
+  }
+  .field-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:10px;}
+  .field-row:last-child{margin-bottom:0;}
+  .field-row label{font-size:13px;color:var(--ink);}
+  .field-row input[type=number]{
+    width:90px;text-align:right;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;
+    border:1px solid var(--line);border-radius:4px;padding:5px 8px;
+    background:#FFFCF8;
+  }
+  .pct-line{
+    display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+    border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;
+  }
+  .pct-line b{color:var(--ink);}
+
+  .yield-summary{
+    margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    padding:7px 12px;border-radius:20px;display:flex;gap:6px;align-items:center;
+  }
+  .chip.green{background:var(--sage-dim);color:var(--sage);}
+  .chip.red{background:var(--ember-dim);color:var(--ember);}
+  .chip b{font-size:14px;}
+
+  /* Order & stock inputs */
+  .stock-field{margin-bottom:12px;}
+  .stock-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;}
+  .stock-field input{
+    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:5px;
+    font-family:'IBM Plex Mono',monospace;font-size:15px;background:#FFFCF8;
+  }
+  .stock-result{
+    margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .stock-result .val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;}
+
+  /* WIP table */
+  table.wip{width:100%;border-collapse:collapse;font-size:13px;}
+  table.wip th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;
+    color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:2px solid var(--ink);
+  }
+  table.wip td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  table.wip tr.green td.stage{border-left:3px solid var(--sage);}
+  table.wip tr.red td.stage{border-left:3px solid var(--ember);}
+  table.wip input[type=number]{
+    width:70px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;
+    border:1px solid var(--line);border-radius:4px;padding:4px 6px;background:#FFFCF8;
+  }
+  table.wip td.num{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--muted);}
+  table.wip tr.totals td{font-weight:700;border-top:2px solid var(--ink);border-bottom:none;font-family:'IBM Plex Mono',monospace;}
+
+  /* Results strip */
+  .results-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:720px){.results-strip{grid-template-columns:1fr;}}
+  .result-box{
+    background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px;box-shadow:var(--shadow);
+  }
+  .result-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px;}
+  .result-box .value{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;}
+  .result-box.accent{border-color:var(--clay);}
+  .result-box.accent .value{color:var(--clay);}
+
+  /* Casting log + gauge */
+  .log-layout{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start;}
+  @media (max-width:860px){.log-layout{grid-template-columns:1fr;}}
+
+  table.log{width:100%;border-collapse:collapse;font-size:13px;}
+  table.log th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--ink);}
+  table.log td{padding:5px 8px;border-bottom:1px solid var(--line);}
+  table.log input{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--line);
+    border-radius:4px;padding:4px 6px;background:#FFFCF8;
+  }
+  table.log input[type=date]{width:130px;}
+  table.log input[type=number]{width:64px;text-align:right;}
+  table.log td.cum{font-family:'IBM Plex Mono',monospace;text-align:right;}
+  table.log tr.hit td{background:var(--clay-dim);}
+  table.log .rm{
+    border:none;background:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;
+  }
+  .rm:hover{color:var(--ember);}
+  .log-actions{display:flex;gap:8px;margin-top:10px;}
+  .btn{
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+    padding:8px 14px;border-radius:5px;border:1px solid var(--line);
+    background:#FFFCF8;cursor:pointer;color:var(--ink);
+  }
+  .btn:hover{border-color:var(--clay);color:var(--clay);}
+  .btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .btn.primary:hover{background:var(--clay);border-color:var(--clay);color:#fff;}
+
+  /* Gauge card */
+  .gauge-card{
+    background:var(--ink);color:var(--bg);border-radius:8px;padding:22px;
+    display:flex;flex-direction:column;align-items:center;box-shadow:var(--shadow);
+  }
+  .gauge-card .g-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#C9BFAE;margin-bottom:8px;}
+  .gauge-wrap{position:relative;width:170px;height:170px;margin:4px 0 6px;}
+  .gauge-wrap svg{transform:rotate(-90deg);}
+  .gauge-center{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .gauge-center .pct{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;}
+  .gauge-center .pct-sub{font-size:10px;color:#C9BFAE;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;}
+
+  .finish-date{
+    text-align:center;margin-top:8px;
+  }
+  .finish-date .fd-label{font-size:11px;color:#C9BFAE;text-transform:uppercase;letter-spacing:0.06em;}
+  .finish-date .fd-value{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-top:2px;}
+  .finish-date .fd-note{font-size:11px;color:#8f8677;margin-top:3px;}
+
+  .processing-row{
+    margin-top:16px;width:100%;display:flex;align-items:center;justify-content:space-between;
+    background:#3A332A;border-radius:6px;padding:10px 12px;
+  }
+  .processing-row label{font-size:12px;color:#C9BFAE;}
+  .processing-row input{
+    width:52px;text-align:center;font-family:'IBM Plex Mono',monospace;
+    border:1px solid #55493A;border-radius:4px;background:#2B241D;color:var(--bg);padding:5px;
+  }
+
+  .promised-final{
+    margin-top:14px;width:100%;text-align:center;background:var(--clay);
+    border-radius:6px;padding:14px;
+  }
+  .promised-final .pf-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#FBE6DA;}
+  .promised-final .pf-value{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin-top:4px;color:#fff;}
+
+  footer{text-align:center;color:var(--muted);font-size:11px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div>
+      <h1>Promised Date Calculator</h1>
+      <div class="sub">Casting → firing yield → promised completion date</div>
+    </div>
+    <div class="order-tag">ORDER <input id="orderRef" value="10G01" /></div>
+  </div>
+
+  <!-- LATEST FIRING RESULTS -->
+  <div class="section">
+    <div class="section-title">Latest Firing Results</div>
+    <div class="card">
+      <div class="grid2">
+        <div class="fire-card f1">
+          <h3>1st Fire</h3>
+          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f1a" value="200"></div>
+          <div class="field-row"><label>Reject (R)</label><input type="number" id="f1r" value="30"></div>
+          <div class="field-row"><label>Loss</label><input type="number" id="f1l" value="20"></div>
+          <div class="pct-line"><span>Total fired: <b id="f1tot">250</b></span><span>A% <b id="f1apct">80.0%</b></span></div>
+        </div>
+        <div class="fire-card f2">
+          <h3>2nd Fire</h3>
+          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f2a" value="35"></div>
+          <div class="field-row"><label>Reject (R)</label><input type="number" id="f2r" value="10"></div>
+          <div class="field-row"><label>Loss</label><input type="number" id="f2l" value="5"></div>
+          <div class="pct-line"><span>Total fired: <b id="f2tot">50</b></span><span>A% <b id="f2apct">70.0%</b></span></div>
+        </div>
+      </div>
+      <div class="yield-summary">
+        <div class="chip green">Total Yield (used for green stages) <b id="totalAOut">88.4%</b></div>
+        <div class="chip red">2nd Fire A% (used for red stages) <b id="twoFAOut">70.0%</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDER & STOCK + WIP -->
+  <div class="section">
+    <div class="section-title">Order, Stock &amp; Work-in-Progress</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="stock-field"><label>Order Qty</label><input type="number" id="orderQty" value="100"></div>
+        <div class="stock-field"><label>Warehouse (WH)</label><input type="number" id="wh" value="11"></div>
+        <div class="stock-field"><label>Grinding (GR)</label><input type="number" id="gr" value="0"></div>
+        <div class="stock-result"><span>Available F/G</span><span class="val" id="availFG">11</span></div>
+      </div>
+      <div class="card" style="overflow-x:auto;">
+        <table class="wip" id="wipTable">
+          <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Tot. Fired</th></tr></thead>
+          <tbody></tbody>
+          <tfoot>
+            <tr class="totals"><td>WIP Total</td><td class="num" id="wipQtyTotal">0</td><td></td><td class="num" id="wipFiredTotal">0</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS STRIP -->
+  <div class="section">
+    <div class="section-title">Position</div>
+    <div class="results-strip">
+      <div class="result-box">
+        <div class="label">FG Balance (still to make)</div>
+        <div class="value" id="fgBalance">0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Firing Yield</div>
+        <div class="value" id="firingYield">0%</div>
+      </div>
+      <div class="result-box accent">
+        <div class="label">Casting Required</div>
+        <div class="value" id="castingReq">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASTING LOG + GAUGE -->
+  <div class="section">
+    <div class="section-title">Daily Casting Log &amp; Promised Date</div>
+    <div class="log-layout">
+      <div class="card">
+        <table class="log">
+          <thead><tr><th>Date</th><th>Cast Qty</th><th>Cumulative</th><th></th></tr></thead>
+          <tbody id="logBody"></tbody>
+        </table>
+        <div class="log-actions">
+          <button class="btn primary" id="addRow">+ Add day</button>
+          <button class="btn" id="clearLog">Clear log</button>
+        </div>
+      </div>
+
+      <div class="gauge-card">
+        <div class="g-label">Progress to Casting Req.</div>
+        <div class="gauge-wrap">
+          <svg width="170" height="170" viewBox="0 0 170 170">
+            <circle cx="85" cy="85" r="72" fill="none" stroke="#3A332A" stroke-width="14"/>
+            <circle id="gaugeArc" cx="85" cy="85" r="72" fill="none" stroke="#C1592B" stroke-width="14"
+                    stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
+          </svg>
+          <div class="gauge-center">
+            <div class="pct" id="gaugePct">0%</div>
+            <div class="pct-sub">cast so far</div>
+          </div>
+        </div>
+
+        <div class="finish-date">
+          <div class="fd-label">Casting Finish Date</div>
+          <div class="fd-value" id="castFinishDate">—</div>
+          <div class="fd-note" id="castFinishNote">add casting log entries</div>
+        </div>
+
+        <div class="processing-row">
+          <label>+ Processing days (fire → dry → despatch)</label>
+          <input type="number" id="procDays" value="7">
+        </div>
+
+        <div class="promised-final">
+          <div class="pf-label">Promised Date</div>
+          <div class="pf-value" id="promisedDate">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · runs entirely in this page, nothing is sent anywhere</footer>
+</div>
+
+<script>
+// ---------- WIP stage configuration (fixed process, matches the workbook) ----------
+const WIP_STAGES = [
+  { key:'rfStock',       label:'R/F Stock (Uni:F/F)',   yield:'green', mult:false, qty:6  },
+  { key:'kilnSk',        label:'Kiln (SK) R/F',         yield:'green', mult:false, qty:0  },
+  { key:'dkSkFf',        label:'D/K & SK (FF)',         yield:'green', mult:false, qty:0  },
+  { key:'rfFired',       label:'R/F Fired',             yield:'red',   mult:false, qty:0  },
+  { key:'rfStockAbout',  label:'R/F Stock — About',     yield:'red',   mult:false, qty:0  },
+  { key:'spray',         label:'Spray (Clay Yield)',    yield:'green', mult:false, qty:0  },
+  { key:'gwfInspected',  label:'GWF Inspected',         yield:'green', mult:false, qty:0  },
+  { key:'greenware',     label:'Greenware',             yield:'green', mult:false, qty:0  },
+  { key:'dryer',         label:'Dryer',                 yield:'green', mult:true,  qty:0  },
+  { key:'casting1',      label:'Casting',               yield:'green', mult:true,  qty:10 },
+  { key:'casting2',      label:'Casting (2)',           yield:'green', mult:true,  qty:0  },
+];
+const PROCESS_FACTOR = 0.9; // the workbook's fixed 0.9 multiplier (D column) used on Dryer/Casting rows and Casting Req
+
+// ---------- state ----------
+let logEntries = [
+  { date:'2023-01-16', qty:6 },
+  { date:'2023-01-17', qty:6 },
+  { date:'2023-01-18', qty:6 },
+];
+
+function $(id){ return document.getElementById(id); }
+function fmt(n, d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:d}); }
+function pct(n){ return (n*100).toFixed(1)+'%'; }
+
+// ---------- build WIP table rows once ----------
+const wipBody = document.querySelector('#wipTable tbody');
+WIP_STAGES.forEach(stage=>{
+  const tr = document.createElement('tr');
+  tr.className = stage.yield;
+  tr.innerHTML = `
+    <td class="stage">${stage.label}</td>
+    <td><input type="number" min="0" value="${stage.qty}" data-key="${stage.key}" class="wipQtyInput"></td>
+    <td class="num" data-yieldcell="${stage.key}">–</td>
+    <td class="num" data-firedcell="${stage.key}">–</td>
+  `;
+  wipBody.appendChild(tr);
+});
+
+// ---------- core calculation ----------
+function calculate(){
+  // --- Latest firing ---
+  const f1a=+$('f1a').value||0, f1r=+$('f1r').value||0, f1l=+$('f1l').value||0;
+  const f2a=+$('f2a').value||0, f2r=+$('f2r').value||0, f2l=+$('f2l').value||0;
+  const f1tot=f1a+f1r+f1l, f2tot=f2a+f2r+f2l;
+  const f1Apct = f1tot? f1a/f1tot:0;
+  const f1Rpct = f1tot? f1r/f1tot:0;
+  const f2Apct = f2tot? f2a/f2tot:0;
+
+  $('f1tot').textContent=fmt(f1tot,0);
+  $('f2tot').textContent=fmt(f2tot,0);
+  $('f1apct').textContent=pct(f1Apct);
+  $('f2apct').textContent=pct(f2Apct);
+
+  const twoFA = f1Rpct * f2Apct;       // "2FA" cell
+  const totalA = twoFA + f1Apct;       // "Total A" — drives the green (dark green) stages
+  const redYield = f2Apct;             // drives the red stages directly
+
+  $('totalAOut').textContent = pct(totalA);
+  $('twoFAOut').textContent = pct(redYield);
+
+  // --- Order & stock ---
+  const orderQty = +$('orderQty').value||0;
+  const wh = +$('wh').value||0;
+  const gr = +$('gr').value||0;
+  const availFG = wh+gr;
+  $('availFG').textContent = fmt(availFG,0);
+
+  // --- WIP ---
+  let wipQtyTotal=0, wipFiredTotal=0;
+  WIP_STAGES.forEach(stage=>{
+    const input = document.querySelector(`.wipQtyInput[data-key="${stage.key}"]`);
+    const qty = +input.value||0;
+    const y = stage.yield==='green' ? totalA : redYield;
+    const fired = stage.mult ? (qty*PROCESS_FACTOR)*y : qty*y;
+    wipQtyTotal += qty;
+    wipFiredTotal += fired;
+    document.querySelector(`[data-yieldcell="${stage.key}"]`).textContent = pct(y);
+    document.querySelector(`[data-firedcell="${stage.key}"]`).textContent = fmt(fired,2);
+  });
+  $('wipQtyTotal').textContent = fmt(wipQtyTotal,0);
+  $('wipFiredTotal').textContent = fmt(wipFiredTotal,2);
+
+  const totalExpectedFG = wipFiredTotal + availFG;
+  const fgBalance = orderQty - totalExpectedFG;
+  const firingYield = totalA;
+  const castingReq = firingYield ? (fgBalance/firingYield)/PROCESS_FACTOR : 0;
+
+  $('fgBalance').textContent = fmt(fgBalance,2);
+  $('firingYield').textContent = pct(firingYield);
+  $('castingReq').textContent = fmt(castingReq,2);
+
+  renderLog(castingReq);
+}
+
+// ---------- casting log ----------
+const logBody = $('logBody');
+
+function renderLog(castingReq){
+  logBody.innerHTML='';
+  const sorted = [...logEntries].sort((a,b)=> a.date.localeCompare(b.date));
+  let cum=0, hitDate=null, hitIndex=-1;
+  sorted.forEach((e,i)=>{
+    cum += (+e.qty||0);
+    if(hitDate===null && cum>=castingReq && castingReq>0){ hitDate=e.date; hitIndex=i; }
+  });
+
+  cum=0;
+  sorted.forEach((e,i)=>{
+    cum += (+e.qty||0);
+    const tr=document.createElement('tr');
+    if(hitIndex===i) tr.classList.add('hit');
+    tr.innerHTML = `
+      <td><input type="date" value="${e.date}" data-idx="${i}" class="logDate"></td>
+      <td><input type="number" value="${e.qty}" data-idx="${i}" class="logQty"></td>
+      <td class="cum">${fmt(cum,2)}</td>
+      <td><button class="rm" data-idx="${i}" title="remove">×</button></td>
+    `;
+    logBody.appendChild(tr);
+  });
+
+  // gauge + finish date
+  const total = sorted.reduce((s,e)=>s+(+e.qty||0),0);
+  const progress = castingReq>0 ? Math.min(1, total/castingReq) : 0;
+  const circumference = 452.4;
+  $('gaugeArc').setAttribute('stroke-dashoffset', circumference*(1-progress));
+  $('gaugePct').textContent = (progress*100).toFixed(0)+'%';
+
+  const procDays = +$('procDays').value||0;
+
+  if(hitDate){
+    const finish = new Date(hitDate+'T00:00:00');
+    $('castFinishDate').textContent = finish.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+    $('castFinishNote').textContent = 'reached from logged entries';
+    const promised = new Date(finish); promised.setDate(promised.getDate()+procDays);
+    $('promisedDate').textContent = promised.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+  } else if(sorted.length && castingReq>0){
+    // project forward using the average daily rate of days that had casting
+    const activeDays = sorted.filter(e=>(+e.qty||0)>0).length || 1;
+    const avgRate = total/activeDays;
+    const remaining = castingReq-total;
+    const daysNeeded = avgRate>0 ? Math.ceil(remaining/avgRate) : null;
+    const lastDate = new Date(sorted[sorted.length-1].date+'T00:00:00');
+    if(daysNeeded!==null){
+      const projected = new Date(lastDate); projected.setDate(projected.getDate()+daysNeeded);
+      $('castFinishDate').textContent = projected.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+      $('castFinishNote').textContent = 'estimated — at current rate';
+      const promised = new Date(projected); promised.setDate(promised.getDate()+procDays);
+      $('promisedDate').textContent = promised.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+    } else {
+      $('castFinishDate').textContent='—';
+      $('castFinishNote').textContent='add a casting rate to estimate';
+      $('promisedDate').textContent='—';
+    }
+  } else {
+    $('castFinishDate').textContent='—';
+    $('castFinishNote').textContent='add casting log entries';
+    $('promisedDate').textContent='—';
+  }
+}
+
+// ---------- events ----------
+document.addEventListener('input', (e)=>{
+  if(e.target.classList.contains('logDate')){
+    logEntries[+e.target.dataset.idx].date = e.target.value;
+    calculate();
+    return;
+  }
+  if(e.target.classList.contains('logQty')){
+    logEntries[+e.target.dataset.idx].qty = e.target.value;
+    calculate();
+    return;
+  }
+  calculate();
+});
+
+document.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('rm')){
+    const idx = +e.target.dataset.idx;
+    const sorted = [...logEntries].sort((a,b)=> a.date.localeCompare(b.date));
+    const target = sorted[idx];
+    logEntries = logEntries.filter(en=> en!==target);
+    calculate();
+  }
+});
+
+$('addRow').addEventListener('click', ()=>{
+  const last = [...logEntries].sort((a,b)=>a.date.localeCompare(b.date)).pop();
+  const base = last ? new Date(last.date+'T00:00:00') : new Date();
+  base.setDate(base.getDate()+1);
+  const iso = base.toISOString().slice(0,10);
+  logEntries.push({date:iso, qty:6});
+  calculate();
+});
+
+$('clearLog').addEventListener('click', ()=>{
+  logEntries = [];
+  calculate();
+});
+
+calculate();
+</script>
+</body>
+</html>
