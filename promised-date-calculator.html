@@ -4,329 +4,266 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Promised Date Calculator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F7F2EA;
-    --card:#FFFFFF;
-    --line:#E7DFD1;
-    --ink:#2B241D;
-    --muted:#8A7F70;
-    --clay:#C1592B;
-    --clay-dim:#F1DBCC;
-    --ember:#9C3B2A;
-    --ember-dim:#F2DAD3;
-    --sage:#57694F;
-    --sage-dim:#DEE6D6;
-    --gold-edge:#C1592B;
-    --shadow: 0 1px 2px rgba(43,36,29,0.04), 0 6px 20px rgba(43,36,29,0.05);
+    --bg:#0f172a; --card:#1e293b; --card2:#141f36; --line:rgba(255,255,255,0.07);
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --blue:#38bdf8; --blue2:#818cf8; --blue-bg:rgba(56,189,248,0.1); --blue-bd:rgba(56,189,248,0.25);
+    --green:#4ade80; --green-bg:rgba(34,197,94,0.1); --green-bd:rgba(34,197,94,0.3);
+    --red:#f87171; --red-bg:rgba(239,68,68,0.1); --red-bd:rgba(239,68,68,0.3);
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding:28px 16px 60px;
-  }
-  .wrap{max-width:1080px;margin:0 auto;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+  body{background:var(--bg);color:var(--ink);padding:36px 20px 80px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1150px;margin:0 auto;}
 
-  /* Header */
-  .header{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    flex-wrap:wrap;gap:14px;
-    margin-bottom:26px;
-    border-bottom:2px solid var(--ink);
-    padding-bottom:16px;
-  }
-  .header h1{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:clamp(26px,4vw,34px);
-    margin:0;
-    letter-spacing:-0.01em;
-  }
-  .header .sub{
-    color:var(--muted);
-    font-size:13px;
-    margin-top:4px;
-  }
-  .order-tag{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    background:var(--ink);
-    color:var(--bg);
-    padding:6px 12px;
-    border-radius:3px;
-    white-space:nowrap;
-  }
-  .order-tag input{
-    background:transparent;border:none;color:inherit;font-family:inherit;font-size:inherit;
-    width:110px;
-  }
+  /* header */
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:26px;}
+  .topbar h1{font-size:26px;font-weight:700;}
+  .topbar h1 span{background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .topbar .sub{color:var(--muted);font-size:13px;margin-top:4px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:9999px;color:var(--blue);font-size:12px;font-weight:600;}
 
-  /* Section */
-  .section{margin-bottom:22px;}
+  .id-card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;
+  }
+  @media (max-width:800px){.id-card{grid-template-columns:1fr 1fr;}}
+  .id-field label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+  .id-field input{
+    width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;
+    padding:8px 10px;color:var(--ink);font-size:13px;
+  }
+  .id-field input:focus{outline:none;border-color:var(--blue);}
+
+  .section{margin-bottom:24px;}
   .section-title{
-    font-family:'Fraunces',serif;
-    font-size:14px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    color:var(--clay);
-    margin:0 0 10px 2px;
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--blue);margin:0 0 10px 2px;display:flex;align-items:center;gap:8px;
   }
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:8px;
-    box-shadow:var(--shadow);
-    padding:20px;
-  }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;}
+
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  @media (max-width:720px){
-    .grid2, .grid3{grid-template-columns:1fr;}
-  }
+  @media (max-width:800px){.grid2{grid-template-columns:1fr;}}
 
-  /* Fire cards */
-  .fire-card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;}
-  .fire-card.f1{border-left:4px solid var(--sage);}
-  .fire-card.f2{border-left:4px solid var(--ember);}
-  .fire-card h3{
-    font-size:12px;text-transform:uppercase;letter-spacing:0.06em;
-    margin:0 0 10px;color:var(--muted);font-weight:600;
+  /* fire cards */
+  .fire-card{border-radius:12px;padding:16px 18px;background:var(--card2);border:1px solid var(--line);}
+  .fire-card.f1{border-left:3px solid var(--green);}
+  .fire-card.f2{border-left:3px solid var(--red);}
+  .fire-card h3{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:12px;font-weight:700;}
+  .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:10px;}
+  .field-row label{font-size:13px;color:var(--muted);}
+  .field-row input{
+    width:85px;text-align:right;background:var(--bg);border:1px solid var(--line);
+    border-radius:6px;padding:6px 9px;color:var(--ink);font-size:13px;
   }
-  .field-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:10px;}
-  .field-row:last-child{margin-bottom:0;}
-  .field-row label{font-size:13px;color:var(--ink);}
-  .field-row input[type=number]{
-    width:90px;text-align:right;
-    font-family:'IBM Plex Mono',monospace;font-size:13px;
-    border:1px solid var(--line);border-radius:4px;padding:5px 8px;
-    background:#FFFCF8;
-  }
-  .pct-line{
-    display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
-    font-family:'IBM Plex Mono',monospace;
-    border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;
-  }
+  .pct-line{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);border-top:1px dashed var(--line);margin-top:10px;padding-top:9px;}
   .pct-line b{color:var(--ink);}
+  .yield-summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+  .chip{padding:7px 13px;border-radius:9999px;font-size:12px;display:flex;gap:6px;}
+  .chip.green{background:var(--green-bg);border:1px solid var(--green-bd);color:var(--green);}
+  .chip.red{background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red);}
+  .chip b{font-weight:700;}
 
-  .yield-summary{
-    margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;
-  }
-  .chip{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;
-    padding:7px 12px;border-radius:20px;display:flex;gap:6px;align-items:center;
-  }
-  .chip.green{background:var(--sage-dim);color:var(--sage);}
-  .chip.red{background:var(--ember-dim);color:var(--ember);}
-  .chip b{font-size:14px;}
-
-  /* Order & stock inputs */
-  .stock-field{margin-bottom:12px;}
-  .stock-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;}
-  .stock-field input{
-    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:5px;
-    font-family:'IBM Plex Mono',monospace;font-size:15px;background:#FFFCF8;
-  }
-  .stock-result{
-    margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
-    display:flex;justify-content:space-between;align-items:center;
-  }
-  .stock-result .val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;}
+  /* stock */
+  .stock-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  @media (max-width:900px){.stock-grid{grid-template-columns:repeat(2,1fr);}}
+  .stock-field label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px;}
+  .stock-field input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--ink);font-size:14px;}
+  .stock-result{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .stock-result .val{font-size:19px;font-weight:700;color:var(--blue);}
 
   /* WIP table */
   table.wip{width:100%;border-collapse:collapse;font-size:13px;}
-  table.wip th{
-    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;
-    color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:2px solid var(--ink);
-  }
-  table.wip td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
-  table.wip tr.green td.stage{border-left:3px solid var(--sage);}
-  table.wip tr.red td.stage{border-left:3px solid var(--ember);}
-  table.wip input[type=number]{
-    width:70px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;
-    border:1px solid var(--line);border-radius:4px;padding:4px 6px;background:#FFFCF8;
-  }
-  table.wip td.num{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--muted);}
-  table.wip tr.totals td{font-weight:700;border-top:2px solid var(--ink);border-bottom:none;font-family:'IBM Plex Mono',monospace;}
+  table.wip th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--dim);font-weight:700;padding:8px;border-bottom:1px solid var(--line);}
+  table.wip td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  table.wip tr.green td.stage{border-left:3px solid var(--green);padding-left:10px;}
+  table.wip tr.red td.stage{border-left:3px solid var(--red);padding-left:10px;color:var(--red);}
+  table.wip tr.green td.stage{color:var(--green);}
+  table.wip input{width:64px;text-align:right;background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:5px 6px;color:var(--ink);font-size:12.5px;}
+  table.wip td.num{text-align:right;color:var(--muted);}
+  table.wip tr.totals td{font-weight:700;border-top:1px solid var(--blue-bd);color:var(--ink);}
+  .stage-name{font-size:12.5px;}
 
-  /* Results strip */
+  /* results strip */
   .results-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  @media (max-width:720px){.results-strip{grid-template-columns:1fr;}}
-  .result-box{
-    background:var(--card);border:1px solid var(--line);border-radius:8px;
-    padding:16px 18px;box-shadow:var(--shadow);
-  }
-  .result-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px;}
-  .result-box .value{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;}
-  .result-box.accent{border-color:var(--clay);}
-  .result-box.accent .value{color:var(--clay);}
+  @media (max-width:800px){.results-strip{grid-template-columns:1fr;}}
+  .result-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .result-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--dim);margin-bottom:6px;}
+  .result-box .value{font-size:22px;font-weight:700;}
+  .result-box.accent{border-color:var(--blue-bd);background:linear-gradient(135deg,var(--card),var(--card2));}
+  .result-box.accent .value{color:var(--blue);}
 
-  /* Casting log + gauge */
-  .log-layout{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start;}
-  @media (max-width:860px){.log-layout{grid-template-columns:1fr;}}
-
-  table.log{width:100%;border-collapse:collapse;font-size:13px;}
-  table.log th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--ink);}
+  /* casting log */
+  .log-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start;}
+  @media (max-width:900px){.log-layout{grid-template-columns:1fr;}}
+  .log-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px;}
+  .log-controls .id-field{flex:1;min-width:120px;}
+  table.log{width:100%;border-collapse:collapse;font-size:12.5px;max-height:420px;display:block;overflow-y:auto;}
+  table.log thead{display:table;width:100%;table-layout:fixed;}
+  table.log tbody{display:block;max-height:380px;overflow-y:auto;}
+  table.log tbody tr{display:table;width:100%;table-layout:fixed;}
+  table.log th{text-align:left;font-size:10.5px;text-transform:uppercase;color:var(--dim);padding:6px 8px;border-bottom:1px solid var(--line);}
   table.log td{padding:5px 8px;border-bottom:1px solid var(--line);}
-  table.log input{
-    font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--line);
-    border-radius:4px;padding:4px 6px;background:#FFFCF8;
-  }
-  table.log input[type=date]{width:130px;}
-  table.log input[type=number]{width:64px;text-align:right;}
-  table.log td.cum{font-family:'IBM Plex Mono',monospace;text-align:right;}
-  table.log tr.hit td{background:var(--clay-dim);}
-  table.log .rm{
-    border:none;background:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;
-  }
-  .rm:hover{color:var(--ember);}
-  .log-actions{display:flex;gap:8px;margin-top:10px;}
-  .btn{
-    font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
-    padding:8px 14px;border-radius:5px;border:1px solid var(--line);
-    background:#FFFCF8;cursor:pointer;color:var(--ink);
-  }
-  .btn:hover{border-color:var(--clay);color:var(--clay);}
-  .btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
-  .btn.primary:hover{background:var(--clay);border-color:var(--clay);color:#fff;}
+  table.log input{background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:4px 6px;color:var(--ink);font-size:12px;}
+  table.log input[type=date]{width:118px;}
+  table.log input[type=number]{width:56px;text-align:right;}
+  table.log tr.off td{opacity:0.4;}
+  table.log tr.hit td{background:var(--blue-bg);}
+  table.log td.cum{text-align:right;color:var(--muted);}
+  table.log .rm{border:none;background:none;color:var(--dim);cursor:pointer;font-size:15px;}
+  .rm:hover{color:var(--red);}
+  .log-actions{display:flex;gap:8px;margin-top:12px;}
+  .btn{font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);cursor:pointer;}
+  .btn:hover{border-color:var(--blue);color:var(--blue);}
+  .btn.primary{background:linear-gradient(to right,#0ea5e9,#2563eb);border-color:transparent;color:#fff;}
+  .btn.primary:hover{background:linear-gradient(to right,#38bdf8,#2563eb);}
 
-  /* Gauge card */
-  .gauge-card{
-    background:var(--ink);color:var(--bg);border-radius:8px;padding:22px;
-    display:flex;flex-direction:column;align-items:center;box-shadow:var(--shadow);
-  }
-  .gauge-card .g-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#C9BFAE;margin-bottom:8px;}
-  .gauge-wrap{position:relative;width:170px;height:170px;margin:4px 0 6px;}
+  /* gauge */
+  .gauge-card{background:linear-gradient(160deg,var(--card2),var(--bg));border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;}
+  .g-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--dim);margin-bottom:10px;}
+  .gauge-wrap{position:relative;width:170px;height:170px;margin-bottom:6px;}
   .gauge-wrap svg{transform:rotate(-90deg);}
-  .gauge-center{
-    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  }
-  .gauge-center .pct{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;}
-  .gauge-center .pct-sub{font-size:10px;color:#C9BFAE;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;}
+  .gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .gauge-center .pct{font-size:26px;font-weight:700;color:var(--blue);}
+  .gauge-center .pct-sub{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;}
+  .finish-date{text-align:center;margin-top:8px;}
+  .finish-date .fd-label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;}
+  .finish-date .fd-value{font-size:19px;font-weight:700;margin-top:3px;}
+  .finish-date .fd-note{font-size:11px;color:var(--dim);margin-top:3px;}
+  .processing-row{margin-top:18px;width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .processing-row label{font-size:11.5px;color:var(--muted);}
+  .processing-row input{width:50px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--ink);padding:5px;}
+  .promised-final{margin-top:14px;width:100%;text-align:center;background:linear-gradient(to right,#0ea5e9,#2563eb);border-radius:10px;padding:16px;}
+  .promised-final .pf-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#dceefd;}
+  .promised-final .pf-value{font-size:24px;font-weight:700;margin-top:5px;color:#fff;}
 
-  .finish-date{
-    text-align:center;margin-top:8px;
-  }
-  .finish-date .fd-label{font-size:11px;color:#C9BFAE;text-transform:uppercase;letter-spacing:0.06em;}
-  .finish-date .fd-value{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-top:2px;}
-  .finish-date .fd-note{font-size:11px;color:#8f8677;margin-top:3px;}
+  .top-actions{display:flex;gap:10px;}
 
-  .processing-row{
-    margin-top:16px;width:100%;display:flex;align-items:center;justify-content:space-between;
-    background:#3A332A;border-radius:6px;padding:10px 12px;
-  }
-  .processing-row label{font-size:12px;color:#C9BFAE;}
-  .processing-row input{
-    width:52px;text-align:center;font-family:'IBM Plex Mono',monospace;
-    border:1px solid #55493A;border-radius:4px;background:#2B241D;color:var(--bg);padding:5px;
-  }
+  footer{text-align:center;color:var(--dim);font-size:11px;margin-top:34px;}
 
-  .promised-final{
-    margin-top:14px;width:100%;text-align:center;background:var(--clay);
-    border-radius:6px;padding:14px;
+  /* PRINT SUMMARY */
+  #printSummary{display:none;}
+  @media print{
+    body *{visibility:hidden;}
+    #printSummary, #printSummary *{visibility:visible;}
+    #printSummary{display:block !important;position:absolute;top:0;left:0;width:100%;background:#fff;color:#111;padding:20px;}
+    .no-print{display:none !important;}
   }
-  .promised-final .pf-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#FBE6DA;}
-  .promised-final .pf-value{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin-top:4px;color:#fff;}
-
-  footer{text-align:center;color:var(--muted);font-size:11px;margin-top:30px;}
+  .ps-h{font-size:20px;font-weight:700;margin-bottom:4px;}
+  .ps-sub{font-size:12px;color:#555;margin-bottom:16px;}
+  .ps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;font-size:12px;}
+  .ps-grid div b{display:block;font-size:14px;}
+  .ps-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;}
+  .ps-table th,.ps-table td{border:1px solid #ccc;padding:5px 8px;text-align:left;}
+  .ps-table th{background:#eee;}
+  .ps-result{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+  .ps-result div{border:1px solid #ccc;padding:8px 10px;font-size:12px;}
+  .ps-result div b{display:block;font-size:16px;}
+  .ps-promised{border:2px solid #2563eb;padding:12px;text-align:center;font-size:16px;font-weight:700;color:#2563eb;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="header">
+  <div class="topbar">
     <div>
-      <h1>Promised Date Calculator</h1>
+      <h1>Promised <span>Date</span> Calculator</h1>
       <div class="sub">Casting → firing yield → promised completion date</div>
     </div>
-    <div class="order-tag">ORDER <input id="orderRef" value="10G01" /></div>
+    <div class="top-actions no-print">
+      <span class="badge">⏱ Live calculation</span>
+      <button class="btn primary" id="printBtn">🖨 Print Summary</button>
+    </div>
   </div>
 
-  <!-- LATEST FIRING RESULTS -->
+  <div class="id-card no-print">
+    <div class="id-field"><label>Order ID</label><input id="orderId" value=""></div>
+    <div class="id-field"><label>Item Code</label><input id="itemCode" placeholder="e.g. 10G01"></div>
+    <div class="id-field"><label>Item Name</label><input id="itemName" placeholder="e.g. Round Bowl 8&quot;"></div>
+    <div class="id-field"><label>Status Date</label><input type="date" id="statusDate"></div>
+  </div>
+
+  <!-- LATEST FIRING -->
   <div class="section">
     <div class="section-title">Latest Firing Results</div>
     <div class="card">
       <div class="grid2">
         <div class="fire-card f1">
           <h3>1st Fire</h3>
-          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f1a" value="200"></div>
-          <div class="field-row"><label>Reject (R)</label><input type="number" id="f1r" value="30"></div>
-          <div class="field-row"><label>Loss</label><input type="number" id="f1l" value="20"></div>
-          <div class="pct-line"><span>Total fired: <b id="f1tot">250</b></span><span>A% <b id="f1apct">80.0%</b></span></div>
+          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f1a" value="80"></div>
+          <div class="field-row"><label>Reject (R)</label><input type="number" id="f1r" value="15"></div>
+          <div class="field-row"><label>Loss</label><input type="number" id="f1l" value="5"></div>
+          <div class="pct-line"><span>Total: <b id="f1tot">100</b></span><span>A% <b id="f1apct">80.0%</b></span></div>
         </div>
         <div class="fire-card f2">
           <h3>2nd Fire</h3>
-          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f2a" value="35"></div>
-          <div class="field-row"><label>Reject (R)</label><input type="number" id="f2r" value="10"></div>
-          <div class="field-row"><label>Loss</label><input type="number" id="f2l" value="5"></div>
-          <div class="pct-line"><span>Total fired: <b id="f2tot">50</b></span><span>A% <b id="f2apct">70.0%</b></span></div>
+          <div class="field-row"><label>Accepted (A)</label><input type="number" id="f2a" value="70"></div>
+          <div class="field-row"><label>Reject (R)</label><input type="number" id="f2r" value="20"></div>
+          <div class="field-row"><label>Loss</label><input type="number" id="f2l" value="10"></div>
+          <div class="pct-line"><span>Total: <b id="f2tot">100</b></span><span>A% <b id="f2apct">70.0%</b></span></div>
         </div>
       </div>
       <div class="yield-summary">
-        <div class="chip green">Total Yield (used for green stages) <b id="totalAOut">88.4%</b></div>
-        <div class="chip red">2nd Fire A% (used for red stages) <b id="twoFAOut">70.0%</b></div>
+        <div class="chip green">Total A (green stages) <b id="totalAOut">—</b></div>
+        <div class="chip red">2nd Fire A% (red stages) <b id="twoFAOut">—</b></div>
       </div>
     </div>
   </div>
 
-  <!-- ORDER & STOCK + WIP -->
+  <!-- STOCK -->
   <div class="section">
-    <div class="section-title">Order, Stock &amp; Work-in-Progress</div>
-    <div class="grid2">
-      <div class="card">
+    <div class="section-title">Order &amp; Stock</div>
+    <div class="card">
+      <div class="stock-grid">
         <div class="stock-field"><label>Order Qty</label><input type="number" id="orderQty" value="100"></div>
-        <div class="stock-field"><label>Warehouse (WH)</label><input type="number" id="wh" value="11"></div>
-        <div class="stock-field"><label>Grinding (GR)</label><input type="number" id="gr" value="0"></div>
-        <div class="stock-result"><span>Available F/G</span><span class="val" id="availFG">11</span></div>
+        <div class="stock-field"><label>Warehouse</label><input type="number" id="wh" value="11"></div>
+        <div class="stock-field"><label>Grinding</label><input type="number" id="gr" value="0"></div>
+        <div class="stock-field"><label>Flush Test</label><input type="number" id="flush" value="0"></div>
+        <div class="stock-field"><label>PHX</label><input type="number" id="phx" value="0"></div>
       </div>
-      <div class="card" style="overflow-x:auto;">
-        <table class="wip" id="wipTable">
-          <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Tot. Fired</th></tr></thead>
-          <tbody></tbody>
-          <tfoot>
-            <tr class="totals"><td>WIP Total</td><td class="num" id="wipQtyTotal">0</td><td></td><td class="num" id="wipFiredTotal">0</td></tr>
-          </tfoot>
-        </table>
-      </div>
+      <div class="stock-result"><span>Available F/G</span><span class="val" id="availFG">0</span></div>
     </div>
   </div>
 
-  <!-- RESULTS STRIP -->
+  <!-- WIP -->
+  <div class="section">
+    <div class="section-title">Work-in-Progress · <span style="color:var(--green)">green = first-fire yield</span> · <span style="color:var(--red)">red = second-fire yield</span></div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="wip" id="wipTable">
+        <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Clay Yield / Factor</th><th>Tot. Fired</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr class="totals"><td>WIP Total</td><td class="num" id="wipQtyTotal">0</td><td></td><td></td><td class="num" id="wipFiredTotal">0</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
   <div class="section">
     <div class="section-title">Position</div>
     <div class="results-strip">
-      <div class="result-box">
-        <div class="label">FG Balance (still to make)</div>
-        <div class="value" id="fgBalance">0</div>
-      </div>
-      <div class="result-box">
-        <div class="label">Firing Yield</div>
-        <div class="value" id="firingYield">0%</div>
-      </div>
-      <div class="result-box accent">
-        <div class="label">Casting Required</div>
-        <div class="value" id="castingReq">0</div>
-      </div>
+      <div class="result-box"><div class="label">FG Balance</div><div class="value" id="fgBalance">0</div></div>
+      <div class="result-box"><div class="label">Total Firing Yield</div><div class="value" id="firingYield">0%</div></div>
+      <div class="result-box accent"><div class="label">Casting Required</div><div class="value" id="castingReq">0</div></div>
     </div>
   </div>
 
-  <!-- CASTING LOG + GAUGE -->
+  <!-- CASTING LOG -->
   <div class="section">
     <div class="section-title">Daily Casting Log &amp; Promised Date</div>
     <div class="log-layout">
       <div class="card">
+        <div class="log-controls">
+          <div class="id-field"><label>Log start date</label><input type="date" id="logStart"></div>
+          <div class="id-field"><label>Days to generate</label><input type="number" id="logDays" value="30"></div>
+          <button class="btn" id="genLog">Generate</button>
+        </div>
         <table class="log">
-          <thead><tr><th>Date</th><th>Cast Qty</th><th>Cumulative</th><th></th></tr></thead>
+          <thead><tr><th>Date</th><th>Day</th><th>Cast Qty</th><th>Cumulative</th><th></th></tr></thead>
           <tbody id="logBody"></tbody>
         </table>
         <div class="log-actions">
-          <button class="btn primary" id="addRow">+ Add day</button>
+          <button class="btn" id="addRow">+ Add single day</button>
           <button class="btn" id="clearLog">Clear log</button>
         </div>
       </div>
@@ -335,27 +272,21 @@
         <div class="g-label">Progress to Casting Req.</div>
         <div class="gauge-wrap">
           <svg width="170" height="170" viewBox="0 0 170 170">
-            <circle cx="85" cy="85" r="72" fill="none" stroke="#3A332A" stroke-width="14"/>
-            <circle id="gaugeArc" cx="85" cy="85" r="72" fill="none" stroke="#C1592B" stroke-width="14"
+            <circle cx="85" cy="85" r="72" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"/>
+            <circle id="gaugeArc" cx="85" cy="85" r="72" fill="none" stroke="#38bdf8" stroke-width="14"
                     stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
           </svg>
-          <div class="gauge-center">
-            <div class="pct" id="gaugePct">0%</div>
-            <div class="pct-sub">cast so far</div>
-          </div>
+          <div class="gauge-center"><div class="pct" id="gaugePct">0%</div><div class="pct-sub">cast so far</div></div>
         </div>
-
         <div class="finish-date">
           <div class="fd-label">Casting Finish Date</div>
           <div class="fd-value" id="castFinishDate">—</div>
-          <div class="fd-note" id="castFinishNote">add casting log entries</div>
+          <div class="fd-note" id="castFinishNote">generate or add log entries</div>
         </div>
-
         <div class="processing-row">
           <label>+ Processing days (fire → dry → despatch)</label>
           <input type="number" id="procDays" value="7">
         </div>
-
         <div class="promised-final">
           <div class="pf-label">Promised Date</div>
           <div class="pf-value" id="promisedDate">—</div>
@@ -364,213 +295,255 @@
     </div>
   </div>
 
-  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · runs entirely in this page, nothing is sent anywhere</footer>
+  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · all calculation runs in this page, nothing is sent anywhere</footer>
+</div>
+
+<!-- PRINT-ONLY SUMMARY -->
+<div id="printSummary">
+  <div class="ps-h">Promised Date Calculator — Summary</div>
+  <div class="ps-sub" id="psSub"></div>
+  <div class="ps-grid">
+    <div>Order ID<b id="psOrderId"></b></div>
+    <div>Item Code<b id="psItemCode"></b></div>
+    <div>Item Name<b id="psItemName"></b></div>
+    <div>Status Date<b id="psStatusDate"></b></div>
+  </div>
+  <table class="ps-table">
+    <thead><tr><th>Stage</th><th>Qty</th><th>Yield</th><th>Factor</th><th>Tot. Fired</th></tr></thead>
+    <tbody id="psWipBody"></tbody>
+  </table>
+  <div class="ps-result">
+    <div>FG Balance<b id="psFgBalance"></b></div>
+    <div>Total Firing Yield<b id="psFiringYield"></b></div>
+    <div>Casting Required<b id="psCastingReq"></b></div>
+  </div>
+  <div class="ps-promised">Promised Date: <span id="psPromised"></span></div>
 </div>
 
 <script>
-// ---------- WIP stage configuration (fixed process, matches the workbook) ----------
 const WIP_STAGES = [
-  { key:'rfStock',       label:'R/F Stock (Uni:F/F)',   yield:'green', mult:false, qty:6  },
-  { key:'kilnSk',        label:'Kiln (SK) R/F',         yield:'green', mult:false, qty:0  },
-  { key:'dkSkFf',        label:'D/K & SK (FF)',         yield:'green', mult:false, qty:0  },
-  { key:'rfFired',       label:'R/F Fired',             yield:'red',   mult:false, qty:0  },
-  { key:'rfStockAbout',  label:'R/F Stock — About',     yield:'red',   mult:false, qty:0  },
-  { key:'spray',         label:'Spray (Clay Yield)',    yield:'green', mult:false, qty:0  },
-  { key:'gwfInspected',  label:'GWF Inspected',         yield:'green', mult:false, qty:0  },
-  { key:'greenware',     label:'Greenware',             yield:'green', mult:false, qty:0  },
-  { key:'dryer',         label:'Dryer',                 yield:'green', mult:true,  qty:0  },
-  { key:'casting1',      label:'Casting',               yield:'green', mult:true,  qty:10 },
-  { key:'casting2',      label:'Casting (2)',           yield:'green', mult:true,  qty:0  },
+  { key:'uninsp',  label:'UNINSPECTION (FIRST FIRE)',      cls:'green', factor:1,    qty:0  },
+  { key:'kilnF',   label:'KILN INSIDE (FIRST FIRE)',       cls:'green', factor:1,    qty:0  },
+  { key:'kilnS',   label:'KILN INSIDE (SECOND FIRE)',      cls:'red',   factor:1,    qty:0  },
+  { key:'refireR', label:'REFIRE STOCK (READY TO LOAD)',   cls:'red',   factor:1,    qty:0  },
+  { key:'refire',  label:'REFIRE STOCK',                   cls:'red',   factor:1,    qty:0  },
+  { key:'spray',   label:'SPRAY',                          cls:'green', factor:0.98, qty:0  },
+  { key:'trap',    label:'TRAP GLAZED',                    cls:'green', factor:0.98, qty:0  },
+  { key:'greenIn', label:'GREENWARE (INSPECTED)',          cls:'green', factor:0.98, qty:0  },
+  { key:'green',   label:'GREENWARE',                      cls:'green', factor:0.9,  qty:0  },
+  { key:'dryer',   label:'DRYER INSIDE',                   cls:'green', factor:0.9,  qty:0  },
+  { key:'cast1',   label:'CASTING 1',                      cls:'green', factor:0.9,  qty:10 },
+  { key:'cast2',   label:'CASTING 2',                      cls:'green', factor:0.9,  qty:0  },
 ];
-const PROCESS_FACTOR = 0.9; // the workbook's fixed 0.9 multiplier (D column) used on Dryer/Casting rows and Casting Req
 
-// ---------- state ----------
-let logEntries = [
-  { date:'2023-01-16', qty:6 },
-  { date:'2023-01-17', qty:6 },
-  { date:'2023-01-18', qty:6 },
-];
+let logEntries = [];
 
 function $(id){ return document.getElementById(id); }
-function fmt(n, d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:d}); }
+function fmt(n,d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:d}); }
 function pct(n){ return (n*100).toFixed(1)+'%'; }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
 
-// ---------- build WIP table rows once ----------
+// ---- init header fields ----
+$('statusDate').value = todayISO();
+$('logStart').value = todayISO();
+$('orderId').value = 'ORD-'+todayISO().replace(/-/g,'')+'-'+Math.floor(100+Math.random()*900);
+
+// ---- build WIP rows ----
 const wipBody = document.querySelector('#wipTable tbody');
-WIP_STAGES.forEach(stage=>{
-  const tr = document.createElement('tr');
-  tr.className = stage.yield;
-  tr.innerHTML = `
-    <td class="stage">${stage.label}</td>
-    <td><input type="number" min="0" value="${stage.qty}" data-key="${stage.key}" class="wipQtyInput"></td>
-    <td class="num" data-yieldcell="${stage.key}">–</td>
-    <td class="num" data-firedcell="${stage.key}">–</td>
+WIP_STAGES.forEach(s=>{
+  const tr=document.createElement('tr');
+  tr.className=s.cls;
+  tr.innerHTML=`
+    <td class="stage stage-name">${s.label}</td>
+    <td><input type="number" min="0" value="${s.qty}" class="wQty" data-key="${s.key}"></td>
+    <td><input type="number" step="0.001" value="0" class="wYield" data-key="${s.key}"></td>
+    <td><input type="number" step="0.01" value="${s.factor}" class="wFactor" data-key="${s.key}"></td>
+    <td class="num" data-fired="${s.key}">–</td>
   `;
   wipBody.appendChild(tr);
 });
 
-// ---------- core calculation ----------
 function calculate(){
-  // --- Latest firing ---
   const f1a=+$('f1a').value||0, f1r=+$('f1r').value||0, f1l=+$('f1l').value||0;
   const f2a=+$('f2a').value||0, f2r=+$('f2r').value||0, f2l=+$('f2l').value||0;
   const f1tot=f1a+f1r+f1l, f2tot=f2a+f2r+f2l;
-  const f1Apct = f1tot? f1a/f1tot:0;
-  const f1Rpct = f1tot? f1r/f1tot:0;
-  const f2Apct = f2tot? f2a/f2tot:0;
+  const f1Apct=f1tot?f1a/f1tot:0, f1Rpct=f1tot?f1r/f1tot:0, f2Apct=f2tot?f2a/f2tot:0;
+  $('f1tot').textContent=fmt(f1tot,0); $('f2tot').textContent=fmt(f2tot,0);
+  $('f1apct').textContent=pct(f1Apct); $('f2apct').textContent=pct(f2Apct);
 
-  $('f1tot').textContent=fmt(f1tot,0);
-  $('f2tot').textContent=fmt(f2tot,0);
-  $('f1apct').textContent=pct(f1Apct);
-  $('f2apct').textContent=pct(f2Apct);
+  const twoFA=f1Rpct*f2Apct;
+  const totalA=twoFA+f1Apct;
+  $('totalAOut').textContent=pct(totalA);
+  $('twoFAOut').textContent=pct(f2Apct);
 
-  const twoFA = f1Rpct * f2Apct;       // "2FA" cell
-  const totalA = twoFA + f1Apct;       // "Total A" — drives the green (dark green) stages
-  const redYield = f2Apct;             // drives the red stages directly
-
-  $('totalAOut').textContent = pct(totalA);
-  $('twoFAOut').textContent = pct(redYield);
-
-  // --- Order & stock ---
-  const orderQty = +$('orderQty').value||0;
-  const wh = +$('wh').value||0;
-  const gr = +$('gr').value||0;
-  const availFG = wh+gr;
-  $('availFG').textContent = fmt(availFG,0);
-
-  // --- WIP ---
-  let wipQtyTotal=0, wipFiredTotal=0;
-  WIP_STAGES.forEach(stage=>{
-    const input = document.querySelector(`.wipQtyInput[data-key="${stage.key}"]`);
-    const qty = +input.value||0;
-    const y = stage.yield==='green' ? totalA : redYield;
-    const fired = stage.mult ? (qty*PROCESS_FACTOR)*y : qty*y;
-    wipQtyTotal += qty;
-    wipFiredTotal += fired;
-    document.querySelector(`[data-yieldcell="${stage.key}"]`).textContent = pct(y);
-    document.querySelector(`[data-firedcell="${stage.key}"]`).textContent = fmt(fired,2);
+  // default yields into inputs the first time only (won't overwrite manual edits after)
+  WIP_STAGES.forEach(s=>{
+    const yInput=document.querySelector(`.wYield[data-key="${s.key}"]`);
+    if(!yInput.dataset.touched){
+      yInput.value = (s.cls==='green'? totalA : f2Apct).toFixed(4);
+    }
   });
-  $('wipQtyTotal').textContent = fmt(wipQtyTotal,0);
-  $('wipFiredTotal').textContent = fmt(wipFiredTotal,2);
 
-  const totalExpectedFG = wipFiredTotal + availFG;
-  const fgBalance = orderQty - totalExpectedFG;
-  const firingYield = totalA;
-  const castingReq = firingYield ? (fgBalance/firingYield)/PROCESS_FACTOR : 0;
+  const orderQty=+$('orderQty').value||0;
+  const wh=+$('wh').value||0, gr=+$('gr').value||0, flush=+$('flush').value||0, phx=+$('phx').value||0;
+  const availFG=wh+gr+flush+phx;
+  $('availFG').textContent=fmt(availFG,0);
 
-  $('fgBalance').textContent = fmt(fgBalance,2);
-  $('firingYield').textContent = pct(firingYield);
-  $('castingReq').textContent = fmt(castingReq,2);
+  let wipQtyTotal=0, wipFiredTotal=0;
+  let lastYield=0, castingFactor=0;
+  WIP_STAGES.forEach(s=>{
+    const qty=+document.querySelector(`.wQty[data-key="${s.key}"]`).value||0;
+    const y=+document.querySelector(`.wYield[data-key="${s.key}"]`).value||0;
+    const factor=+document.querySelector(`.wFactor[data-key="${s.key}"]`).value||0;
+    const fired=qty*factor*y;
+    wipQtyTotal+=qty; wipFiredTotal+=fired;
+    document.querySelector(`[data-fired="${s.key}"]`).textContent=fmt(fired,2);
+    lastYield=y;
+    if(s.key==='cast1') castingFactor=factor;
+  });
+  $('wipQtyTotal').textContent=fmt(wipQtyTotal,0);
+  $('wipFiredTotal').textContent=fmt(wipFiredTotal,2);
+
+  const totalExpectedFG=wipFiredTotal+availFG;
+  const fgBalance=orderQty-totalExpectedFG;
+  const firingYield=lastYield;          // = Casting 2's yield, mirrors workbook C46=E36
+  const clayYield=castingFactor;        // = Casting 1's factor, mirrors workbook C47=A35
+  const castingReq= (firingYield&&clayYield) ? (fgBalance/firingYield)/clayYield : 0;
+
+  $('fgBalance').textContent=fmt(fgBalance,2);
+  $('firingYield').textContent=pct(firingYield);
+  $('castingReq').textContent=fmt(castingReq,2);
 
   renderLog(castingReq);
+  updatePrintSummary(fgBalance, firingYield, castingReq);
 }
 
-// ---------- casting log ----------
-const logBody = $('logBody');
+// ---- casting log ----
+const logBody=$('logBody');
+function isFriday(dateStr){ return new Date(dateStr+'T00:00:00').getDay()===5; }
 
 function renderLog(castingReq){
   logBody.innerHTML='';
-  const sorted = [...logEntries].sort((a,b)=> a.date.localeCompare(b.date));
-  let cum=0, hitDate=null, hitIndex=-1;
-  sorted.forEach((e,i)=>{
-    cum += (+e.qty||0);
-    if(hitDate===null && cum>=castingReq && castingReq>0){ hitDate=e.date; hitIndex=i; }
-  });
+  const sorted=[...logEntries].sort((a,b)=>a.date.localeCompare(b.date));
+  let cum=0, hitIndex=-1;
+  sorted.forEach((e,i)=>{ cum+=(+e.qty||0); if(hitIndex===-1 && cum>=castingReq && castingReq>0) hitIndex=i; });
 
   cum=0;
   sorted.forEach((e,i)=>{
-    cum += (+e.qty||0);
+    cum+=(+e.qty||0);
+    const off=isFriday(e.date);
     const tr=document.createElement('tr');
+    if(off) tr.classList.add('off');
     if(hitIndex===i) tr.classList.add('hit');
-    tr.innerHTML = `
+    tr.innerHTML=`
       <td><input type="date" value="${e.date}" data-idx="${i}" class="logDate"></td>
-      <td><input type="number" value="${e.qty}" data-idx="${i}" class="logQty"></td>
+      <td>${off?'FRIDAY':''}</td>
+      <td><input type="number" value="${e.qty}" data-idx="${i}" class="logQty" ${off?'disabled':''}></td>
       <td class="cum">${fmt(cum,2)}</td>
-      <td><button class="rm" data-idx="${i}" title="remove">×</button></td>
+      <td><button class="rm" data-idx="${i}">×</button></td>
     `;
     logBody.appendChild(tr);
   });
 
-  // gauge + finish date
-  const total = sorted.reduce((s,e)=>s+(+e.qty||0),0);
-  const progress = castingReq>0 ? Math.min(1, total/castingReq) : 0;
-  const circumference = 452.4;
-  $('gaugeArc').setAttribute('stroke-dashoffset', circumference*(1-progress));
-  $('gaugePct').textContent = (progress*100).toFixed(0)+'%';
+  const total=sorted.reduce((s,e)=>s+(+e.qty||0),0);
+  const progress=castingReq>0?Math.min(1,total/castingReq):0;
+  $('gaugeArc').setAttribute('stroke-dashoffset', 452.4*(1-progress));
+  $('gaugePct').textContent=(progress*100).toFixed(0)+'%';
 
-  const procDays = +$('procDays').value||0;
-
-  if(hitDate){
-    const finish = new Date(hitDate+'T00:00:00');
-    $('castFinishDate').textContent = finish.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
-    $('castFinishNote').textContent = 'reached from logged entries';
-    const promised = new Date(finish); promised.setDate(promised.getDate()+procDays);
-    $('promisedDate').textContent = promised.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+  const procDays=+$('procDays').value||0;
+  let finishDate=null, note='';
+  if(hitIndex>-1){
+    finishDate=new Date(sorted[hitIndex].date+'T00:00:00');
+    note='reached from logged entries';
   } else if(sorted.length && castingReq>0){
-    // project forward using the average daily rate of days that had casting
-    const activeDays = sorted.filter(e=>(+e.qty||0)>0).length || 1;
-    const avgRate = total/activeDays;
-    const remaining = castingReq-total;
-    const daysNeeded = avgRate>0 ? Math.ceil(remaining/avgRate) : null;
-    const lastDate = new Date(sorted[sorted.length-1].date+'T00:00:00');
-    if(daysNeeded!==null){
-      const projected = new Date(lastDate); projected.setDate(projected.getDate()+daysNeeded);
-      $('castFinishDate').textContent = projected.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
-      $('castFinishNote').textContent = 'estimated — at current rate';
-      const promised = new Date(projected); promised.setDate(promised.getDate()+procDays);
-      $('promisedDate').textContent = promised.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
-    } else {
-      $('castFinishDate').textContent='—';
-      $('castFinishNote').textContent='add a casting rate to estimate';
-      $('promisedDate').textContent='—';
+    const activeDays=sorted.filter(e=>(+e.qty||0)>0).length||1;
+    const avgRate=total/activeDays;
+    const remaining=castingReq-total;
+    if(avgRate>0){
+      const daysNeeded=Math.ceil(remaining/avgRate);
+      finishDate=new Date(sorted[sorted.length-1].date+'T00:00:00');
+      finishDate.setDate(finishDate.getDate()+daysNeeded);
+      note='estimated — at current rate';
     }
+  }
+
+  if(finishDate){
+    $('castFinishDate').textContent=finishDate.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+    $('castFinishNote').textContent=note;
+    const promised=new Date(finishDate); promised.setDate(promised.getDate()+procDays);
+    $('promisedDate').textContent=promised.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
   } else {
-    $('castFinishDate').textContent='—';
-    $('castFinishNote').textContent='add casting log entries';
-    $('promisedDate').textContent='—';
+    $('castFinishDate').textContent='—'; $('castFinishNote').textContent='generate or add log entries'; $('promisedDate').textContent='—';
   }
 }
 
-// ---------- events ----------
-document.addEventListener('input', (e)=>{
-  if(e.target.classList.contains('logDate')){
-    logEntries[+e.target.dataset.idx].date = e.target.value;
-    calculate();
-    return;
-  }
-  if(e.target.classList.contains('logQty')){
-    logEntries[+e.target.dataset.idx].qty = e.target.value;
-    calculate();
-    return;
+function updatePrintSummary(fgBalance, firingYield, castingReq){
+  $('psSub').textContent = 'Status as of '+($('statusDate').value||'—');
+  $('psOrderId').textContent=$('orderId').value;
+  $('psItemCode').textContent=$('itemCode').value||'—';
+  $('psItemName').textContent=$('itemName').value||'—';
+  $('psStatusDate').textContent=$('statusDate').value||'—';
+  $('psFgBalance').textContent=fmt(fgBalance,2);
+  $('psFiringYield').textContent=pct(firingYield);
+  $('psCastingReq').textContent=fmt(castingReq,2);
+  $('psPromised').textContent=$('promisedDate').textContent;
+
+  const body=$('psWipBody'); body.innerHTML='';
+  WIP_STAGES.forEach(s=>{
+    const qty=document.querySelector(`.wQty[data-key="${s.key}"]`).value;
+    const y=document.querySelector(`.wYield[data-key="${s.key}"]`).value;
+    const f=document.querySelector(`.wFactor[data-key="${s.key}"]`).value;
+    const fired=document.querySelector(`[data-fired="${s.key}"]`).textContent;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${s.label}</td><td>${qty}</td><td>${(y*100).toFixed(1)}%</td><td>${f}</td><td>${fired}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+// ---- log generation ----
+$('genLog').addEventListener('click', ()=>{
+  const start=$('logStart').value || todayISO();
+  const days=+$('logDays').value || 30;
+  logEntries=[];
+  let d=new Date(start+'T00:00:00');
+  for(let i=0;i<days;i++){
+    const iso=d.toISOString().slice(0,10);
+    logEntries.push({date:iso, qty: (d.getDay()===5)?0:6});
+    d.setDate(d.getDate()+1);
   }
   calculate();
-});
-
-document.addEventListener('click', (e)=>{
-  if(e.target.classList.contains('rm')){
-    const idx = +e.target.dataset.idx;
-    const sorted = [...logEntries].sort((a,b)=> a.date.localeCompare(b.date));
-    const target = sorted[idx];
-    logEntries = logEntries.filter(en=> en!==target);
-    calculate();
-  }
 });
 
 $('addRow').addEventListener('click', ()=>{
-  const last = [...logEntries].sort((a,b)=>a.date.localeCompare(b.date)).pop();
-  const base = last ? new Date(last.date+'T00:00:00') : new Date();
+  const last=[...logEntries].sort((a,b)=>a.date.localeCompare(b.date)).pop();
+  const base=last?new Date(last.date+'T00:00:00'):new Date();
   base.setDate(base.getDate()+1);
-  const iso = base.toISOString().slice(0,10);
-  logEntries.push({date:iso, qty:6});
+  logEntries.push({date:base.toISOString().slice(0,10), qty:6});
   calculate();
 });
 
-$('clearLog').addEventListener('click', ()=>{
-  logEntries = [];
+$('clearLog').addEventListener('click', ()=>{ logEntries=[]; calculate(); });
+
+$('printBtn').addEventListener('click', ()=>{ window.print(); });
+
+document.addEventListener('input',(e)=>{
+  if(e.target.classList.contains('wYield')){ e.target.dataset.touched='1'; calculate(); return; }
+  if(e.target.classList.contains('logDate')){ logEntries[+e.target.dataset.idx].date=e.target.value; calculate(); return; }
+  if(e.target.classList.contains('logQty')){ logEntries[+e.target.dataset.idx].qty=e.target.value; calculate(); return; }
   calculate();
 });
+document.addEventListener('click',(e)=>{
+  if(e.target.classList.contains('rm')){
+    const idx=+e.target.dataset.idx;
+    const sorted=[...logEntries].sort((a,b)=>a.date.localeCompare(b.date));
+    const target=sorted[idx];
+    logEntries=logEntries.filter(en=>en!==target);
+    calculate();
+  }
+});
 
-calculate();
+// seed a starter log then calculate
+$('genLog').click();
 </script>
 </body>
 </html>
