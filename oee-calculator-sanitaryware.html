@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OEE Calculator — Ceramic Sanitaryware | Production Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B1220;
+    --panel: #121B2E;
+    --panel-2: #17233A;
+    --line: #24324B;
+    --text: #EAF0FA;
+    --text-dim: #8CA0BE;
+    --amber: #F5A623;
+    --green: #34D399;
+    --red: #F0625B;
+    --steel: #4C6FA3;
+    --clay: #C97B4A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 15% -10%, #142238 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:40px 20px 60px;
+    min-height:100vh;
+  }
+  .wrap{max-width:1000px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; background:var(--amber);
+    display:inline-block; box-shadow:0 0 10px var(--amber);
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(24px,4vw,36px);
+    font-weight:700; margin:0 0 8px; letter-spacing:-0.01em;
+  }
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:640px;line-height:1.55;margin-bottom:22px;}
+
+  .stage-select{
+    display:flex; gap:8px; margin-bottom:30px; flex-wrap:wrap;
+  }
+  .stage-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.05em;
+    background:var(--panel); border:1px solid var(--line); color:var(--text-dim);
+    padding:9px 16px; cursor:pointer; transition:all .15s;
+  }
+  .stage-btn.active{ border-color:var(--amber); color:var(--amber); background:#1c1608; }
+  .stage-btn:hover{ color:var(--text); }
+
+  .grid{ display:grid; grid-template-columns: 1fr 1.1fr; gap:20px; }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); padding:26px; position:relative;
+  }
+  .panel::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--amber),transparent 60%);
+  }
+  .panel-title{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:18px;
+  }
+  .field{margin-bottom:20px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px; }
+  .field label b{color:var(--text); font-weight:600;}
+  .input-row{position:relative;}
+  input[type=number]{
+    width:100%; background:#0C1526; border:1px solid var(--line); color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:16px; padding:12px 60px 12px 14px;
+    transition:border-color .15s;
+  }
+  input[type=number]:focus{outline:none; border-color:var(--amber);}
+  .unit{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    color:var(--text-dim); font-size:11.5px; font-family:'JetBrains Mono',monospace;
+  }
+  .helper{
+    font-size:12px; color:#5b6f8f; margin-top:6px; line-height:1.5;
+    border-left:2px solid var(--line); padding-left:10px;
+  }
+  .helper b{color:var(--clay);}
+  .section-label{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--amber); margin:24px 0 12px; opacity:.9;
+  }
+  .section-label:first-child{margin-top:0;}
+
+  .gauge-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:22px;
+  }
+  .gauge-value{ font-family:'Space Grotesk',sans-serif; font-size:50px; font-weight:700; margin-top:-62px; letter-spacing:-0.02em; }
+  .gauge-status{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; margin-top:2px; }
+  .bench{ font-size:11.5px; color:var(--text-dim); margin-top:10px; text-align:center; line-height:1.5; max-width:280px; }
+
+  .metric-block{margin-bottom:14px;}
+  .metric-block:last-child{margin-bottom:0;}
+  .metric-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; }
+  .metric-name{font-size:13.5px; color:var(--text-dim);}
+  .metric-name span{display:block; font-size:11px; color:#5b6f8f; margin-top:2px;}
+  .metric-value{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:19px; }
+  .bar-track{ height:5px; background:#0C1526; border:1px solid var(--line); margin-top:6px; overflow:hidden; }
+  .bar-fill{height:100%; transition:width .3s ease;}
+
+  .reality-box{
+    margin-top:22px; padding:16px; background:#150f07; border:1px solid #3a2a12;
+    font-size:12px; color:#c9a876; line-height:1.6;
+  }
+  .reality-box b{color:var(--amber);}
+
+  .guide{
+    margin-top:36px; background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); padding:30px;
+  }
+  .guide-title{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; margin:0 0 6px;
+  }
+  .guide-sub{ color:var(--text-dim); font-size:13.5px; margin-bottom:22px; }
+  .guide-item{
+    display:grid; grid-template-columns: 200px 1fr; gap:18px;
+    padding:16px 0; border-top:1px solid var(--line);
+  }
+  .guide-item:first-of-type{border-top:none;}
+  @media (max-width:640px){ .guide-item{grid-template-columns:1fr; gap:6px;} }
+  .guide-field{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--amber);
+    letter-spacing:.02em;
+  }
+  .guide-desc{ font-size:13.5px; color:var(--text); line-height:1.65; }
+  .guide-desc .ex{ display:block; margin-top:6px; font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Production Tools Suite</div>
+  <h1>OEE Calculator — Ceramic Sanitaryware</h1>
+  <p class="sub">Built for casting, kiln, and glazing lines in sanitaryware production. Select your process stage below — field guidance and example values adjust to match.</p>
+
+  <div class="stage-select">
+    <button class="stage-btn active" data-stage="kiln">🔥 Kiln / Firing</button>
+    <button class="stage-btn" data-stage="casting">🏺 Casting Line</button>
+    <button class="stage-btn" data-stage="glazing">🎨 Glazing Line</button>
+  </div>
+
+  <div class="grid">
+
+    <div class="panel">
+      <div class="panel-title" id="panelTitle">Shift Inputs — Kiln</div>
+
+      <div class="section-label">Availability</div>
+      <div class="field">
+        <label><b>Planned production time</b></label>
+        <div class="input-row">
+          <input type="number" id="planned" value="1440" min="0">
+          <span class="unit">min</span>
+        </div>
+        <div class="helper" id="help-planned"></div>
+      </div>
+      <div class="field">
+        <label><b>Downtime</b></label>
+        <div class="input-row">
+          <input type="number" id="downtime" value="90" min="0">
+          <span class="unit">min</span>
+        </div>
+        <div class="helper" id="help-downtime"></div>
+      </div>
+
+      <div class="section-label">Performance</div>
+      <div class="field">
+        <label><b>Ideal cycle time</b></label>
+        <div class="input-row">
+          <input type="number" id="cycletime" value="480" min="0" step="0.1">
+          <span class="unit">min/batch</span>
+        </div>
+        <div class="helper" id="help-cycle"></div>
+      </div>
+      <div class="field">
+        <label><b>Total units produced</b></label>
+        <div class="input-row">
+          <input type="number" id="total" value="3" min="0">
+          <span class="unit">units</span>
+        </div>
+        <div class="helper" id="help-total"></div>
+      </div>
+
+      <div class="section-label">Quality</div>
+      <div class="field">
+        <label><b>Good units</b></label>
+        <div class="input-row">
+          <input type="number" id="good" value="2" min="0">
+          <span class="unit">units</span>
+        </div>
+        <div class="helper" id="help-good"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Result</div>
+
+      <div class="gauge-wrap">
+        <svg id="gauge" width="220" height="130" viewBox="0 0 220 130">
+          <path d="M 15 115 A 95 95 0 0 1 205 115" fill="none" stroke="#1c2840" stroke-width="16" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M 15 115 A 95 95 0 0 1 205 115" fill="none" stroke="var(--amber)" stroke-width="16" stroke-linecap="round" stroke-dasharray="298.5" stroke-dashoffset="298.5"/>
+        </svg>
+        <div class="gauge-value" id="oeeValue">0%</div>
+        <div class="gauge-status" id="oeeStatus">—</div>
+        <div class="bench">Sanitaryware-realistic OEE: <b style="color:var(--text)">35–55%</b> is normal. Generic 85% "world-class" benchmarks don't apply here.</div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Availability<span>Run time vs planned time</span></div>
+          <div class="metric-value" id="availVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="availBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Performance<span>Actual speed vs ideal speed</span></div>
+          <div class="metric-value" id="perfVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="perfBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Quality<span>Good units vs total units</span></div>
+          <div class="metric-value" id="qualVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="qualBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="reality-box" id="realityBox"></div>
+    </div>
+
+  </div>
+
+  <div class="guide">
+    <div class="guide-title">How to fill this in — Sanitaryware Field Guide</div>
+    <div class="guide-sub">What each number means on the factory floor, by stage.</div>
+    <div id="guideContent"></div>
+  </div>
+
+</div>
+
+<script>
+const stageData = {
+  kiln: {
+    title: 'Shift Inputs — Kiln',
+    fields: {
+      planned: { value: 1440, unit: 'min', label: 'Planned production time', help: 'Full firing cycle window — e.g. one 24-hour kiln schedule (1440 min). Tunnel kilns often run continuously, so "planned time" is usually a full day, not a single shift.' },
+      downtime: { value: 90, unit: 'min', label: 'Downtime', help: 'Kiln stoppage time — cooling delays, loading/unloading gaps, refractory repair, power/gas supply interruption, waiting for setter/kiln car readiness.' },
+      cycletime: { value: 480, unit: 'min/batch', label: 'Ideal cycle time', help: 'Ideal firing time per batch/kiln car — from the kiln\'s standard firing curve (e.g. 8 hours = 480 min for one load), taken from the manufacturer\'s spec or your own time study.' },
+      total: { value: 3, unit: 'batches', label: 'Total units produced', help: 'Number of kiln loads (batches or kiln cars) fired in the planned period — not individual pieces, since the kiln fires in loads.' },
+      good: { value: 2.7, unit: 'batches (equiv.)', label: 'Good units', help: 'Batches worth of pieces that passed after firing — cracked, warped, or under-fired pieces from a load reduce this. Can be a fractional batch-equivalent if you convert from piece counts.' }
+    },
+    reality: 'Kiln firing curves are fixed by process/chemistry, not by machine speed — so Performance can\'t be pushed up the way it can on a casting line. Track this OEE against <b>your own past shifts</b>, not against generic factory benchmarks.'
+  },
+  casting: {
+    title: 'Shift Inputs — Casting Line',
+    fields: {
+      planned: { value: 480, unit: 'min', label: 'Planned production time', help: 'Shift length — e.g. one 8-hour shift (480 min), excluding scheduled breaks.' },
+      downtime: { value: 60, unit: 'min', label: 'Downtime', help: 'Casting line stoppages — mould changeover, slip supply interruption, mould cleaning/repair, waiting for demoulding readiness, plaster mould drying delays.' },
+      cycletime: { value: 25, unit: 'min/piece', label: 'Ideal cycle time', help: 'Ideal cast + demould time per piece (e.g. one WC pan or basin) — from your standard mould cycle time, based on slip casting or pressure casting method used.' },
+      total: { value: 16, unit: 'pieces', label: 'Total units produced', help: 'Total green ware pieces demoulded in the shift, before drying and firing — this is your raw casting output count.' },
+      good: { value: 14, unit: 'pieces', label: 'Good units', help: 'Pieces demoulded without cracks, deformation, or mould-line defects — rejects at this stage are usually handling damage or mould wear issues.' }
+    },
+    reality: 'Casting is where Performance improvements are most realistic — mould maintenance, slip consistency, and demoulding technique directly affect cycle time here, unlike the kiln stage.'
+  },
+  glazing: {
+    title: 'Shift Inputs — Glazing Line',
+    fields: {
+      planned: { value: 480, unit: 'min', label: 'Planned production time', help: 'Shift length — e.g. one 8-hour glazing shift (480 min).' },
+      downtime: { value: 40, unit: 'min', label: 'Downtime', help: 'Glazing line stoppages — spray gun clogs, glaze line changeover (color/formula change), robot arm fault, glaze booth cleaning.' },
+      cycletime: { value: 3, unit: 'min/piece', label: 'Ideal cycle time', help: 'Ideal spray/dip time per piece — from your glaze application standard, depending on manual spray, automatic spray robot, or dip-glazing method.' },
+      total: { value: 130, unit: 'pieces', label: 'Total units produced', help: 'Total pieces glazed in the shift, ready to move to kiln loading.' },
+      good: { value: 122, unit: 'pieces', label: 'Good units', help: 'Pieces with acceptable glaze coverage — no pinholes, crawling, uneven thickness, or color mismatch caught at this pre-fire inspection stage.' }
+    },
+    reality: 'Glaze defects caught here are cheaper than defects caught after firing — a piece rejected at glazing hasn\'t yet consumed a kiln firing slot. Watch this Quality number closely; it\'s your early warning stage.'
+  }
+};
+
+function loadStage(stage){
+  const d = stageData[stage];
+  document.getElementById('panelTitle').textContent = d.title;
+
+  const order = ['planned','downtime','cycletime','total','good'];
+  order.forEach(key=>{
+    document.getElementById(key).value = d.fields[key].value;
+  });
+
+  document.getElementById('help-planned').innerHTML = '<b>' + d.fields.planned.label + ':</b> ' + d.fields.planned.help;
+  document.getElementById('help-downtime').innerHTML = '<b>' + d.fields.downtime.label + ':</b> ' + d.fields.downtime.help;
+  document.getElementById('help-cycle').innerHTML = '<b>' + d.fields.cycletime.label + ':</b> ' + d.fields.cycletime.help;
+  document.getElementById('help-total').innerHTML = '<b>' + d.fields.total.label + ':</b> ' + d.fields.total.help;
+  document.getElementById('help-good').innerHTML = '<b>' + d.fields.good.label + ':</b> ' + d.fields.good.help;
+
+  const unitEls = document.querySelectorAll('.unit');
+  order.forEach((key,i)=>{ unitEls[i].textContent = d.fields[key].unit; });
+
+  document.getElementById('realityBox').innerHTML = '<b>Why the number looks the way it does:</b> ' + d.reality;
+
+  buildGuide(stage);
+  calc();
+}
+
+function buildGuide(stage){
+  const d = stageData[stage];
+  const order = ['planned','downtime','cycletime','total','good'];
+  let html = '';
+  order.forEach(key=>{
+    const f = d.fields[key];
+    html += '<div class="guide-item">' +
+      '<div class="guide-field">' + f.label + '</div>' +
+      '<div class="guide-desc">' + f.help + '<span class="ex">Example: ' + f.value + ' ' + f.unit + '</span></div>' +
+    '</div>';
+  });
+  document.getElementById('guideContent').innerHTML = html;
+}
+
+document.querySelectorAll('.stage-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.stage-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loadStage(btn.dataset.stage);
+  });
+});
+
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+function calc(){
+  const planned = parseFloat(document.getElementById('planned').value) || 0;
+  const downtime = parseFloat(document.getElementById('downtime').value) || 0;
+  const cycle = parseFloat(document.getElementById('cycletime').value) || 0;
+  const total = parseFloat(document.getElementById('total').value) || 0;
+  const good = parseFloat(document.getElementById('good').value) || 0;
+
+  const runTime = Math.max(planned - downtime, 0);
+  const availability = planned > 0 ? clamp(runTime / planned, 0, 1) : 0;
+
+  const idealTime = cycle * total;
+  const performance = runTime > 0 ? clamp(idealTime / runTime, 0, 1) : 0;
+
+  const quality = total > 0 ? clamp(good / total, 0, 1) : 0;
+
+  const oee = availability * performance * quality;
+
+  document.getElementById('availVal').textContent = Math.round(availability*100) + '%';
+  document.getElementById('perfVal').textContent = Math.round(performance*100) + '%';
+  document.getElementById('qualVal').textContent = Math.round(quality*100) + '%';
+
+  document.getElementById('availBar').style.width = (availability*100) + '%';
+  document.getElementById('perfBar').style.width = (performance*100) + '%';
+  document.getElementById('qualBar').style.width = (quality*100) + '%';
+
+  const oeePct = Math.round(oee*100);
+  document.getElementById('oeeValue').textContent = oeePct + '%';
+
+  const statusEl = document.getElementById('oeeStatus');
+  const valueEl = document.getElementById('oeeValue');
+  let color, label;
+  if(oeePct >= 55){ color = 'var(--green)'; label = 'Strong for sanitaryware'; }
+  else if(oeePct >= 35){ color = 'var(--amber)'; label = 'Typical range'; }
+  else { color = 'var(--red)'; label = 'Below typical — investigate'; }
+  statusEl.textContent = label;
+  statusEl.style.color = color;
+  valueEl.style.color = color;
+
+  document.getElementById('availBar').style.background = color;
+  document.getElementById('perfBar').style.background = color;
+  document.getElementById('qualBar').style.background = color;
+
+  const arc = document.getElementById('gaugeArc');
+  const totalLength = 298.5;
+  const offset = totalLength - (totalLength * oee);
+  arc.style.stroke = color;
+  arc.style.strokeDashoffset = offset;
+}
+
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
+
+loadStage('kiln');
+</script>
+
+</body>
+</html>
