@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ceramic Industry Network | Shakthi Chathuranga</title>
+    <meta name="description" content="Directory of key organizations, associations, and resources across the global ceramic sanitaryware industry, curated by Shakthi Chathuranga.">
+    <meta property="og:title" content="Ceramic Industry Network | Shakthi Chathuranga">
+    <meta property="og:description" content="Directory of key organizations, associations, and resources across the global ceramic sanitaryware industry.">
+    <meta property="og:image" content="sc-logo.jpeg">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="sc-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -19,53 +26,7 @@
             overflow-x: hidden;
         }
 
-        /* 🌐 Premium Navigation Bar */
-        nav {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #38bdf8, #0ea5e9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-tabs {
-            display: flex;
-            list-style: none;
-            height: 100%;
-            gap: 10px;
-        }
-
-        .nav-tabs a {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-weight: 500;
-            height: 100%;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-tabs a:hover, .nav-tabs a.active {
-            color: #38bdf8;
-            border-bottom: 3px solid #38bdf8;
-        }
+        /* 🌐 Navigation styles moved to shared style.css */
 
         /* 📁 Directory Wrapper */
         .main-container {
@@ -248,14 +209,16 @@
 
     <!-- 🌐 Premium Navigation Bar -->
     <nav>
-        <div class="logo">SC. <span>Portal</span></div>
+        <a href="index.html" class="logo">
+            <img src="sc-logo.jpeg" alt="SC. Portal logo">
+            <span class="logo-text">SC. Portal</span>
+        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
-            <li><a href="tools.html">Tools</a></li>
+            <li><a href="tools.html">Production Tools</a></li>
             <li><a href="ceramic_news.html">Ceramic News</a></li>
-            <li><a href="#" class="active">Industry Network</a></li>
-            <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>          
-            
+            <li><a href="Ceramic_Industry_Network.html" class="active">Industry Network</a></li>
+            <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
         </ul>
     </nav>
 

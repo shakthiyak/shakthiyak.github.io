@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shakthi Chathuranga | Production Planning & Operations Portfolio</title>
+    <link rel="stylesheet" href="style.css">
 
     <!-- 📊 Google tag (gtag.js) - මෙන්න මේ හරියට පේස්ට් කරන්න -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZBHZ86LKE"></script>
@@ -25,7 +26,7 @@
     <meta property="og:type" content="website">
 
     <!-- Simple favicon using initials -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22>SC</text></svg>">
+    <link rel="icon" href="sc-logo.jpeg">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -44,49 +45,7 @@
             overflow-x: hidden;
         }
 
-        /* 🌐 Navigation */
-        nav {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #38bdf8, #0ea5e9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
-
-        .nav-tabs a {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-weight: 500;
-            height: 100%;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-        }
-
-        .nav-tabs a:hover, .nav-tabs a.active {
-            color: #38bdf8;
-            border-bottom: 3px solid #38bdf8;
-        }
+        /* 🌐 Navigation styles moved to shared style.css */
 
         /* 📸 Hero */
         .hero {
@@ -481,9 +440,12 @@
 
     <!-- 🌐 Navigation -->
     <nav>
-        <div class="logo">SC. <span>Portal</span></div>
+        <a href="index.html" class="logo">
+            <img src="sc-logo.jpeg" alt="SC. Portal logo">
+            <span class="logo-text">SC. Portal</span>
+        </a>
         <ul class="nav-tabs">
-            <li><a href="#" class="active">Home</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
             <li><a href="tools.html">Production Tools</a></li>
             <li><a href="ceramic_news.html">Ceramic News</a></li>
             <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>

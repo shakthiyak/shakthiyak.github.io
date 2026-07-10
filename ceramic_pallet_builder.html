@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ceramic Pallet Builder | Shakthi Chathuranga</title>
+    <meta name="description" content="Interactive tool for planning ceramic sanitaryware pallet loading and packing configurations, built by Shakthi Chathuranga.">
+    <meta property="og:title" content="Ceramic Pallet Builder | Shakthi Chathuranga">
+    <meta property="og:description" content="Interactive tool for planning ceramic sanitaryware pallet loading and packing configurations.">
+    <meta property="og:image" content="sc-logo.jpeg">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="sc-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,25 +24,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
         
-        nav {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 50px; display: flex; justify-content: space-between; align-items: center; height: 80px;
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .logo {
-            font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
-            background: linear-gradient(to right, #38bdf8, #0ea5e9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;
-        }
-        .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
-        .nav-tabs a {
-            display: flex; align-items: center; padding: 0 20px; text-decoration: none;
-            color: var(--text-muted); font-weight: 500; height: 100%; transition: all 0.3s ease;
-            border-bottom: 3px solid transparent; white-space: nowrap;
-        }
-        .nav-tabs a:hover, .nav-tabs a.active { color: var(--accent-blue); border-bottom: 3px solid var(--accent-blue); }
+        /* Navigation styles moved to shared style.css */
 
         .page-container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; }
         .tool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
@@ -83,7 +72,10 @@
 <body>
 
     <nav>
-        <a href="index.html" class="logo">SC. <span>Portal</span></a>
+        <a href="index.html" class="logo">
+            <img src="sc-logo.jpeg" alt="SC. Portal logo">
+            <span class="logo-text">SC. Portal</span>
+        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
             <li><a href="tools.html" class="active">Production Tools</a></li>

@@ -1,0 +1,92 @@
+/* ============================================
+   SC. Portal — Shared Site Navigation Styles
+   Used by every page. Edit this ONE file to
+   change the header/logo/nav look site-wide.
+   ============================================ */
+
+nav {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.logo .logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #38bdf8, #0ea5e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+
+.nav-tabs {
+    display: flex;
+    list-style: none;
+    height: 100%;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.nav-tabs a {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-weight: 500;
+    height: 100%;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.nav-tabs a:hover, .nav-tabs a.active {
+    color: #38bdf8;
+    border-bottom: 3px solid #38bdf8;
+}
+
+@media (max-width: 900px) {
+    nav {
+        height: auto;
+        padding: 14px 20px;
+    }
+    .nav-tabs {
+        height: auto;
+        width: 100%;
+        justify-content: center;
+    }
+    .nav-tabs a {
+        height: 40px;
+        padding: 0 12px;
+        font-size: 14px;
+    }
+}

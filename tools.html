@@ -5,40 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Production Tools | Shakthi Chathuranga</title>
     <meta name="description" content="A collection of production and operations tools built by Shakthi Chathuranga for ceramic manufacturing workflows.">
+    <meta property="og:title" content="Production Tools | Shakthi Chathuranga">
+    <meta property="og:description" content="A collection of production and operations tools built by Shakthi Chathuranga for ceramic manufacturing workflows.">
+    <meta property="og:image" content="sc-logo.jpeg">
+    <meta property="og:type" content="website">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 font-family=%22Arial%22 font-weight=%22700%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22>SC</text></svg>">
+    <link rel="icon" href="sc-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; }
 
-        nav {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo {
-            font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
-            background: linear-gradient(to right, #38bdf8, #0ea5e9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-        .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; }
-        .nav-tabs a {
-            display: flex; align-items: center; padding: 0 20px; text-decoration: none;
-            color: #94a3b8; font-weight: 500; height: 100%; transition: all 0.3s ease;
-            border-bottom: 3px solid transparent; white-space: nowrap;
-        }
-        .nav-tabs a:hover, .nav-tabs a.active { color: #38bdf8; border-bottom: 3px solid #38bdf8; }
+        /* Navigation styles moved to shared style.css */
 
         .page-header {
             max-width: 1200px;
@@ -132,7 +112,10 @@
 <body>
 
     <nav>
-        <a href="index.html" class="logo">SC. <span>Portal</span></a>
+        <a href="index.html" class="logo">
+            <img src="sc-logo.jpeg" alt="SC. Portal logo">
+            <span class="logo-text">SC. Portal</span>
+        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
             <li><a href="tools.html" class="active">Production Tools</a></li>
@@ -191,28 +174,17 @@
             <a href="promised-date-calculator.html" target="_blank" class="cta-btn">Launch Tool 🚀</a>
         </div>
 
-         <!-- NEW LIVE TOOL: Container Loading Calculator -->
+        <!-- NEW LIVE TOOL: Overtime Calculator -->
         <div class="tool-card">
             <div>
-                <div class="tool-icon">🚢</div>
+                <div class="tool-icon">⏱️</div>
                 <span class="tool-status status-live">● Live</span>
-                <h2>OEE Calculator — Ceramic Sanitaryware</h2>
-                <p>OEE = Overall Equipment Effectiveness.</p>
-            </div>
-            <a href="oee-calculator-sanitarywarehtml" target="_blank" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-     <!-- NEW LIVE TOOL: Container Loading Calculator -->
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🚢</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Overtime Pay Calculator</h2>
-                <p>Select any country — currency switches automatically. Overtime multiplier defaults to that country's common statutory rate where known, editable for your own factory policy or CBA.</p>
+                <h2>Overtime Calculator</h2>
+                <p>Select a country to auto-switch currency and suggested OT multiplier, then calculate overtime hours and pay for production staff.</p>
             </div>
             <a href="ot-calculator.html" target="_blank" class="cta-btn">Launch Tool 🚀</a>
         </div>
-        
+
         <div class="tool-card">
             <div>
                 <div class="tool-icon">📊</div>

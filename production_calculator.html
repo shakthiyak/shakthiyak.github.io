@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ceramic Production · Delivery Date Calculator</title>
+<meta name="description" content="Calculate ceramic sanitaryware production delivery dates from order details through the full process timeline, built by Shakthi Chathuranga.">
+<meta property="og:title" content="Ceramic Production · Delivery Date Calculator">
+<meta property="og:description" content="Calculate ceramic sanitaryware production delivery dates from order details through the full process timeline.">
+<meta property="og:image" content="sc-logo.jpeg">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.jpeg">
+<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -14,9 +21,12 @@
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
-  header{background:rgba(15,23,42,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:18px 24px;}
-  header h1{margin:0;font-size:1.4rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
-  header p{margin:4px 0 0;color:var(--muted);font-size:.85rem;}
+  /* Navigation styles moved to shared style.css */
+  .tool-page-header{max-width:1000px;margin:20px auto 0;padding:0 16px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
+  .tool-page-header h1{margin:0;font-size:1.4rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+  .tool-page-header p{margin:4px 0 0;color:var(--muted);font-size:.85rem;}
+  .back-to-tools{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:.85rem;border:1px solid var(--line);padding:8px 14px;border-radius:8px;flex-shrink:0;}
+  .back-to-tools:hover{color:var(--accent);border-color:var(--accent);}
   main{max-width:1000px;margin:20px auto;padding:0 16px 60px;}
   .card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;}
   .card h2{margin:0 0 14px;font-size:1.05rem;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:8px;font-weight:600;}
@@ -59,14 +69,12 @@
   .status-msg.err{background:rgba(248,113,113,0.12);color:var(--warn);}
   a{color:var(--accent);}
   .print-only{display:none;}
-  .backlink{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:.85rem;}
-  .backlink:hover{color:var(--accent);}
   .invalid{border-color:var(--warn) !important;box-shadow:0 0 0 1px var(--warn);}
 
   /* Print styles: only the printable summary shows on paper */
   @media print{
     @page{ size:A4; margin:10mm; }
-    header, .no-print { display:none !important; }
+    nav, .tool-page-header, .no-print { display:none !important; }
     body{background:#fff;color:#000;font-size:11px;}
     .card{background:#fff;box-shadow:none;border:1px solid #999;padding:10px 12px;margin-bottom:8px;color:#000;page-break-inside:avoid;border-radius:6px;}
     .card h2{color:#000;font-size:.95rem;margin:0 0 8px;padding-bottom:4px;}
@@ -93,13 +101,27 @@
 </head>
 <body>
 
-<header style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+<nav class="no-print">
+  <a href="index.html" class="logo">
+    <img src="sc-logo.jpeg" alt="SC. Portal logo">
+    <span class="logo-text">SC. Portal</span>
+  </a>
+  <ul class="nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+  </ul>
+</nav>
+
+<div class="tool-page-header no-print">
   <div>
     <h1>🏺 Ceramic Production · Delivery Date Calculator</h1>
     <p>Order details in → Process timeline out → Print or Share the result</p>
   </div>
-  <a class="backlink no-print" href="https://shakthiyak.github.io/">← Back to Portfolio</a>
-</header>
+  <a class="back-to-tools" href="tools.html">← Back to Tools</a>
+</div>
 
 <main>
 
