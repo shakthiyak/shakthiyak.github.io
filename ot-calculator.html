@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overtime Calculator | Production Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body {
+        background-color: #0f172a;
+        color: #f8fafc;
+        overflow-x: hidden;
+        min-height: 100vh;
+    }
+
+    /* 🌐 Navigation — matches site header */
+    nav {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 0 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        flex-wrap: wrap;
+    }
+    .logo {
+        font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+        background: linear-gradient(to right, #38bdf8, #0ea5e9);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        padding: 18px 0;
+    }
+    .nav-tabs { display: flex; list-style: none; height: 100%; gap: 10px; flex-wrap: wrap; }
+    .nav-tabs a {
+        display: flex; align-items: center; padding: 0 18px; text-decoration: none;
+        color: #94a3b8; font-weight: 500; height: 100%; transition: all 0.3s ease;
+        border-bottom: 3px solid transparent; white-space: nowrap; font-size: 14.5px;
+    }
+    .nav-tabs a:hover, .nav-tabs a.active { color: #38bdf8; border-bottom: 3px solid #38bdf8; }
+
+    .page-header {
+        max-width: 1100px; margin: 0 auto; padding: 50px 20px 10px;
+    }
+    .eyebrow {
+        font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+        color: #38bdf8; display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background:#38bdf8; box-shadow:0 0 10px rgba(56,189,248,.6); }
+    h1 { font-size: clamp(26px,4vw,36px); font-weight: 700; color:#ffffff; margin-bottom: 10px; letter-spacing:-0.5px; }
+    .sub { color:#94a3b8; font-size:15px; max-width:640px; line-height:1.6; margin-bottom: 30px; }
+
+    .main-container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+
+    .panel {
+        background: #1e293b; border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 16px; padding: 28px;
+    }
+    .panel-title {
+        font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        color: #64748b; margin-bottom: 20px;
+    }
+
+    .field{ margin-bottom: 19px; }
+    .field:last-child{ margin-bottom:0; }
+    .field label{ display:block; font-size:13.5px; color:#94a3b8; margin-bottom:7px; }
+    .field label b{ color:#f8fafc; font-weight:600; }
+    .input-row{ position:relative; }
+    input[type=number], select{
+        width:100%; background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#f8fafc;
+        font-size:15px; padding:12px 46px 12px 14px; border-radius:10px;
+        transition:border-color .15s; appearance:none;
+    }
+    select{
+        cursor:pointer;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%2394a3b8' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+        background-repeat:no-repeat; background-position:right 16px center; padding-right:38px;
+    }
+    input[type=number]:focus, select:focus{ outline:none; border-color:#38bdf8; box-shadow:0 0 0 3px rgba(56,189,248,0.12); }
+    input::placeholder{ color:#475569; }
+    .unit{ position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#64748b; font-size:12px; pointer-events:none; }
+    .curr-input input{ padding-left:58px; }
+    .curr-tag{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#38bdf8; font-size:13px; font-weight:700; pointer-events:none; }
+    .helper{ font-size:12px; color:#64748b; margin-top:6px; line-height:1.5; }
+
+    .result-hero{ text-align:center; padding:20px 0 26px; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:22px; }
+    .result-label{ font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#64748b; margin-bottom:8px; }
+    .result-value{ font-size:44px; font-weight:700; color:#4ade80; letter-spacing:-0.5px; word-break:break-word; }
+
+    .metric-row{ display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .metric-row:last-of-type{ border-bottom:none; }
+    .metric-name{ font-size:13.5px; color:#94a3b8; }
+    .metric-value{ font-weight:700; font-size:16px; color:#f8fafc; }
+
+    .note-box{
+        margin-top:20px; padding:14px 16px; background:rgba(56,189,248,0.06);
+        border:1px solid rgba(56,189,248,0.15); border-radius:12px;
+        font-size:12px; color:#94a3b8; line-height:1.6;
+    }
+    .note-box b{ color:#38bdf8; }
+
+    .action-bar{ display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; }
+    .action-btn{
+        font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:8px;
+        background:#1e293b; border:1px solid rgba(255,255,255,0.08); color:#f8fafc;
+        padding:11px 20px; border-radius:10px; cursor:pointer; transition:all .2s; text-decoration:none;
+    }
+    .action-btn:hover{ transform:translateY(-2px); }
+    .action-btn.reset:hover{ border-color:#f87171; color:#f87171; }
+    .action-btn.print:hover{ border-color:#38bdf8; color:#38bdf8; }
+    .action-btn.whatsapp:hover{ border-color:#25D366; color:#25D366; }
+    .action-btn.email:hover{ border-color:#818cf8; color:#818cf8; }
+
+    footer{
+        padding:30px 0; border-top:1px solid rgba(255,255,255,0.05);
+        color:#64748b; font-size:13px; text-align:center; margin-top:40px;
+    }
+
+    /* ---- PRINT: A4 single page ---- */
+    @media print{
+        @page{ size:A4; margin:14mm; }
+        body{ background:#fff !important; color:#111 !important; padding:0; font-size:11px; }
+        nav, .action-bar, footer{ display:none !important; }
+        .page-header{ padding:0 0 6px; }
+        .eyebrow{ color:#0369a1; }
+        .eyebrow::before{ background:#0369a1; box-shadow:none; }
+        h1{ font-size:19px; color:#111; margin-bottom:4px; }
+        .sub{ display:none; }
+        .main-container{ padding:0; }
+        .grid{ grid-template-columns:1fr 1fr; gap:12px; }
+        .panel{
+            background:#fff !important; border:1px solid #ccc; border-radius:8px; padding:14px;
+            break-inside:avoid;
+        }
+        .panel-title{ color:#666; margin-bottom:10px; }
+        .field{ margin-bottom:10px; }
+        .field label{ color:#555; font-size:11px; margin-bottom:3px; }
+        .field label b{ color:#111; }
+        input[type=number], select{
+            background:#f7f7f7 !important; color:#111 !important; border:1px solid #ccc;
+            font-size:12px; padding:7px 10px 7px 44px; border-radius:6px;
+        }
+        select{ padding-left:10px; }
+        .curr-input input{ padding-left:44px !important; }
+        .curr-tag{ color:#0369a1; left:12px; font-size:11.5px; }
+        .helper{ display:none; }
+        .result-hero{ padding:8px 0 12px; margin-bottom:10px; }
+        .result-label{ color:#666; }
+        .result-value{ font-size:24px; color:#15803d !important; }
+        .metric-row{ padding:6px 0; border-bottom:1px solid #ddd; }
+        .metric-name{ color:#555; font-size:11px; }
+        .metric-value{ font-size:12.5px; color:#111; }
+        .note-box{ background:#f0f9ff; border:1px solid #bae6fd; color:#334155; font-size:9.5px; margin-top:8px; padding:8px 10px; }
+        .note-box b{ color:#0369a1; }
+    }
+
+    @media (max-width:640px){
+        nav{ padding:0 20px; height:auto; flex-direction:column; align-items:flex-start; }
+        .nav-tabs{ height:auto; padding-bottom:12px; }
+        .nav-tabs a{ height:36px; padding:0 12px; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">SC. <span style="-webkit-text-fill-color:#f8fafc;">Portal</span></div>
+    <ul class="nav-tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tools.html" class="active">Production Tools</a></li>
+        <li><a href="ceramic_news.html">Ceramic News</a></li>
+        <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+        <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+    </ul>
+</nav>
+
+<div class="page-header">
+    <div class="eyebrow">Production Tools Suite</div>
+    <h1>Overtime Pay Calculator</h1>
+    <p class="sub">Select a country — currency and suggested OT multiplier switch automatically. Fill in your own shift data below.</p>
+</div>
+
+<div class="main-container">
+
+  <div class="grid">
+
+    <div class="panel">
+      <div class="panel-title">Inputs</div>
+
+      <div class="field">
+        <label><b>Country</b></label>
+        <select id="country"></select>
+        <div class="helper" id="countryNote">Select your country to auto-fill currency and suggested OT multiplier.</div>
+      </div>
+
+      <div class="field">
+        <label><b>Basic monthly salary</b></label>
+        <div class="input-row curr-input">
+          <span class="curr-tag" id="currTag">—</span>
+          <input type="number" id="salary" placeholder="e.g. 3000" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label><b>Standard working days / month</b></label>
+        <div class="input-row">
+          <input type="number" id="days" placeholder="e.g. 26" min="1" max="31">
+          <span class="unit">days</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><b>Standard working hours / day</b></label>
+        <div class="input-row">
+          <input type="number" id="hoursday" placeholder="e.g. 8" min="1" max="24">
+          <span class="unit">hrs</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><b>Overtime hours worked (this period)</b></label>
+        <div class="input-row">
+          <input type="number" id="othours" placeholder="e.g. 20" min="0">
+          <span class="unit">hrs</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><b>Overtime multiplier</b></label>
+        <div class="input-row">
+          <input type="number" id="multiplier" placeholder="e.g. 1.25" min="1" step="0.05">
+          <span class="unit">×</span>
+        </div>
+        <div class="helper" id="multiplierNote"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Result</div>
+
+      <div class="result-hero">
+        <div class="result-label">Total Overtime Pay</div>
+        <div class="result-value" id="otTotal">—</div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-name">Hourly base rate</div>
+        <div class="metric-value" id="hourlyRate">—</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-name">OT hourly rate (with multiplier)</div>
+        <div class="metric-value" id="otRate">—</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-name">Basic salary (reference)</div>
+        <div class="metric-value" id="basicRef">—</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-name">Salary + OT (total pay)</div>
+        <div class="metric-value" id="grandTotal">—</div>
+      </div>
+
+      <div class="note-box">
+        <b>Verify locally:</b> overtime multipliers, max OT hours, and calculation methods (calendar days vs working days) vary by country and can change. The multiplier shown is a common reference point, not legal advice — check your local labor law or HR policy before running payroll.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="action-bar">
+    <button class="action-btn reset" id="btnReset">↺ Reset</button>
+    <button class="action-btn print" id="btnPrint">🖨️ Print</button>
+    <button class="action-btn whatsapp" id="btnWhatsapp">📱 WhatsApp</button>
+    <button class="action-btn email" id="btnEmail">✉️ Email</button>
+  </div>
+</div>
+
+<footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+<script>
+const countries = [
+  ["United Arab Emirates","AED",1.25,"Weekday OT 1.25×, rest-day/holiday OT 1.5× (UAE Labour Law)"],
+  ["Saudi Arabia","SAR",1.5,"OT paid at 1.5× base hourly wage (Saudi Labor Law)"],
+  ["Qatar","QAR",1.25,"OT typically 1.25× of basic hourly wage"],
+  ["Oman","OMR",1.25,"OT typically 1.25×, higher on rest days/holidays"],
+  ["Bahrain","BHD",1.25,"OT typically 1.25× of basic hourly wage"],
+  ["Kuwait","KWD",1.25,"OT typically 1.25× of basic hourly wage"],
+  ["Sri Lanka","LKR",1.5,"OT commonly 1.5× under Shop & Office / Wages Boards Ordinance"],
+  ["India","INR",2.0,"OT commonly 2× under Factories Act"],
+  ["Pakistan","PKR",2.0,"OT commonly 2× of ordinary hourly rate"],
+  ["Bangladesh","BDT",2.0,"OT commonly 2× under Bangladesh Labour Act"],
+  ["Nepal","NPR",1.5,"OT commonly 1.5×"],
+  ["Philippines","PHP",1.25,"OT 1.25× on ordinary days, higher on rest days/holidays"],
+  ["Indonesia","IDR",1.5,"Tiered OT formula, first hour ~1.5×"],
+  ["Malaysia","MYR",1.5,"OT commonly 1.5× under Employment Act"],
+  ["Vietnam","VND",1.5,"OT 1.5× weekday, 2× rest day, 3× public holiday"],
+  ["Thailand","THB",1.5,"OT commonly 1.5×, higher on holidays"],
+  ["China","CNY",1.5,"OT 1.5× weekday, 2× rest day, 3× public holiday"],
+  ["Singapore","SGD",1.5,"OT commonly 1.5× under Employment Act"],
+  ["Hong Kong","HKD",1.5,"Varies by contract, no statutory minimum rate"],
+  ["Japan","JPY",1.25,"OT minimum 1.25×, higher for late night/holiday"],
+  ["South Korea","KRW",1.5,"OT commonly 1.5×"],
+  ["United States","USD",1.5,"Federal FLSA: 1.5× over 40 hrs/week"],
+  ["Canada","CAD",1.5,"OT commonly 1.5×, varies by province"],
+  ["United Kingdom","GBP",1.0,"No statutory OT premium; per contract/CBA"],
+  ["Ireland","EUR",1.0,"No statutory OT premium; per contract"],
+  ["Germany","EUR",1.0,"Per collective agreement / contract"],
+  ["France","EUR",1.25,"OT 1.25× first 8 hrs, 1.5× beyond (statutory)"],
+  ["Spain","EUR",1.0,"Per collective agreement, capped OT hours"],
+  ["Italy","EUR",1.0,"Per collective agreement (CCNL)"],
+  ["Netherlands","EUR",1.0,"Per collective agreement / contract"],
+  ["Belgium","EUR",1.5,"OT commonly 1.5×, 2× on Sundays"],
+  ["Switzerland","CHF",1.25,"OT commonly 1.25× (Labour Code)"],
+  ["Austria","EUR",1.5,"OT commonly 1.5×"],
+  ["Sweden","SEK",1.0,"Per collective agreement"],
+  ["Norway","NOK",1.4,"OT minimum 1.4× (Working Environment Act)"],
+  ["Denmark","DKK",1.0,"Per collective agreement"],
+  ["Finland","EUR",1.5,"OT tiered: 1.5× first 2 hrs, 2× beyond"],
+  ["Poland","PLN",1.5,"OT 1.5× weekday, 2× night/rest day"],
+  ["Portugal","EUR",1.25,"OT tiered, starts ~1.25×"],
+  ["Greece","EUR",1.4,"OT commonly 1.4–1.75× depending on hours"],
+  ["Turkey","TRY",1.5,"OT commonly 1.5×"],
+  ["Russia","RUB",1.5,"OT 1.5× first 2 hrs, 2× beyond"],
+  ["Ukraine","UAH",2.0,"OT commonly 2×"],
+  ["Australia","AUD",1.5,"OT commonly 1.5× first hours, 2× beyond (award-dependent)"],
+  ["New Zealand","NZD",1.5,"Per employment agreement"],
+  ["South Africa","ZAR",1.5,"OT 1.5× under Basic Conditions of Employment Act"],
+  ["Egypt","EGP",1.35,"OT 1.35× day, 1.7× night"],
+  ["Nigeria","NGN",1.0,"Per contract/CBA, no fixed statutory rate"],
+  ["Kenya","KES",1.5,"OT commonly 1.5×, 2× on rest days/holidays"],
+  ["Morocco","MAD",1.25,"OT tiered 1.25–1.5× depending on time of day"],
+  ["Ghana","GHS",1.5,"Per contract, commonly 1.5×"],
+  ["Ethiopia","ETB",1.25,"OT 1.25× day, 1.5× night"],
+  ["Tanzania","TZS",1.5,"OT commonly 1.5×"],
+  ["Brazil","BRL",1.5,"OT minimum 1.5× (CLT), 2× Sundays/holidays"],
+  ["Mexico","MXN",2.0,"First 9 hrs/week OT at 2×, beyond at 3×"],
+  ["Argentina","ARS",1.5,"OT 1.5× weekday, 2× rest day/holiday"],
+  ["Chile","CLP",1.5,"OT minimum 1.5×"],
+  ["Colombia","COP",1.25,"OT 1.25× day, 1.75× night"],
+  ["Peru","PEN",1.25,"OT tiered, first 2 hrs 1.25×, beyond 1.35×"],
+  ["Ecuador","USD",1.5,"OT 1.5× day, 2× night/rest day"],
+  ["Venezuela","VES",1.5,"OT commonly 1.5×"],
+  ["Israel","ILS",1.25,"OT 1.25× first 2 hrs, 1.5× beyond"],
+  ["Jordan","JOD",1.25,"OT commonly 1.25×, 1.5× on rest days"],
+  ["Lebanon","LBP",1.5,"OT commonly 1.5×"],
+  ["Iraq","IQD",1.5,"Per Iraqi Labour Law, commonly 1.5×"],
+  ["Iran","IRR",1.4,"OT commonly 1.4×"],
+  ["Taiwan","TWD",1.34,"OT tiered: first 2 hrs 1.34×, beyond 1.67×"],
+  ["Cambodia","KHR",1.5,"OT commonly 1.5×, 2× night"],
+  ["Myanmar","MMK",2.0,"OT commonly 2×"],
+  ["Laos","LAK",1.5,"OT commonly 1.5×"],
+  ["Mongolia","MNT",1.5,"OT commonly 1.5×"],
+  ["Kazakhstan","KZT",1.5,"OT commonly 1.5×"],
+  ["Uzbekistan","UZS",2.0,"OT commonly 2×"],
+  ["Afghanistan","AFN",1.25,"OT commonly 1.25×"],
+  ["Maldives","MVR",1.25,"OT commonly 1.25×"],
+  ["Bhutan","BTN",1.5,"OT commonly 1.5×"],
+  ["Iceland","ISK",1.0,"Per collective agreement"],
+  ["Luxembourg","EUR",1.0,"Per collective agreement"],
+  ["Cyprus","EUR",1.0,"Per contract/CBA"],
+  ["Malta","EUR",1.5,"OT commonly 1.5×"],
+  ["Croatia","EUR",1.5,"OT minimum 1.5×"],
+  ["Serbia","RSD",1.26,"OT minimum 1.26× base"],
+  ["Romania","RON",1.75,"OT compensated with time off or 1.75× pay"],
+  ["Bulgaria","BGN",1.5,"OT minimum 1.5×"],
+  ["Hungary","HUF",1.5,"OT minimum 1.5×"],
+  ["Czech Republic","CZK",1.25,"OT minimum 1.25×"],
+  ["Slovakia","EUR",1.25,"OT minimum 1.25×"],
+  ["Slovenia","EUR",1.3,"OT per collective agreement, commonly ~1.3×"],
+  ["Estonia","EUR",1.5,"OT minimum 1.5×"],
+  ["Latvia","EUR",1.5,"OT minimum 1.5×"],
+  ["Lithuania","EUR",1.5,"OT minimum 1.5×"],
+  ["Algeria","DZD",1.5,"OT commonly 1.5×"],
+  ["Tunisia","TND",1.25,"OT tiered 1.25–1.75×"],
+  ["Libya","LYD",1.5,"OT commonly 1.5×"],
+  ["Sudan","SDG",1.5,"OT commonly 1.5×"],
+  ["Uganda","UGX",1.5,"OT commonly 1.5×"],
+  ["Rwanda","RWF",1.5,"OT commonly 1.5×"],
+  ["Zambia","ZMW",1.5,"OT commonly 1.5×"],
+  ["Zimbabwe","ZWL",1.5,"OT commonly 1.5×"],
+  ["Mozambique","MZN",1.5,"OT commonly 1.5×"],
+  ["Senegal","XOF",1.15,"OT tiered, starts ~1.15×"],
+  ["Ivory Coast","XOF",1.15,"OT tiered, starts ~1.15×"],
+  ["Cameroon","XAF",1.2,"OT tiered from ~1.2×"],
+  ["Angola","AOA",1.5,"OT commonly 1.5×"],
+  ["DR Congo","CDF",1.3,"OT commonly ~1.3×"],
+  ["Macau","MOP",1.5,"OT commonly 1.5×"],
+  ["Brunei","BND",1.5,"OT commonly 1.5×"],
+  ["Papua New Guinea","PGK",1.5,"OT commonly 1.5×"],
+  ["Fiji","FJD",1.5,"OT commonly 1.5×"],
+  ["Georgia","GEL",1.0,"Per employment contract"],
+  ["Armenia","AMD",1.5,"OT minimum 1.5×"],
+  ["Azerbaijan","AZN",1.0,"OT compensated per contract/time-off"],
+  ["Belarus","BYN",1.0,"OT compensated per Labour Code (rate or time-off)"],
+  ["Moldova","MDL",1.5,"OT minimum 1.5×"],
+  ["Panama","PAB",1.25,"OT 1.25× day, 1.5× night"],
+  ["Costa Rica","CRC",1.5,"OT minimum 1.5×"],
+  ["Guatemala","GTQ",1.5,"OT minimum 1.5×"],
+  ["Honduras","HNL",1.25,"OT 1.25× day, 1.75× night"],
+  ["El Salvador","USD",1.5,"OT minimum 1.5×"],
+  ["Nicaragua","NIO",1.0,"OT paid double the hourly rate (100% premium)"],
+  ["Dominican Republic","DOP",1.35,"OT tiered 1.35–2×"],
+  ["Cuba","CUP",1.0,"Per state labor regulations"],
+  ["Jamaica","JMD",1.5,"OT commonly 1.5×"],
+  ["Trinidad and Tobago","TTD",1.5,"OT commonly 1.5×"],
+  ["Bolivia","BOB",2.0,"OT commonly 2×"],
+  ["Paraguay","PYG",1.5,"OT 1.5× day, 2× night"],
+  ["Uruguay","UYU",2.0,"OT commonly 2×"],
+  ["Other / Not Listed","USD",1.5,"Generic reference rate — confirm local labor law"]
+];
+
+const countrySelect = document.getElementById('country');
+
+// Placeholder first option — country starts unselected
+const placeholderOpt = document.createElement('option');
+placeholderOpt.value = '';
+placeholderOpt.textContent = 'Select country...';
+placeholderOpt.disabled = true;
+placeholderOpt.selected = true;
+countrySelect.appendChild(placeholderOpt);
+
+countries.forEach((c,i)=>{
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = c[0] + ' — ' + c[1];
+  countrySelect.appendChild(opt);
+});
+
+function applyCountry(){
+  if(countrySelect.value === ''){
+    document.getElementById('currTag').textContent = '—';
+    document.getElementById('multiplierNote').textContent = '';
+    document.getElementById('countryNote').textContent = 'Select your country to auto-fill currency and suggested OT multiplier.';
+    calc();
+    return;
+  }
+  const c = countries[countrySelect.value];
+  document.getElementById('currTag').textContent = c[1];
+  document.getElementById('multiplier').value = c[2];
+  document.getElementById('multiplierNote').textContent = c[3];
+  document.getElementById('countryNote').textContent = 'Currency: ' + c[1] + ' — multiplier auto-filled, editable below.';
+  calc();
+}
+
+countrySelect.addEventListener('change', applyCountry);
+
+function fmt(n){
+  return n.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function currentCurrency(){
+  return countrySelect.value === '' ? '' : countries[countrySelect.value][1];
+}
+
+function calc(){
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const days = parseFloat(document.getElementById('days').value) || 0;
+  const hoursday = parseFloat(document.getElementById('hoursday').value) || 0;
+  const othours = parseFloat(document.getElementById('othours').value) || 0;
+  const mult = parseFloat(document.getElementById('multiplier').value) || 0;
+  const curr = currentCurrency();
+  const curPrefix = curr ? curr + ' ' : '';
+
+  const denom = days * hoursday;
+  const hourlyRate = denom > 0 ? salary / denom : 0;
+  const otRate = hourlyRate * mult;
+  const otTotal = otRate * othours;
+  const grand = salary + otTotal;
+
+  const hasAnyInput = salary || days || hoursday || othours || mult;
+
+  document.getElementById('hourlyRate').textContent = hasAnyInput ? curPrefix + fmt(hourlyRate) : '—';
+  document.getElementById('otRate').textContent = hasAnyInput ? curPrefix + fmt(otRate) : '—';
+  document.getElementById('basicRef').textContent = hasAnyInput ? curPrefix + fmt(salary) : '—';
+  document.getElementById('grandTotal').textContent = hasAnyInput ? curPrefix + fmt(grand) : '—';
+  document.getElementById('otTotal').textContent = hasAnyInput ? curPrefix + fmt(otTotal) : '—';
+}
+
+['salary','days','hoursday','othours','multiplier'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', calc);
+});
+
+calc();
+
+// ---- Action bar ----
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  document.getElementById('salary').value = '';
+  document.getElementById('days').value = '';
+  document.getElementById('hoursday').value = '';
+  document.getElementById('othours').value = '';
+  document.getElementById('multiplier').value = '';
+  countrySelect.value = '';
+  applyCountry();
+});
+
+document.getElementById('btnPrint').addEventListener('click', ()=>{
+  window.print();
+});
+
+function buildSummary(){
+  const curr = currentCurrency() || '';
+  const country = countrySelect.value === '' ? 'Not selected' : countries[countrySelect.value][0];
+  const salary = document.getElementById('salary').value || '—';
+  const days = document.getElementById('days').value || '—';
+  const hoursday = document.getElementById('hoursday').value || '—';
+  const othours = document.getElementById('othours').value || '—';
+  const mult = document.getElementById('multiplier').value || '—';
+  const total = document.getElementById('otTotal').textContent;
+  const hourly = document.getElementById('hourlyRate').textContent;
+  const otRate = document.getElementById('otRate').textContent;
+  const grand = document.getElementById('grandTotal').textContent;
+
+  return `*Overtime Pay Summary*
+Country: ${country}
+Basic Salary: ${curr} ${salary}
+Working Days/Month: ${days}
+Hours/Day: ${hoursday}
+OT Hours: ${othours}
+OT Multiplier: ${mult}x
+
+Hourly Rate: ${hourly}
+OT Rate: ${otRate}
+*Total OT Pay: ${total}*
+Total Pay (Salary + OT): ${grand}
+
+Calculated via OT Calculator — Production Tools Suite`;
+}
+
+document.getElementById('btnWhatsapp').addEventListener('click', ()=>{
+  const text = encodeURIComponent(buildSummary());
+  window.open('https://wa.me/?text=' + text, '_blank');
+});
+
+document.getElementById('btnEmail').addEventListener('click', ()=>{
+  const subject = encodeURIComponent('Overtime Pay Calculation Summary');
+  const body = encodeURIComponent(buildSummary());
+  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+});
+</script>
+
+</body>
+</html>
