@@ -7,9 +7,9 @@
     <meta name="description" content="Live news and insights from the global ceramic sanitaryware industry, curated by Shakthi Chathuranga.">
     <meta property="og:title" content="Ceramic Industry Live News Insights | Shakthi Chathuranga">
     <meta property="og:description" content="Live news and insights from the global ceramic sanitaryware industry.">
-    <meta property="og:image" content="sc-logo.jpeg">
+    <meta property="og:image" content="sc-logo.png">
     <meta property="og:type" content="website">
-    <link rel="icon" href="sc-logo.jpeg">
+    <link rel="icon" href="sc-logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -182,9 +182,7 @@
     <!-- 🌐 Premium Navigation Bar -->
     <nav>
         <a href="index.html" class="logo">
-            <img src="sc-logo.jpeg" alt="SC. Portal logo">
-            <span class="logo-text">SC. Portal</span>
-        </a>
+            <img src="sc-logo.png" alt="SC. Portal logo">        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
             <li><a href="tools.html">Production Tools</a></li>
@@ -211,7 +209,7 @@
                     <h2 class="news-title">Global Ceramics Market & E-Magazine</h2>
                     <p class="news-desc">The leading international portal dedicated to ceramic tile, sanitaryware, and tableware manufacturing technology and trend insights.</p>
                 </div>
-                <a href="https://www.ceramicworldweb.com/" target="_blank" class="read-btn">Open Official Portal →</a>
+                <a href="https://www.ceramicworldweb.com/" target="_blank" rel="noopener noreferrer" class="read-btn">Open Official Portal →</a>
             </div>
 
             <div class="news-card">
@@ -220,7 +218,7 @@
                     <h2 class="news-title">Ceramic Industry Magazine Reports</h2>
                     <p class="news-desc">Tracks operational breakthroughs, structural manufacturing tech, raw material compositions, and digital kiln updates.</p>
                 </div>
-                <a href="https://www.ceramicindustry.com/" target="_blank" class="read-btn">Open Official Portal →</a>
+                <a href="https://www.ceramicindustry.com/" target="_blank" rel="noopener noreferrer" class="read-btn">Open Official Portal →</a>
             </div>
 
             <div class="news-card">
@@ -229,7 +227,7 @@
                     <h2 class="news-title">Big 5 Global & Industrial Trends</h2>
                     <p class="news-desc">Deep industrial analytics regarding the Middle Eastern construction supply chains, smart factories, and volume demands.</p>
                 </div>
-                <a href="https://www.big5global.com/" target="_blank" class="read-btn">Open Official Portal →</a>
+                <a href="https://www.big5global.com/" target="_blank" rel="noopener noreferrer" class="read-btn">Open Official Portal →</a>
             </div>
         </div>
 
@@ -252,78 +250,121 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Using a backup alternative feed parser structure for reliability
             const rssUrl = 'https://news.google.com/rss/search?q=ceramic+manufacturing+industry+technologies&hl=en-US&gl=US&ceid=US:en';
-            const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
 
-            fetch(apiUrl)
-                .then(response => {
-                    if (response.ok) return response.json();
-                    throw new Error('Network response failure');
-                })
-                .then(data => {
-                    const loading = document.getElementById('loading');
-                    const container = document.getElementById('news-container');
-                    loading.style.display = 'none';
-
-                    // Parse XML string from allorigins proxy response
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-                    const items = xmlDoc.getElementsByTagName("item");
-
-                    if(items.length > 0) {
-                        // Show top 6 dynamic news articles
-                        const limit = Math.min(items.length, 6);
-                        for(let i=0; i<limit; i++) {
-                            const rawTitle = items[i].getElementsByTagName("title")[0].textContent;
-                            const link = items[i].getElementsByTagName("link")[0].textContent;
-                            const pubDateRaw = items[i].getElementsByTagName("pubDate")[0].textContent;
-                            
-                            let title = rawTitle;
-                            let source = "Global Update";
-                            if (rawTitle.includes(" - ")) {
-                                const parts = rawTitle.split(" - ");
-                                source = parts.pop();
-                                title = parts.join(" - ");
-                            }
-
-                            const pubDate = new Date(pubDateRaw).toLocaleDateString('en-US', {
-                                year: 'numeric', month: 'short', day: 'numeric'
-                            });
-
-                            const card = document.createElement('div');
-                            card.className = 'news-card';
-                            card.innerHTML = `
-                                <div>
-                                    <div class="news-tag">${source}</div>
-                                    <h2 class="news-title">${title}</h2>
-                                    <p class="news-desc">Click below to view the comprehensive production or market expansion case profile covering this update directly.</p>
-                                </div>
-                                <div>
-                                    <div class="news-meta">Published: ${pubDate}</div>
-                                    <a href="${link}" target="_blank" class="read-btn">Read Article Link →</a>
-                                </div>
-                            `;
-                            container.appendChild(card);
-                        }
-                    } else {
-                        showLocalNotice();
+            // Try multiple CORS/RSS proxy sources in order - if one is down or
+            // rate-limited, the next one is tried automatically.
+            const sources = [
+                {
+                    url: `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`,
+                    parse: async (res) => {
+                        const data = await res.json();
+                        if (!data.items || !data.items.length) throw new Error('empty rss2json response');
+                        return data.items.slice(0, 6).map(it => ({
+                            rawTitle: it.title, link: it.link, pubDateRaw: it.pubDate
+                        }));
                     }
-                })
-                .catch(error => {
-                    console.error('Stream parsing error:', error);
-                    showLocalNotice();
+                },
+                {
+                    url: `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`,
+                    parse: async (res) => {
+                        const text = await res.text();
+                        const xmlDoc = new DOMParser().parseFromString(text, "text/xml");
+                        const items = xmlDoc.getElementsByTagName("item");
+                        if (!items.length) throw new Error('empty allorigins response');
+                        const out = [];
+                        for (let i = 0; i < Math.min(items.length, 6); i++) {
+                            out.push({
+                                rawTitle: items[i].getElementsByTagName("title")[0].textContent,
+                                link: items[i].getElementsByTagName("link")[0].textContent,
+                                pubDateRaw: items[i].getElementsByTagName("pubDate")[0].textContent
+                            });
+                        }
+                        return out;
+                    }
+                },
+                {
+                    url: `https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`,
+                    parse: async (res) => {
+                        const text = await res.text();
+                        const xmlDoc = new DOMParser().parseFromString(text, "text/xml");
+                        const items = xmlDoc.getElementsByTagName("item");
+                        if (!items.length) throw new Error('empty corsproxy response');
+                        const out = [];
+                        for (let i = 0; i < Math.min(items.length, 6); i++) {
+                            out.push({
+                                rawTitle: items[i].getElementsByTagName("title")[0].textContent,
+                                link: items[i].getElementsByTagName("link")[0].textContent,
+                                pubDateRaw: items[i].getElementsByTagName("pubDate")[0].textContent
+                            });
+                        }
+                        return out;
+                    }
+                }
+            ];
+
+            async function loadNews() {
+                for (const source of sources) {
+                    try {
+                        const res = await fetch(source.url);
+                        if (!res.ok) throw new Error('bad status ' + res.status);
+                        const items = await source.parse(res);
+                        renderItems(items);
+                        return; // success, stop trying further sources
+                    } catch (err) {
+                        console.warn('News source failed, trying next:', err);
+                    }
+                }
+                // every source failed
+                showLocalNotice();
+            }
+
+            function renderItems(items) {
+                const loading = document.getElementById('loading');
+                const container = document.getElementById('news-container');
+                loading.style.display = 'none';
+
+                items.forEach(({rawTitle, link, pubDateRaw}) => {
+                    let title = rawTitle;
+                    let source = "Global Update";
+                    if (rawTitle.includes(" - ")) {
+                        const parts = rawTitle.split(" - ");
+                        source = parts.pop();
+                        title = parts.join(" - ");
+                    }
+
+                    const pubDate = new Date(pubDateRaw).toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric'
+                    });
+
+                    const card = document.createElement('div');
+                    card.className = 'news-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="news-tag">${source}</div>
+                            <h2 class="news-title">${title}</h2>
+                            <p class="news-desc">Click below to view the comprehensive production or market expansion case profile covering this update directly.</p>
+                        </div>
+                        <div>
+                            <div class="news-meta">Published: ${pubDate}</div>
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="read-btn">Read Article Link →</a>
+                        </div>
+                    `;
+                    container.appendChild(card);
                 });
+            }
 
             function showLocalNotice() {
                 document.getElementById('loading').style.display = 'none';
                 const container = document.getElementById('news-container');
                 container.innerHTML = `
                     <div style="grid-column: 1/-1; background: rgba(30, 41, 59, 0.3); border: 1px dashed rgba(255,255,255,0.05); padding: 30px; text-align: center; border-radius: 12px; color: #64748b; font-size: 14px;">
-                        Live streaming stream is running on adaptive background cycles. Use the featured industrial portals above for instant full data access.
+                        Live feed is temporarily unavailable. Please check the featured industrial portals above for the latest updates.
                     </div>
                 `;
             }
+
+            loadNews();
         });
     </script>
 </body>

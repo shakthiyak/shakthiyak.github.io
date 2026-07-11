@@ -7,9 +7,9 @@
 <meta name="description" content="Calculate promised delivery dates for ceramic sanitaryware production orders, built by Shakthi Chathuranga.">
 <meta property="og:title" content="Promised Date Calculator | Shakthi Chathuranga">
 <meta property="og:description" content="Calculate promised delivery dates for ceramic sanitaryware production orders.">
-<meta property="og:image" content="sc-logo.jpeg">
+<meta property="og:image" content="sc-logo.png">
 <meta property="og:type" content="website">
-<link rel="icon" href="sc-logo.jpeg">
+<link rel="icon" href="sc-logo.png">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -196,14 +196,13 @@
     .tool-page-header{flex-direction:column;gap:12px;text-align:center;padding-top:20px;}
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
 <nav class="no-print">
   <a href="index.html" class="logo">
-    <img src="sc-logo.jpeg" alt="SC. Portal logo">
-    <span class="logo-text">SC. Portal</span>
-  </a>
+    <img src="sc-logo.png" alt="SC. Portal logo">  </a>
   <ul class="nav-tabs">
     <li><a href="index.html">Home</a></li>
     <li><a href="tools.html" class="active">Production Tools</a></li>
@@ -225,6 +224,7 @@
       <span class="badge">⏱ Live calculation</span>
       <button class="btn" id="emailBtn">✉️ Email</button>
       <button class="btn" id="waBtn">💬 WhatsApp</button>
+      <button class="btn" id="excelBtn">📊 Export to Excel</button>
       <button class="btn primary" id="printBtn">🖨 Print Summary</button>
     </div>
   </div>
@@ -244,14 +244,14 @@
         <div class="fire-card f1">
           <h3>1st Fire</h3>
           <div class="field-row"><label>Accepted (A)</label><input type="number" id="f1a" value="80"></div>
-          <div class="field-row"><label>Reject (R)</label><input type="number" id="f1r" value="15"></div>
+          <div class="field-row"><label>Refire</label><input type="number" id="f1r" value="15"></div>
           <div class="field-row"><label>Loss</label><input type="number" id="f1l" value="5"></div>
           <div class="pct-line"><span>Total: <b id="f1tot">100</b></span><span>A% <b id="f1apct">80.0%</b></span></div>
         </div>
         <div class="fire-card f2">
           <h3>2nd Fire</h3>
           <div class="field-row"><label>Accepted (A)</label><input type="number" id="f2a" value="70"></div>
-          <div class="field-row"><label>Reject (R)</label><input type="number" id="f2r" value="20"></div>
+          <div class="field-row"><label>Refire</label><input type="number" id="f2r" value="20"></div>
           <div class="field-row"><label>Loss</label><input type="number" id="f2l" value="10"></div>
           <div class="pct-line"><span>Total: <b id="f2tot">100</b></span><span>A% <b id="f2apct">70.0%</b></span></div>
         </div>
@@ -352,7 +352,7 @@
     </div>
   </div>
 
-  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · all calculation runs in this page, nothing is sent anywhere</footer>
+  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · all calculation runs in this page, nothing is sent anywhere<br>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
 </div>
 
 <!-- PRINT-ONLY SUMMARY -->
@@ -618,6 +618,82 @@ $('addRow').addEventListener('click', ()=>{
 $('clearLog').addEventListener('click', ()=>{ logEntries=[]; calculate(); });
 
 $('printBtn').addEventListener('click', ()=>{ window.print(); });
+
+$('excelBtn').addEventListener('click', ()=>{
+  const wb = XLSX.utils.book_new();
+
+  // ---- Sheet 1: Order Summary ----
+  const summaryRows = [
+    ['Promised Date Calculator - Export', ''],
+    ['Generated on', new Date().toLocaleString()],
+    [''],
+    ['ORDER DETAILS', ''],
+    ['Order ID', $('orderId').value],
+    ['Item Code', $('itemCode').value],
+    ['Item Name', $('itemName').value],
+    ['Order Qty', $('orderQty').value],
+    ['Status Date', $('statusDate').value],
+    [''],
+    ['LATEST FIRING RESULTS', ''],
+    ['1st Fire - Accepted (A)', $('f1a').value],
+    ['1st Fire - Refire', $('f1r').value],
+    ['1st Fire - Loss', $('f1l').value],
+    ['1st Fire - Total', $('f1tot').textContent],
+    ['1st Fire - A%', $('f1apct').textContent],
+    ['2nd Fire - Accepted (A)', $('f2a').value],
+    ['2nd Fire - Refire', $('f2r').value],
+    ['2nd Fire - Loss', $('f2l').value],
+    ['2nd Fire - Total', $('f2tot').textContent],
+    ['2nd Fire - A%', $('f2apct').textContent],
+    ['Total A (green stages)', $('totalAOut').textContent],
+    ['2nd Fire A% (red stages)', $('twoFAOut').textContent],
+    [''],
+    ['CALCULATED RESULTS', ''],
+    ['Finished Good Qty (target)', $('finishedGoodQty').value],
+    ['Available FG', $('availFG').value],
+    ['FG Balance', $('fgBalance').textContent],
+    ['Firing Yield', $('firingYield').textContent],
+    ['Casting Required', $('castingReq').textContent],
+    ['Daily Casting Qty', $('dailyQty').value],
+    ['Casting Weekends Worked?', $('castWeekends').checked ? 'Yes' : 'No (Sunday off)'],
+    ['Casting Finish Date', $('castFinishDate').textContent],
+    ['Casting Finish Note', $('castFinishNote').textContent],
+    ['Processing Days (post-casting)', $('procDays').value],
+    ['Promised Date', $('promisedDate').textContent],
+  ];
+  const ws1 = XLSX.utils.aoa_to_sheet(summaryRows);
+  ws1['!cols'] = [{wch:32},{wch:28}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Summary');
+
+  // ---- Sheet 2: WIP Stages ----
+  const wipRows = [['Stage', 'Qty', 'Yield %', 'Factor', 'Fired Equivalent']];
+  WIP_STAGES.forEach(s => {
+    const qty = document.querySelector(`.wQty[data-key="${s.key}"]`).value;
+    const y = document.querySelector(`.wYield[data-key="${s.key}"]`).value;
+    const factorInput = document.querySelector(`.wFactor[data-key="${s.key}"]`);
+    const f = factorInput ? factorInput.value : '—';
+    const fired = document.querySelector(`[data-fired="${s.key}"]`).textContent;
+    wipRows.push([s.label, qty, (y*100).toFixed(1)+'%', f, fired]);
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(wipRows);
+  ws2['!cols'] = [{wch:28},{wch:10},{wch:10},{wch:10},{wch:16}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'WIP Stages');
+
+  // ---- Sheet 3: Casting Log ----
+  const logRows = [['Date', 'Sunday?', 'Qty', 'Cumulative']];
+  const sorted = [...logEntries].sort((a,b)=>a.date.localeCompare(b.date));
+  let cum = 0;
+  sorted.forEach(e => {
+    cum += (+e.qty || 0);
+    logRows.push([e.date, isWeekendOff(e.date) ? 'Yes' : 'No', e.qty, cum]);
+  });
+  const ws3 = XLSX.utils.aoa_to_sheet(logRows);
+  ws3['!cols'] = [{wch:14},{wch:10},{wch:10},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Casting Log');
+
+  const orderId = $('orderId').value || 'order';
+  XLSX.writeFile(wb, `Promised_Date_${orderId}.xlsx`);
+});
 
 function buildShareText(){
   const lines=[
