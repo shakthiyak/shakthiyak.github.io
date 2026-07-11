@@ -170,6 +170,13 @@
     </div>
     <h1>Overtime Pay Calculator</h1>
     <p class="sub">Select a country — currency and suggested OT multiplier switch automatically. Fill in your own shift data below.</p>
+
+    <div class="action-bar" style="margin-top:18px;">
+        <button class="action-btn reset" id="btnReset">↺ Reset</button>
+        <button class="action-btn print" id="btnPrint">🖨️ Print</button>
+        <button class="action-btn whatsapp" id="btnWhatsapp">📱 WhatsApp</button>
+        <button class="action-btn email" id="btnEmail">✉️ Email</button>
+    </div>
 </div>
 
 <div class="main-container">
@@ -259,11 +266,11 @@
 
   </div>
 
-  <div class="action-bar">
-    <button class="action-btn reset" id="btnReset">↺ Reset</button>
-    <button class="action-btn print" id="btnPrint">🖨️ Print</button>
-    <button class="action-btn whatsapp" id="btnWhatsapp">📱 WhatsApp</button>
-    <button class="action-btn email" id="btnEmail">✉️ Email</button>
+  <div class="action-bar" style="margin-top:26px;">
+    <button class="action-btn reset" id="btnReset2">↺ Reset</button>
+    <button class="action-btn print" id="btnPrint2">🖨️ Print</button>
+    <button class="action-btn whatsapp" id="btnWhatsapp2">📱 WhatsApp</button>
+    <button class="action-btn email" id="btnEmail2">✉️ Email</button>
   </div>
 </div>
 
@@ -475,7 +482,7 @@ function calc(){
 calc();
 
 // ---- Action bar ----
-document.getElementById('btnReset').addEventListener('click', ()=>{
+document.querySelectorAll('.action-btn.reset').forEach(btn => btn.addEventListener('click', ()=>{
   document.getElementById('salary').value = '';
   document.getElementById('days').value = '';
   document.getElementById('hoursday').value = '';
@@ -483,11 +490,11 @@ document.getElementById('btnReset').addEventListener('click', ()=>{
   document.getElementById('multiplier').value = '';
   countrySelect.value = '';
   applyCountry();
-});
+}));
 
-document.getElementById('btnPrint').addEventListener('click', ()=>{
+document.querySelectorAll('.action-btn.print').forEach(btn => btn.addEventListener('click', ()=>{
   window.print();
-});
+}));
 
 function buildSummary(){
   const curr = currentCurrency() || '';
@@ -518,16 +525,16 @@ Total Pay (Salary + OT): ${grand}
 Calculated via OT Calculator — Production Tools Suite`;
 }
 
-document.getElementById('btnWhatsapp').addEventListener('click', ()=>{
+document.querySelectorAll('.action-btn.whatsapp').forEach(btn => btn.addEventListener('click', ()=>{
   const text = encodeURIComponent(buildSummary());
   window.open('https://wa.me/?text=' + text, '_blank');
-});
+}));
 
-document.getElementById('btnEmail').addEventListener('click', ()=>{
+document.querySelectorAll('.action-btn.email').forEach(btn => btn.addEventListener('click', ()=>{
   const subject = encodeURIComponent('Overtime Pay Calculation Summary');
   const body = encodeURIComponent(buildSummary());
   window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-});
+}));
 </script>
 
 </body>

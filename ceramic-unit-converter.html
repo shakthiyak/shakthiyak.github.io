@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceramic Unit Converter | Production Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background-color:#0f172a; color:#f8fafc; overflow-x:hidden; min-height:100vh; }
+
+    nav {
+        background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 0 50px;
+        display: flex; justify-content: space-between; align-items: center;
+        height: 80px; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap;
+    }
+    .logo {
+        font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+        background: linear-gradient(to right, #38bdf8, #0ea5e9);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 18px 0;
+    }
+    .nav-tabs { display:flex; list-style:none; height:100%; gap:10px; flex-wrap:wrap; }
+    .nav-tabs a {
+        display:flex; align-items:center; padding:0 18px; text-decoration:none;
+        color:#94a3b8; font-weight:500; height:100%; transition:all 0.3s ease;
+        border-bottom:3px solid transparent; white-space:nowrap; font-size:14.5px;
+    }
+    .nav-tabs a:hover, .nav-tabs a.active { color:#38bdf8; border-bottom:3px solid #38bdf8; }
+
+    .page-header { max-width:1100px; margin:0 auto; padding:50px 20px 10px; }
+    .eyebrow {
+        font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+        color:#38bdf8; display:flex; align-items:center; gap:10px; margin-bottom:12px;
+    }
+    .eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background:#38bdf8; box-shadow:0 0 10px rgba(56,189,248,.6); }
+    h1 { font-size:clamp(26px,4vw,36px); font-weight:700; color:#ffffff; margin-bottom:10px; letter-spacing:-0.5px; }
+    .sub { color:#94a3b8; font-size:15px; max-width:680px; line-height:1.6; margin-bottom:30px; }
+
+    .main-container { max-width:1100px; margin:0 auto; padding:0 20px 60px; }
+
+    .conv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:26px; }
+    @media (max-width:900px){ .conv-grid{ grid-template-columns:1fr; } }
+
+    .panel { background:#1e293b; border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:26px; }
+    .panel-icon { font-size:26px; margin-bottom:10px; }
+    .panel-title { font-size:16px; font-weight:700; color:#ffffff; margin-bottom:6px; }
+    .panel-sub { font-size:12.5px; color:#64748b; margin-bottom:20px; line-height:1.5; }
+
+    .ref-field { margin-bottom:18px; }
+    .ref-field label { display:block; font-size:12.5px; color:#94a3b8; margin-bottom:6px; }
+    .ref-field input {
+        width:100%; background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#38bdf8;
+        font-size:14.5px; font-weight:600; padding:10px 12px; border-radius:8px;
+    }
+    .ref-field input:focus{ outline:none; border-color:#38bdf8; }
+
+    .divider { height:1px; background:rgba(255,255,255,0.06); margin:18px 0; }
+
+    .conv-row { margin-bottom:14px; }
+    .conv-row label { display:block; font-size:13px; color:#94a3b8; margin-bottom:6px; }
+    .conv-row .input-row { position:relative; }
+    .conv-row input[type=number]{
+        width:100%; background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#f8fafc;
+        font-size:16px; padding:11px 60px 11px 12px; border-radius:8px;
+    }
+    .conv-row input[type=number]:focus{ outline:none; border-color:#38bdf8; box-shadow:0 0 0 3px rgba(56,189,248,0.12); }
+    .conv-row .unit-badge{
+        position:absolute; right:10px; top:50%; transform:translateY(-50%);
+        font-size:11px; color:#64748b; font-weight:600; background:#1e293b; padding:2px 8px; border-radius:6px;
+    }
+    .swap-icon{ text-align:center; color:#38bdf8; font-size:18px; margin:4px 0; opacity:.7; }
+
+    .action-bar{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .action-btn{
+        font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:8px;
+        background:#1e293b; border:1px solid rgba(255,255,255,0.08); color:#f8fafc;
+        padding:11px 20px; border-radius:10px; cursor:pointer; transition:all .2s; text-decoration:none;
+    }
+    .action-btn:hover{ transform:translateY(-2px); border-color:#38bdf8; color:#38bdf8; }
+    .action-btn.reset:hover{ border-color:#f87171; color:#f87171; }
+
+    footer { padding:30px 0; border-top:1px solid rgba(255,255,255,0.05); color:#64748b; font-size:13px; text-align:center; margin-top:40px; }
+
+    @media (max-width:640px){
+        nav{ padding:0 20px; height:auto; flex-direction:column; align-items:flex-start; }
+        .nav-tabs{ height:auto; padding-bottom:12px; }
+        .nav-tabs a{ height:36px; padding:0 12px; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">SC. <span style="-webkit-text-fill-color:#f8fafc;">Portal</span></div>
+    <ul class="nav-tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tools.html" class="active">Production Tools</a></li>
+        <li><a href="ceramic_news.html">Ceramic News</a></li>
+        <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+        <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+    </ul>
+</nav>
+
+<div class="page-header">
+    <div class="eyebrow">Production Tools Suite</div>
+    <h1>Ceramic Unit Converter</h1>
+    <p class="sub">Quick conversions between the units used every day on a sanitaryware factory floor. Set your reference values once — they're specific to your product mix and stay editable.</p>
+</div>
+
+<div class="main-container">
+
+  <div class="conv-grid">
+
+    <div class="panel">
+      <div class="panel-icon">⚖️</div>
+      <div class="panel-title">Weight ↔ Pieces</div>
+      <div class="panel-sub">Convert total weight to piece count, or piece count to weight.</div>
+
+      <div class="ref-field">
+        <label>Avg weight per piece (kg)</label>
+        <input type="number" id="wpiece" value="18" step="0.1" min="0">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="conv-row">
+        <label>Total weight</label>
+        <div class="input-row">
+          <input type="number" id="kgInput" placeholder="e.g. 900">
+          <span class="unit-badge">kg</span>
+        </div>
+      </div>
+      <div class="swap-icon">⇅</div>
+      <div class="conv-row">
+        <label>Total pieces</label>
+        <div class="input-row">
+          <input type="number" id="piecesInput" placeholder="e.g. 50">
+          <span class="unit-badge">pcs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-icon">📦</div>
+      <div class="panel-title">Volume ↔ Pallets</div>
+      <div class="panel-sub">Convert cubic meters to pallet count, or pallets to volume.</div>
+
+      <div class="ref-field">
+        <label>Volume per pallet (m³)</label>
+        <input type="number" id="volpallet" value="1.35" step="0.01" min="0">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="conv-row">
+        <label>Total volume</label>
+        <div class="input-row">
+          <input type="number" id="m3Input" placeholder="e.g. 27">
+          <span class="unit-badge">m³</span>
+        </div>
+      </div>
+      <div class="swap-icon">⇅</div>
+      <div class="conv-row">
+        <label>Total pallets</label>
+        <div class="input-row">
+          <input type="number" id="palletsInput" placeholder="e.g. 20">
+          <span class="unit-badge">plt</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-icon">🚢</div>
+      <div class="panel-title">Tons ↔ Containers</div>
+      <div class="panel-sub">Convert total tonnage to container count, or containers to tonnage.</div>
+
+      <div class="ref-field">
+        <label>Avg capacity per container (tons)</label>
+        <input type="number" id="tonscont" value="22" step="0.5" min="0">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="conv-row">
+        <label>Total weight</label>
+        <div class="input-row">
+          <input type="number" id="tonsInput" placeholder="e.g. 44">
+          <span class="unit-badge">tons</span>
+        </div>
+      </div>
+      <div class="swap-icon">⇅</div>
+      <div class="conv-row">
+        <label>Total containers</label>
+        <div class="input-row">
+          <input type="number" id="contInput" placeholder="e.g. 2">
+          <span class="unit-badge">FCL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="action-bar">
+    <button class="action-btn reset" id="btnReset">↺ Reset All</button>
+  </div>
+
+</div>
+
+<footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+<script>
+function bindPair(refId, aId, bId, roundA, roundB){
+  const ref = document.getElementById(refId);
+  const a = document.getElementById(aId);
+  const b = document.getElementById(bId);
+  let updating = false;
+
+  a.addEventListener('input', ()=>{
+    if(updating) return;
+    updating = true;
+    const r = parseFloat(ref.value) || 0;
+    const av = parseFloat(a.value);
+    if(!isNaN(av) && r > 0){ b.value = (av / r).toFixed(roundB); } else { b.value = ''; }
+    updating = false;
+  });
+
+  b.addEventListener('input', ()=>{
+    if(updating) return;
+    updating = true;
+    const r = parseFloat(ref.value) || 0;
+    const bv = parseFloat(b.value);
+    if(!isNaN(bv) && r > 0){ a.value = (bv * r).toFixed(roundA); } else { a.value = ''; }
+    updating = false;
+  });
+
+  ref.addEventListener('input', ()=>{
+    if(a.value !== ''){ a.dispatchEvent(new Event('input')); }
+    else if(b.value !== ''){ b.dispatchEvent(new Event('input')); }
+  });
+}
+
+bindPair('wpiece','kgInput','piecesInput', 1, 1);
+bindPair('volpallet','m3Input','palletsInput', 2, 1);
+bindPair('tonscont','tonsInput','contInput', 1, 2);
+
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  ['kgInput','piecesInput','m3Input','palletsInput','tonsInput','contInput'].forEach(id=>{
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('wpiece').value = 18;
+  document.getElementById('volpallet').value = 1.35;
+  document.getElementById('tonscont').value = 22;
+});
+</script>
+
+</body>
+</html>

@@ -352,7 +352,7 @@
     </div>
   </div>
 
-  <footer>Mirrors the 15-12-22 WIP / Promised Date workbook · all calculation runs in this page, nothing is sent anywhere<br>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+  <footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
 </div>
 
 <!-- PRINT-ONLY SUMMARY -->
@@ -506,12 +506,17 @@ function renderLog(castingReq){
   logBody.innerHTML='';
   const sorted=[...logEntries].sort((a,b)=>a.date.localeCompare(b.date));
   let cum=0, hitIndex=-1;
-  sorted.forEach((e,i)=>{ cum+=(+e.qty||0); if(hitIndex===-1 && cum>=castingReq && castingReq>0) hitIndex=i; });
+  sorted.forEach((e,i)=>{
+    const effQty = isWeekendOff(e.date) ? 0 : (+e.qty||0);
+    cum+=effQty;
+    if(hitIndex===-1 && cum>=castingReq && castingReq>0) hitIndex=i;
+  });
 
   cum=0;
   sorted.forEach((e,i)=>{
-    cum+=(+e.qty||0);
     const off=isWeekendOff(e.date);
+    const effQty = off ? 0 : (+e.qty||0);
+    cum+=effQty;
     const tr=document.createElement('tr');
     if(off) tr.classList.add('off');
     if(hitIndex===i) tr.classList.add('hit');
@@ -525,7 +530,7 @@ function renderLog(castingReq){
     logBody.appendChild(tr);
   });
 
-  const total=sorted.reduce((s,e)=>s+(+e.qty||0),0);
+  const total=sorted.reduce((s,e)=> s + (isWeekendOff(e.date) ? 0 : (+e.qty||0)), 0);
   const progress=castingReq>0?Math.min(1,total/castingReq):0;
   $('gaugeArc').setAttribute('stroke-dashoffset', 452.4*(1-progress));
   $('gaugePct').textContent=(progress*100).toFixed(0)+'%';
@@ -536,7 +541,7 @@ function renderLog(castingReq){
     finishDate=new Date(sorted[hitIndex].date+'T00:00:00');
     note='reached from logged entries';
   } else if(sorted.length && castingReq>0){
-    const activeDays=sorted.filter(e=>(+e.qty||0)>0).length||1;
+    const activeDays=sorted.filter(e=>!isWeekendOff(e.date) && (+e.qty||0)>0).length||1;
     const avgRate=total/activeDays;
     const remaining=castingReq-total;
     if(avgRate>0){
@@ -684,8 +689,9 @@ $('excelBtn').addEventListener('click', ()=>{
   const sorted = [...logEntries].sort((a,b)=>a.date.localeCompare(b.date));
   let cum = 0;
   sorted.forEach(e => {
-    cum += (+e.qty || 0);
-    logRows.push([e.date, isWeekendOff(e.date) ? 'Yes' : 'No', e.qty, cum]);
+    const off = isWeekendOff(e.date);
+    cum += off ? 0 : (+e.qty || 0);
+    logRows.push([e.date, off ? 'Yes' : 'No', e.qty, cum]);
   });
   const ws3 = XLSX.utils.aoa_to_sheet(logRows);
   ws3['!cols'] = [{wch:14},{wch:10},{wch:10},{wch:14}];
