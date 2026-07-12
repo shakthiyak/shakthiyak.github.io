@@ -4,30 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EOSB / Gratuity Calculator | Production Tools</title>
+<meta name="description" content="Calculate end-of-service benefits and gratuity payouts for production staff, built by Shakthi Chathuranga.">
+<meta property="og:title" content="EOSB / Gratuity Calculator | Production Tools">
+<meta property="og:description" content="Calculate end-of-service benefits and gratuity payouts for production staff.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
     html { scroll-behavior: smooth; }
     body { background-color:#0f172a; color:#f8fafc; overflow-x:hidden; min-height:100vh; }
 
-    nav {
-        background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 0 50px;
-        display: flex; justify-content: space-between; align-items: center;
-        height: 80px; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap;
-    }
-    .logo {
-        font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
-        background: linear-gradient(to right, #38bdf8, #0ea5e9);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 18px 0;
-    }
-    .nav-tabs { display:flex; list-style:none; height:100%; gap:10px; flex-wrap:wrap; }
-    .nav-tabs a {
-        display:flex; align-items:center; padding:0 18px; text-decoration:none;
-        color:#94a3b8; font-weight:500; height:100%; transition:all 0.3s ease;
-        border-bottom:3px solid transparent; white-space:nowrap; font-size:14.5px;
-    }
-    .nav-tabs a:hover, .nav-tabs a.active { color:#38bdf8; border-bottom:3px solid #38bdf8; }
+    /* Navigation styles moved to shared style.css */
 
     .page-header { max-width:1000px; margin:0 auto; padding:50px 20px 10px; }
     .eyebrow {
@@ -35,6 +25,9 @@
         color:#38bdf8; display:flex; align-items:center; gap:10px; margin-bottom:12px;
     }
     .eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background:#38bdf8; box-shadow:0 0 10px rgba(56,189,248,.6); }
+    .page-header-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .back-to-tools{color:#94a3b8;text-decoration:none;font-size:13px;border:1px solid rgba(255,255,255,0.1);padding:6px 12px;border-radius:8px;transition:all .2s;}
+    .back-to-tools:hover{color:#38bdf8;border-color:#38bdf8;}
     h1 { font-size:clamp(26px,4vw,36px); font-weight:700; color:#ffffff; margin-bottom:10px; letter-spacing:-0.5px; }
     .sub { color:#94a3b8; font-size:15px; max-width:680px; line-height:1.6; margin-bottom:30px; }
 
@@ -156,7 +149,9 @@
 <body>
 
 <nav>
-    <div class="logo">SC. <span style="-webkit-text-fill-color:#f8fafc;">Portal</span></div>
+    <a href="index.html" class="logo">
+        <img src="sc-logo.png" alt="SC. Portal logo">
+    </a>
     <ul class="nav-tabs">
         <li><a href="index.html">Home</a></li>
         <li><a href="tools.html" class="active">Production Tools</a></li>
@@ -167,7 +162,10 @@
 </nav>
 
 <div class="page-header">
-    <div class="eyebrow">Production Tools Suite</div>
+    <div class="page-header-row">
+        <div class="eyebrow">Production Tools Suite</div>
+        <a href="tools.html" class="back-to-tools">← Back to Tools</a>
+    </div>
     <h1>EOSB / Gratuity Calculator</h1>
     <p class="sub">Estimate End-of-Service Benefits by country. Select a country to auto-fill its typical gratuity structure — every rate is editable and clearly marked as a reference estimate, not legal advice.</p>
 </div>
