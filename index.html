@@ -238,6 +238,31 @@
         .timeline-item .timeline-company { font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: 500; }
         .timeline-item p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
 
+        /* 🧑‍💼 Leadership & Operational Coordination */
+        .leadership-container {
+            max-width: 900px; margin: 0 auto 80px auto;
+            background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 35px;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .leadership-intro {
+            color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px;
+            text-align: center;
+        }
+        .leadership-list { display: flex; flex-direction: column; gap: 16px; }
+        .leadership-item {
+            display: flex; align-items: flex-start; gap: 15px;
+            background: rgba(15, 23, 42, 0.5); padding: 18px; border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .leadership-item:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-2px); }
+        .leadership-icon {
+            font-size: 20px; flex-shrink: 0; width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(56, 189, 248, 0.1); border-radius: 8px;
+        }
+        .leadership-item p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+        .leadership-item p strong { color: #ffffff; }
+
         /* 📜 Certifications (featured, trimmed) */
         .certs-container {
             background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 35px;
@@ -256,6 +281,30 @@
         }
         .certs-more a { color: #38bdf8; text-decoration: none; font-weight: 600; }
         .certs-more a:hover { text-decoration: underline; }
+
+        /* 🎓 Education & Languages */
+        .edu-lang-grid {
+            display: grid; grid-template-columns: 1.4fr 1fr; gap: 25px;
+            max-width: 900px; margin: 0 auto 80px auto;
+        }
+        .edu-card, .lang-card {
+            background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .edu-card h3, .lang-card h3 {
+            font-size: 16px; color: #38bdf8; margin-bottom: 18px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .edu-entry { margin-bottom: 16px; }
+        .edu-entry:last-child { margin-bottom: 0; }
+        .edu-entry h4 { font-size: 15px; color: #ffffff; margin-bottom: 3px; }
+        .edu-entry p { font-size: 13px; color: #94a3b8; }
+        .lang-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .lang-tag {
+            padding: 8px 16px; background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 9999px;
+            color: #e2e8f0; font-size: 13px; font-weight: 500;
+        }
 
         /* 💬 Testimonials & Recognition */
         .testimonials-grid {
@@ -426,13 +475,15 @@
         }
 
         @media (max-width: 968px) {
-            .hero-container, .featured-grid, .certs-list, .testimonials-grid { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
+            .hero-container, .featured-grid, .certs-list, .testimonials-grid, .edu-lang-grid { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
             .stats-bar { justify-content: center; }
             .btn-group, .btn-row { justify-content: center; }
             .panel-header-layout { flex-direction: column; align-items: center; text-align: center; }
             .timeline { padding-left: 20px; }
             .timeline-item { padding-left: 20px; }
             .timeline-item::before { left: -29px; }
+            .lang-tags { justify-content: center; }
+            .leadership-item { flex-direction: column; text-align: center; align-items: center; }
         }
     </style>
 </head>
@@ -505,6 +556,14 @@
                 <h3>Inventory Control</h3>
                 <p>Executing stock reconciliation and structured variance analysis to minimize operational downtime and stop material waste.</p>
             </div>
+            <div class="skill-card">
+                <h3>Team Leadership & Coordination</h3>
+                <p>Stepping into operational leadership when required — supervising teams, driving cross-functional alignment between production, stores, and sales.</p>
+            </div>
+            <div class="skill-card">
+                <h3>Process Improvement</h3>
+                <p>Identifying operational trends and workflow bottlenecks, then implementing structured improvements that lift productivity and efficiency.</p>
+            </div>
         </div>
 
         <!-- 🏢 Featured Projects -->
@@ -553,6 +612,30 @@
             </div>
         </div>
 
+        <!-- 🧑‍💼 Leadership & Operational Coordination -->
+        <h2 class="section-title" id="leadership">Leadership & Operational Coordination</h2>
+        <div class="leadership-container">
+            <p class="leadership-intro">Beyond day-to-day execution, consistently trusted to step up and take ownership of operations at a higher level.</p>
+            <div class="leadership-list">
+                <div class="leadership-item">
+                    <div class="leadership-icon">🧭</div>
+                    <p>Regularly assumed <strong>day-to-day operational monitoring responsibilities</strong> during the annual leave or extended absence of the immediate superior, ensuring continuity of production planning, reporting, and cross-functional coordination.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">🌍</div>
+                    <p>During the <strong>COVID-19 travel restriction period</strong>, independently carried operational responsibility for approximately <strong>10 months</strong> while the immediate superior was unable to return.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">📝</div>
+                    <p>Served as <strong>Production Meeting Secretary for over a year</strong> — preparing draft Minutes of Meeting (MOM), documenting action items, and driving follow-up across departments.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">🤝</div>
+                    <p>Supported the Production Manager in cross-functional coordination, including <strong>participation in Sales meetings</strong> to align production capacity with customer delivery requirements.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- 📜 Certifications -->
         <h2 class="section-title">Professional Certifications</h2>
         <div class="certs-container">
@@ -587,6 +670,30 @@
                 </div>
             </div>
             <div class="certs-more">+ 4 more certifications — see full list on <a href="Shakthi_Chathuranga_CV.pdf" target="_blank" rel="noopener noreferrer">CV</a></div>
+        </div>
+
+        <!-- 🎓 Education & Languages -->
+        <h2 class="section-title">Education & Languages</h2>
+        <div class="edu-lang-grid">
+            <div class="edu-card">
+                <h3>Education</h3>
+                <div class="edu-entry">
+                    <h4>Diploma in Information & Communication Technology</h4>
+                    <p>IMBS Green Campus, Sri Lanka · Currently Enrolled</p>
+                </div>
+                <div class="edu-entry">
+                    <h4>G.C.E. Advanced Level & Ordinary Level</h4>
+                    <p>Walisinghe Harischandra College, Anuradhapura, Sri Lanka · 2010 / 2006</p>
+                </div>
+            </div>
+            <div class="lang-card">
+                <h3>Languages</h3>
+                <div class="lang-tags">
+                    <span class="lang-tag">English</span>
+                    <span class="lang-tag">Hindi</span>
+                    <span class="lang-tag">Sinhala</span>
+                </div>
+            </div>
         </div>
 
         <!-- 💬 Testimonials & Recognition -->
