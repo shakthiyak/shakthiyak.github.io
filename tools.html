@@ -29,6 +29,33 @@
         .page-header h1 { font-size: 34px; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
         .page-header p { font-size: 15px; color: #94a3b8; max-width: 600px; margin: 0 auto; }
 
+        .category-label {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px 0 20px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .category-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+        .category-sub {
+            max-width: 1200px;
+            margin: 6px auto 0;
+            padding: 0 20px;
+            font-size: 13.5px;
+            color: #64748b;
+        }
+
         .tools-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -113,7 +140,8 @@
 
     <nav>
         <a href="index.html" class="logo">
-            <img src="sc-logo.png" alt="SC. Portal logo">        </a>
+            <img src="sc-logo.png" alt="SC. Portal logo">
+        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
             <li><a href="tools.html" class="active">Production Tools</a></li>
@@ -128,6 +156,8 @@
         <p>A growing set of small tools built to solve real problems on the ceramic production floor — starting with a delivery date & yield calculator, with more on the way.</p>
     </div>
 
+    <div class="category-label">🏭 Production Tools</div>
+    <p class="category-sub">Built specifically for ceramic sanitaryware production workflows.</p>
     <div class="tools-container">
 
         <div class="tool-card">
@@ -172,6 +202,33 @@
             <a href="promised-date-calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
         </div>
 
+        <!-- NEW LIVE TOOL: Ceramic Unit Converter -->
+        <div class="tool-card">
+            <div>
+                <div class="tool-icon">🔄</div>
+                <span class="tool-status status-live">● Live</span>
+                <h2>Ceramic Unit Converter</h2>
+                <p>Quick conversions between weight, pieces, volume, pallets, tons, and containers — with editable reference rates for your product mix.</p>
+            </div>
+            <a href="ceramic-unit-converter.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
+        </div>
+
+        <div class="tool-card">
+            <div>
+                <div class="tool-icon">📊</div>
+                <span class="tool-status status-soon">● Coming Soon</span>
+                <h2>Excel Production Tracker</h2>
+                <p>A downloadable Excel-based tracker for daily production, inventory, and manpower KPIs — for teams that prefer offline reporting.</p>
+            </div>
+            <a href="javascript:void(0);" class="disabled-btn" title="Coming soon">📥 Coming Soon</a>
+        </div>
+
+    </div>
+
+    <div class="category-label">🛠️ Generic Tools</div>
+    <p class="category-sub">General-purpose utilities — useful on any factory floor, not just ceramics.</p>
+    <div class="tools-container">
+
         <!-- NEW LIVE TOOL: Overtime Calculator -->
         <div class="tool-card">
             <div>
@@ -203,27 +260,6 @@
                 <p>Turn any link, WhatsApp number, email, or plain text into a scannable QR code — for a CV, LinkedIn, or a factory floor SOP poster.</p>
             </div>
             <a href="qr-code-generator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <!-- NEW LIVE TOOL: Ceramic Unit Converter -->
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🔄</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Ceramic Unit Converter</h2>
-                <p>Quick conversions between weight, pieces, volume, pallets, tons, and containers — with editable reference rates for your product mix.</p>
-            </div>
-            <a href="ceramic-unit-converter.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">📊</div>
-                <span class="tool-status status-soon">● Coming Soon</span>
-                <h2>Excel Production Tracker</h2>
-                <p>A downloadable Excel-based tracker for daily production, inventory, and manpower KPIs — for teams that prefer offline reporting.</p>
-            </div>
-            <a href="javascript:void(0);" class="disabled-btn" title="Coming soon">📥 Coming Soon</a>
         </div>
 
         <div class="tool-card upcoming">
