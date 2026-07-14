@@ -202,6 +202,14 @@
             border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); object-fit: contain;
         }
         .visual-box { height: 160px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .tool-chip-row {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;
+        }
+        .tool-chip {
+            font-size: 12px; font-weight: 600; color: #94a3b8;
+            background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px 12px; border-radius: 8px; white-space: nowrap;
+        }
         .factory-img {
             background: linear-gradient(rgba(30, 41, 59, 0.2), rgba(15, 23, 42, 0.4)),
                         url('https://images.pexels.com/photos/3094030/pexels-photo-3094030.jpeg?auto=compress&cs=tinysrgb&w=600') no-repeat center center/cover;
@@ -610,12 +618,21 @@
                 <div class="panel-info">
                     <span class="project-tag">Internal Systems &amp; Tools</span>
                     <h2>Production Tools Suite</h2>
-                    <p>A growing set of tools built for the ceramic production floor — delivery date &amp; yield calculator, pallet builder, and container loading optimizer, with more on the way.</p>
+                    <p>A growing set of tools built for the ceramic production floor — production &amp; delivery date calculators, pallet/container loading optimizers, unit converters, plus generic payroll and QR tools.</p>
                     <div class="btn-group">
-                        <a href="tools.html" class="cta-btn">Explore Tools (4 Live) 🚀</a>
+                        <a href="tools.html" class="cta-btn">Explore Tools (8 Live) 🚀</a>
                     </div>
                 </div>
-                <div class="visual-box factory-img"></div>
+                <div class="tool-chip-row">
+                    <span class="tool-chip">🧮 Production Calculator</span>
+                    <span class="tool-chip">🧱 Pallet Builder</span>
+                    <span class="tool-chip">🚢 Container Loader</span>
+                    <span class="tool-chip">📅 Promised Date Calculator</span>
+                    <span class="tool-chip">🔄 Unit Converter</span>
+                    <span class="tool-chip">⏱️ Overtime Calculator</span>
+                    <span class="tool-chip">💼 EOSB Calculator</span>
+                    <span class="tool-chip">🔗 QR Generator</span>
+                </div>
             </div>
         </div>
 

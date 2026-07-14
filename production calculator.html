@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceramic Production · Delivery Date Calculator</title>
+<meta name="description" content="Calculate ceramic sanitaryware production delivery dates from order details through the full process timeline, built by Shakthi Chathuranga.">
+<meta property="og:title" content="Ceramic Production · Delivery Date Calculator">
+<meta property="og:description" content="Calculate ceramic sanitaryware production delivery dates from order details through the full process timeline.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel-2:#151f32;
+    --accent:#38bdf8; --accent-2:#0ea5e9; --accent-3:#818cf8;
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --line:rgba(255,255,255,0.08); --ok:#22c55e; --warn:#f87171;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  /* Navigation styles moved to shared style.css */
+  .tool-page-header{max-width:1000px;margin:20px auto 0;padding:0 16px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
+  .tool-page-header h1{margin:0;font-size:1.4rem;background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+  .tool-page-header p{margin:4px 0 0;color:var(--muted);font-size:.85rem;}
+  .back-to-tools{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:.85rem;border:1px solid var(--line);padding:8px 14px;border-radius:8px;flex-shrink:0;}
+  .back-to-tools:hover{color:var(--accent);border-color:var(--accent);}
+  main{max-width:1000px;margin:20px auto;padding:0 16px 60px;}
+  .card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;}
+  .card h2{margin:0 0 14px;font-size:1.05rem;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:8px;font-weight:600;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+  label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:4px;}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;background:rgba(15,23,42,0.6);color:var(--ink);font-family:inherit;}
+  input::placeholder{color:var(--dim);}
+  input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent);}
+  input[readonly]{background:rgba(255,255,255,0.03);color:var(--muted);}
+  .btn{background:linear-gradient(to right,var(--accent-2),#2563eb);color:#fff;border:none;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.9rem;}
+  .btn:hover{background:linear-gradient(to right,var(--accent),#2563eb);transform:translateY(-1px);}
+  .btn.secondary{background:#334155;color:var(--ink);border:1px solid var(--line);}
+  .btn.secondary:hover{background:#3f4f66;}
+  .btn.whatsapp{background:#25D366;}
+  .btn.whatsapp:hover{background:#1ebe5a;}
+  .btn.email{background:#546e7a;}
+  .btn.email:hover{background:#455a64;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;}
+  th{background:rgba(56,189,248,0.08);color:var(--accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;}
+  .timeline td:nth-child(2),.timeline td:nth-child(3){text-align:center;}
+  .day-input{width:64px;text-align:center;font-weight:800;color:var(--accent);background:rgba(56,189,248,0.1);border:2px solid var(--accent);border-radius:8px;padding:5px 4px;}
+  .day-input:focus{outline:2px solid var(--accent-3);}
+  .day-input.locked{background:rgba(255,255,255,0.04);border-color:var(--line);color:var(--muted);font-weight:600;}
+  .sum-item{font-size:.85rem;padding:4px 0;border-bottom:1px dashed var(--line);}
+  .sum-item .k{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;display:block;}
+  .sum-item .v{font-weight:700;color:var(--ink);}
+  .delivery-box{background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border-radius:16px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .delivery-box .date{font-size:1.6rem;font-weight:800;}
+  .delivery-box .label{font-size:.8rem;opacity:.9;text-transform:uppercase;letter-spacing:.05em;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .datalist-wrap{position:relative;}
+  .hint{font-size:.75rem;color:var(--muted);margin-top:3px;}
+  footer{text-align:center;color:var(--dim);font-size:.78rem;padding:20px;}
+  details{margin-top:6px;}
+  summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:.85rem;}
+  .fieldkey{font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;font-size:.8rem;color:var(--accent-3);}
+  .status-msg{font-size:.8rem;margin-top:8px;padding:8px 10px;border-radius:8px;}
+  .status-msg.ok{background:rgba(34,197,94,0.12);color:var(--ok);}
+  .status-msg.err{background:rgba(248,113,113,0.12);color:var(--warn);}
+  a{color:var(--accent);}
+  .print-only{display:none;}
+  .invalid{border-color:var(--warn) !important;box-shadow:0 0 0 1px var(--warn);}
+
+  /* Print styles: only the printable summary shows on paper */
+  @media print{
+    @page{ size:A4; margin:10mm; }
+    nav, .tool-page-header, .no-print { display:none !important; }
+    body{background:#fff;color:#000;font-size:11px;}
+    .card{background:#fff;box-shadow:none;border:1px solid #999;padding:10px 12px;margin-bottom:8px;color:#000;page-break-inside:avoid;border-radius:6px;}
+    .card h2{color:#000;font-size:.95rem;margin:0 0 8px;padding-bottom:4px;}
+    th{background:#eee;color:#000;}
+    th,td{padding:4px 6px;font-size:10.5px;}
+    .sum-item{padding:2px 0;font-size:10.5px;}
+    .sum-item .v, .sum-item .k{color:#000;}
+    .sum-item .k{font-size:.62rem;}
+    .print-only{display:block !important;}
+    #orderSummaryGrid{grid-template-columns:repeat(4,1fr) !important;column-gap:10px;}
+    main{max-width:100%;margin:0;padding:0;}
+    .delivery-box{background:#eee !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:10px 14px;}
+    .delivery-box .date{font-size:1.1rem;}
+    .day-input{border:1px solid #999;background:#fff;color:#000;width:40px;font-size:10.5px;padding:2px;}
+  }
+  @media (max-width:640px){
+    .delivery-box{flex-direction:column;align-items:stretch;}
+    .delivery-box .actions{flex-direction:column;width:100%;}
+    .delivery-box .actions .btn{width:100%;padding:12px 18px;font-size:1rem;}
+    #draftBanner .actions{flex-direction:column;width:100%;}
+    #draftBanner .actions .btn{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="no-print">
+  <a href="index.html" class="logo">
+    <img src="sc-logo.png" alt="SC. Portal logo">  </a>
+  <ul class="nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+  </ul>
+</nav>
+
+<div class="tool-page-header no-print">
+  <div>
+    <h1>🏺 Ceramic Production · Delivery Date Calculator</h1>
+    <p>Order details in → Process timeline out → Print or Share the result</p>
+  </div>
+  <a class="back-to-tools" href="tools.html">← Back to Tools</a>
+</div>
+
+<main>
+
+  <div class="card no-print" id="draftBanner" style="display:none;border-color:var(--accent);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div>💾 You have an unsaved order from last time. Continue where you left off?</div>
+      <div class="actions">
+        <button class="btn" id="draftYesBtn">Yes, continue</button>
+        <button class="btn secondary" id="draftNoBtn">No, start fresh</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>📋 Order Reference</h2>
+    <div class="grid">
+      <div><label>Doc / Ref No <span class="hint" style="display:inline;">(auto-generated)</span></label><input id="docNo" readonly></div>
+      <div><label>Order No</label><input id="orderNo"></div>
+      <div><label>Order Date</label><input id="orderDate" type="date"></div>
+      <div><label>Quote No</label><input id="quoteNo"></div>
+      <div><label>Customer Name</label><input id="customerName"></div>
+      <div><label>P.O. No</label><input id="poNo"></div>
+      <div><label>Status</label>
+        <select id="status">
+          <option>Quoted</option><option>Confirmed</option><option>In Production</option><option>Delivered</option><option>Cancelled</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>📦 Item &amp; Quantity</h2>
+    <div class="grid">
+      <div><label>Item Code</label><input id="itemCode" placeholder="e.g. 10100280"></div>
+      <div><label>Item Name</label><input id="itemName" placeholder="e.g. Uni Pedestal White"></div>
+      <div><label>Category</label>
+        <select id="category">
+          <option>VITREOUS CHINA</option>
+          <option>FINE FIRE CLAY</option>
+        </select>
+      </div>
+      <div><label>Colour</label><input id="colour" value="WHITE"></div>
+      <div><label>Family</label>
+        <select id="family">
+          <option>WASH BASIN V.C</option>
+          <option>WASH BASIN F.FC</option>
+          <option>PEDESTAL F.F.C</option>
+          <option>OTHER F.F.C</option>
+          <option>WATER CLOSET</option>
+          <option>TANK</option>
+          <option>LIDS</option>
+          <option>BIDET</option>
+          <option>SHOWER TRAY</option>
+          <option>SINK</option>
+          <option>URAINAL</option>
+          <option>ACCESSORIES</option>
+          <option>SINKOLOGY SINK</option>
+          <option>SQUATTING PAN</option>
+        </select>
+      </div>
+      <div><label>L/S</label>
+        <select id="ls">
+          <option>LARGE</option>
+          <option>SMALL</option>
+        </select>
+      </div>
+      <div><label>Sales Order Qty</label><input id="salesQty" type="number" min="0"></div>
+      <div><label>Stock Qty</label><input id="stockQty" type="number" min="0" value="0"></div>
+      <div><label>Balance to Make 🎯</label><input id="balanceToMake" readonly></div>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>⚗️ Production Data</h2>
+    <div class="grid">
+      <div><label>Mould Ready? (Yes/No)</label>
+        <select id="mouldReady"><option>No</option><option>Yes</option></select>
+      </div>
+      <div><label>Clay / Green Loss %</label><input id="clayLoss" type="number" step="0.0001" value="0.10"></div>
+      <div><label>Firing Yield %</label><input id="firingYield" type="number" step="0.0001" value="0.85"></div>
+      <div><label>Firing Loss %</label><input id="firingLoss" type="number" step="0.0001" value="0.15"></div>
+      <div><label>Required Casting (before firing loss)</label><input id="reqCasting" readonly></div>
+      <div><label>Required Casting Qty</label><input id="reqCastingQty" readonly></div>
+      <div><label>Daily Casting Qty *</label><input id="dailyCasting" type="number" min="1" value="100"></div>
+      <div><label>Casting Days</label><input id="castingDays" readonly></div>
+      <div><label>Skip Sunday? (Yes/No)</label>
+        <select id="skipSunday"><option>Yes</option><option>No</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card print-only" id="orderSummary">
+    <h2>🧾 Order Summary</h2>
+    <div class="grid" id="orderSummaryGrid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));row-gap:6px;"></div>
+  </div>
+
+  <div class="card" id="printSummary" style="overflow-x:auto;">
+    <h2>📅 Process Timeline</h2>
+    <table class="timeline">
+      <thead><tr><th>Stage</th><th>Days</th><th>Cumulative Days</th><th>Expected Date</th></tr></thead>
+      <tbody id="timelineBody"></tbody>
+    </table>
+    <div class="row" style="margin-top:10px;font-size:.85rem;color:#8a7f72;">Sundays skipped in range: <b id="sundaysCount">0</b> · Total Production Days: <b id="totalProdDays">0</b></div>
+  </div>
+
+  <div class="delivery-box">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img id="qrCode" width="76" height="76" style="border-radius:8px;background:#fff;padding:4px;" alt="QR code with order details">
+      <div>
+        <div class="label">🚚 Confirmed Delivery Date</div>
+        <div class="date" id="deliveryDateBig">—</div>
+      </div>
+    </div>
+    <div class="actions no-print">
+      <button class="btn" id="printBtn">🖨️ Print</button>
+      <button class="btn whatsapp" id="whatsappBtn">📤 Share to WhatsApp</button>
+      <button class="btn email" id="emailBtn">✉️ Share via Email</button>
+      <button class="btn secondary" id="newBtn">🧹 Clear / New</button>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>🔗 Google Form Sync</h2>
+    <p class="hint" style="margin-top:0;">
+      Already connected to your Google Form — every click adds/updates a row in your linked Google Sheet.
+      One-way only, no Google account permission needed.
+    </p>
+    <div class="actions">
+      <button class="btn secondary" id="sendToFormBtn">📨 Send This Order to Google Form</button>
+    </div>
+    <div id="sendStatus"></div>
+  </div>
+
+</main>
+
+
+<footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+<script>
+
+/* ============ CALC HELPERS ============ */
+function roundUp(v, d=0){ const f=Math.pow(10,d); return Math.ceil((v-Number.EPSILON)*f)/f; }
+function addDays(date, days){ const d=new Date(date); d.setDate(d.getDate()+days); return d; }
+function countSundaysInclusive(start,end){
+  if(end<start) return 0;
+  let count=0, cur=new Date(start);
+  while(cur<=end){ if(cur.getDay()===0) count++; cur.setDate(cur.getDate()+1); }
+  return count;
+}
+function fmtDateDisplay(d){
+  if(!d||isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+const STAGES = [
+  {key:'caseArrange', label:'Case Arrange Days', days:3, gate:true},
+  {key:'mouldMaking', label:'Mould Making Days', days:3, gate:true},
+  {key:'mouldDrying', label:'Mould Drying Days', days:1, gate:true},
+  {key:'loadingSetting', label:'Loading & Setting Days', days:1, gate:false},
+  {key:'casting', label:'Casting Days', days:null, gate:false},
+  {key:'finishingDrying', label:'Finishing & Drying Days', days:1, gate:false},
+  {key:'greenInspGlazing', label:'Green Inspection & Glazing Days', days:1, gate:false},
+  {key:'kilnLoading', label:'Kiln Loading Days', days:1, gate:false},
+  {key:'firingInspection', label:'Firing & Inspection Days', days:2, gate:false},
+  {key:'secondFire', label:'Second Fire / Delivery Prep Days', days:2, gate:false},
+  {key:'buffer', label:'Buffer Days', days:1, gate:false},
+];
+
+function getVal(id){ return document.getElementById(id).value; }
+function setVal(id,v){ document.getElementById(id).value = v; }
+
+let lastCalc = null;
+
+function renderOrderSummary(){
+  const d = collectFormData();
+  const rows = [
+    ['Doc No', d.docNo], ['Order No', d.orderNo], ['Order Date', d.orderDate], ['Quote No', d.quoteNo],
+    ['Customer Name', d.customerName], ['P.O. No', d.poNo], ['Status', d.status],
+    ['Item Code', d.itemCode], ['Item Name', d.itemName], ['Category', d.category], ['Colour', d.colour],
+    ['Family', d.family], ['L/S', d.ls],
+    ['Sales Order Qty', d.salesQty], ['Stock Qty', d.stockQty], ['Balance to Make', d.balanceToMake],
+    ['Mould Ready?', d.mouldReady], ['Daily Casting Qty', d.dailyCasting], ['Casting Days', d.castingDays],
+    ['Skip Sunday?', d.skipSunday]
+  ];
+  const grid = document.getElementById('orderSummaryGrid');
+  grid.innerHTML = rows.map(([k,v])=>`<div class="sum-item"><span class="k">${k}</span><span class="v">${v || '—'}</span></div>`).join('');
+  updateQrCode(d);
+}
+
+function updateQrCode(d){
+  const qrText = `Order: ${d.orderNo||'-'}\nCustomer: ${d.customerName||'-'}\nItem: ${d.itemName||d.itemCode||'-'}\nQty: ${d.salesQty||'-'}\nDelivery: ${d.deliveryDate||'-'}`;
+  const url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=2&data=' + encodeURIComponent(qrText);
+  const img = document.getElementById('qrCode');
+  if(img) img.src = url;
+}
+
+function renderTimelineSkeleton(){
+  const tbody = document.getElementById('timelineBody');
+  tbody.innerHTML = STAGES.map(stage=>{
+    const dayCell = stage.key==='casting'
+      ? `<input class="day-input locked" id="day-${stage.key}" type="text" value="${stage.days!=null?stage.days:0}" readonly title="Auto-calculated from Required Casting Qty ÷ Daily Casting Qty">`
+      : `<input class="day-input" id="day-${stage.key}" type="number" min="0" step="1" value="${stage.days}" title="Click to change">`;
+    return `<tr><td>${stage.label}${stage.gate?' <span class="hint" style="display:inline;">(skipped if Mould Ready)</span>':''}</td>`+
+           `<td>${dayCell}</td><td id="cum-${stage.key}">0</td><td id="exp-${stage.key}">—</td></tr>`;
+  }).join('');
+  STAGES.forEach(stage=>{
+    if(stage.key==='casting') return;
+    document.getElementById('day-'+stage.key).addEventListener('input', calcAll);
+    document.getElementById('day-'+stage.key).addEventListener('change', calcAll);
+  });
+}
+
+function generateDocNo(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const datePart = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
+  const timePart = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  const rand = Math.floor(Math.random()*900+100); // 3-digit random for extra safety
+  return `DOC-${datePart}-${timePart}-${rand}`;
+}
+
+function validateFields(){
+  const orderDateEl = document.getElementById('orderDate');
+  const itemCodeEl = document.getElementById('itemCode');
+  const dailyCastingEl = document.getElementById('dailyCasting');
+  orderDateEl.classList.toggle('invalid', !orderDateEl.value.trim());
+  itemCodeEl.classList.toggle('invalid', !itemCodeEl.value.trim());
+  dailyCastingEl.classList.toggle('invalid', !dailyCastingEl.value || parseFloat(dailyCastingEl.value)<=0);
+}
+
+function calcAll(){
+  const orderDateStr = getVal('orderDate');
+  const mouldReady = getVal('mouldReady');
+  const skipSunday = getVal('skipSunday');
+  const salesQty = parseFloat(getVal('salesQty'))||0;
+  const stockQty = parseFloat(getVal('stockQty'))||0;
+  const dailyCasting = parseFloat(getVal('dailyCasting'))||0;
+  const firingLoss = parseFloat(getVal('firingLoss'))||0;
+  const clayLoss = parseFloat(getVal('clayLoss'))||0;
+
+  const balance = Math.max(salesQty-stockQty,0);
+  setVal('balanceToMake', balance);
+
+  const reqCasting = firingLoss<1 ? roundUp(balance/(1-firingLoss)) : 0;
+  setVal('reqCasting', reqCasting||0);
+
+  const reqCastingQty = clayLoss<1 ? roundUp(reqCasting/(1-clayLoss)) : 0;
+  setVal('reqCastingQty', reqCastingQty||0);
+
+  const castingDays = dailyCasting>0 ? roundUp(reqCastingQty/dailyCasting) : 0;
+  setVal('castingDays', castingDays||0);
+  const castingDayInput = document.getElementById('day-casting');
+  if(castingDayInput) castingDayInput.value = castingDays||0;
+
+  if(!orderDateStr){
+    document.getElementById('deliveryDateBig').textContent='Enter Order Date';
+    document.getElementById('sundaysCount').textContent='0';
+    document.getElementById('totalProdDays').textContent='0';
+    STAGES.forEach(stage=>{
+      const cumEl = document.getElementById('cum-'+stage.key);
+      const expEl = document.getElementById('exp-'+stage.key);
+      if(cumEl) cumEl.textContent='0';
+      if(expEl) expEl.textContent='—';
+    });
+    lastCalc = null;
+    renderOrderSummary();
+    validateFields();
+    return;
+  }
+
+  const orderDate = new Date(orderDateStr+'T00:00:00');
+  let cumulative=0, deliveryDate=null, sundaysTotal=0;
+
+  STAGES.forEach(stage=>{
+    const dayCount = stage.key==='casting' ? castingDays : (parseFloat(getVal('day-'+stage.key))||0);
+    const effectiveDays = stage.gate ? (mouldReady==='No' ? dayCount : 0) : dayCount;
+    cumulative += effectiveDays;
+
+    let expected = addDays(orderDate, cumulative);
+    let sundaysInStage = 0;
+    if(skipSunday==='Yes'){
+      sundaysInStage = countSundaysInclusive(orderDate, expected);
+      expected = addDays(orderDate, cumulative+sundaysInStage);
+    }
+    sundaysTotal = sundaysInStage;
+
+    document.getElementById('cum-'+stage.key).textContent = cumulative;
+    document.getElementById('exp-'+stage.key).textContent = fmtDateDisplay(expected);
+
+    if(stage.key==='buffer') deliveryDate = expected;
+  });
+
+  document.getElementById('sundaysCount').textContent = sundaysTotal;
+  document.getElementById('totalProdDays').textContent = cumulative;
+  document.getElementById('deliveryDateBig').textContent = fmtDateDisplay(deliveryDate);
+
+  lastCalc = {balance, reqCasting, reqCastingQty, castingDays, cumulative, sundaysTotal, deliveryDate};
+  renderOrderSummary();
+  validateFields();
+}
+
+['orderDate','mouldReady','skipSunday','salesQty','stockQty','dailyCasting','clayLoss','firingYield','firingLoss','itemCode','itemName','category','colour','family','ls'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', calcAll);
+  document.getElementById(id).addEventListener('change', calcAll);
+});
+['docNo','orderNo','quoteNo','customerName','poNo','status'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderOrderSummary);
+  document.getElementById(id).addEventListener('change', renderOrderSummary);
+});
+
+/* ============ COLLECT DATA / CLEAR ============ */
+function collectFormData(){
+  return {
+    docNo:getVal('docNo'), orderNo:getVal('orderNo'), orderDate:getVal('orderDate'),
+    quoteNo:getVal('quoteNo'), customerName:getVal('customerName'), poNo:getVal('poNo'), status:getVal('status'),
+    itemCode:getVal('itemCode'), itemName:getVal('itemName'), category:getVal('category'), colour:getVal('colour'),
+    family:getVal('family'), ls:getVal('ls'), salesQty:getVal('salesQty'), stockQty:getVal('stockQty'),
+    balanceToMake:getVal('balanceToMake'), mouldReady:getVal('mouldReady'), clayLoss:getVal('clayLoss'),
+    firingYield:getVal('firingYield'), firingLoss:getVal('firingLoss'), reqCasting:getVal('reqCasting'),
+    reqCastingQty:getVal('reqCastingQty'), dailyCasting:getVal('dailyCasting'), castingDays:getVal('castingDays'),
+    skipSunday:getVal('skipSunday'), totalProdDays:document.getElementById('totalProdDays').textContent,
+    deliveryDate:document.getElementById('deliveryDateBig').textContent
+  };
+}
+const FIELD_KEYS = Object.keys(collectFormData());
+
+document.getElementById('newBtn').addEventListener('click',()=>{
+  document.querySelectorAll('input:not([readonly])').forEach(i=>i.value='');
+  setVal('stockQty','0'); setVal('mouldReady','No'); setVal('dailyCasting','100'); setVal('skipSunday','Yes');
+  setVal('category','VITREOUS CHINA'); setVal('family','WASH BASIN V.C'); setVal('ls','LARGE');
+  setVal('colour','WHITE'); setVal('clayLoss','0.10'); setVal('firingYield','0.85'); setVal('firingLoss','0.15');
+  ['itemName','reqCasting','reqCastingQty','castingDays','balanceToMake'].forEach(id=>setVal(id,''));
+  setVal('docNo', generateDocNo());
+  STAGES.forEach(stage=>{
+    if(stage.key==='casting') return;
+    setVal('day-'+stage.key, stage.days);
+  });
+  clearDraft();
+  calcAll();
+});
+
+/* ============ PRINT ============ */
+document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+/* ============ SHARE TEXT BUILDER ============ */
+function buildShareText(){
+  const d = collectFormData();
+  return `🏺 CERAMIC PRODUCTION ORDER\n`+
+    `================================\n`+
+    `Doc No: ${d.docNo||'-'}\nOrder No: ${d.orderNo||'-'}\nOrder Date: ${d.orderDate||'-'}\n`+
+    `Quote No: ${d.quoteNo||'-'}\nCustomer: ${d.customerName||'-'}\nP.O. No: ${d.poNo||'-'}\nStatus: ${d.status||'-'}\n`+
+    `--------------------------------\n`+
+    `Item Code: ${d.itemCode||'-'}\nItem Name: ${d.itemName||'-'}\nCategory: ${d.category||'-'}\n`+
+    `Colour: ${d.colour||'-'}\nFamily: ${d.family||'-'}\nL/S: ${d.ls||'-'}\n`+
+    `--------------------------------\n`+
+    `Sales Order Qty: ${d.salesQty||'-'}\nStock Qty: ${d.stockQty||'-'}\nBalance to Make: ${d.balanceToMake||'-'}\n`+
+    `Mould Ready?: ${d.mouldReady||'-'}\nDaily Casting Qty: ${d.dailyCasting||'-'}\nCasting Days: ${d.castingDays||'-'}\n`+
+    `Skip Sunday?: ${d.skipSunday||'-'}\n`+
+    `--------------------------------\n`+
+    `Total Production Days: ${d.totalProdDays||'-'}\n`+
+    `🚚 DELIVERY DATE: ${d.deliveryDate||'-'}\n`;
+}
+
+document.getElementById('whatsappBtn').addEventListener('click', ()=>{
+  const text = buildShareText();
+  if(navigator.share){
+    navigator.share({title:'Ceramic Production Order', text}).catch(()=>{});
+  } else {
+    window.open('https://wa.me/?text='+encodeURIComponent(text), '_blank');
+  }
+});
+
+document.getElementById('emailBtn').addEventListener('click', ()=>{
+  const text = buildShareText();
+  const subject = 'Ceramic Production Order - '+ (getVal('customerName')||'');
+  window.location.href = 'mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text);
+});
+
+/* ============ GOOGLE FORM INTEGRATION (pre-configured, no Apps Script needed) ============ */
+const GFORM_CONFIG = {
+  actionUrl: "https://docs.google.com/forms/d/e/1FAIpQLScEDv5QELuYtlOODKTqfKBZAPzPnTlrg4a-8YQIpFWmUl09lw/formResponse",
+  map: {
+    "docNo":"entry.2045479705","orderNo":"entry.435413920","orderDate":"entry.1998028078","quoteNo":"entry.510578087",
+    "customerName":"entry.934095217","poNo":"entry.222535600","status":"entry.596952189","itemCode":"entry.221602364",
+    "itemName":"entry.636121822","category":"entry.1814740863","colour":"entry.863576037","family":"entry.2084237975",
+    "ls":"entry.2039896138","clayLoss":"entry.1028364486","firingYield":"entry.1869923256","firingLoss":"entry.2109289846",
+    "salesQty":"entry.1489654612","stockQty":"entry.1268716120","balanceToMake":"entry.189671400","reqCasting":"entry.38314248",
+    "reqCastingQty":"entry.1404135589","mouldReady":"entry.273178309","dailyCasting":"entry.733901400","castingDays":"entry.490151312",
+    "skipSunday":"entry.1951394151","totalProdDays":"entry.1234806201","deliveryDate":"entry.1882150465"
+  }
+};
+
+document.getElementById('sendToFormBtn').addEventListener('click', async ()=>{
+  const statusEl = document.getElementById('sendStatus');
+  const data = collectFormData();
+  const params = new URLSearchParams();
+  Object.entries(GFORM_CONFIG.map).forEach(([fieldKey, entryId])=>{
+    params.append(entryId, data[fieldKey] !== undefined ? data[fieldKey] : '');
+  });
+  try{
+    await fetch(GFORM_CONFIG.actionUrl, {method:'POST', mode:'no-cors', body:params});
+    statusEl.innerHTML = '<div class="status-msg ok">✓ Sent to Google Form. Check your linked Google Sheet (Form Responses) to confirm.</div>';
+  }catch(e){
+    statusEl.innerHTML = '<div class="status-msg err">✗ Could not send. Check your internet connection.</div>';
+  }
+});
+
+/* ============ AUTO-SAVE DRAFT ============ */
+const DRAFT_KEY = 'ceramic_draft';
+let draftSaveTimer = null;
+
+function collectDraft(){
+  const data = collectFormData();
+  const stageDays = {};
+  STAGES.forEach(s=>{ if(s.key!=='casting') stageDays[s.key] = getVal('day-'+s.key); });
+  return {data, stageDays, savedAt: new Date().toISOString()};
+}
+
+function saveDraft(){
+  clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(collectDraft())); }catch(e){}
+  }, 300);
+}
+
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+}
+
+function restoreDraft(draft){
+  Object.entries(draft.data).forEach(([k,v])=>{
+    const el = document.getElementById(k);
+    if(el && (el.tagName==='INPUT' || el.tagName==='SELECT')) el.value = v;
+  });
+  if(draft.stageDays){
+    Object.entries(draft.stageDays).forEach(([k,v])=>{
+      const el = document.getElementById('day-'+k);
+      if(el) el.value = v;
+    });
+  }
+  calcAll();
+}
+
+function draftHasContent(draft){
+  const d = draft.data;
+  return !!(d.orderNo || d.customerName || d.itemCode || d.orderDate);
+}
+
+document.getElementById('draftYesBtn').addEventListener('click', ()=>{
+  try{
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if(draft) restoreDraft(draft);
+  }catch(e){}
+  document.getElementById('draftBanner').style.display = 'none';
+});
+
+document.getElementById('draftNoBtn').addEventListener('click', ()=>{
+  clearDraft();
+  document.getElementById('draftBanner').style.display = 'none';
+});
+
+document.querySelector('main').addEventListener('input', (e)=>{
+  if(e.target.closest('#draftBanner')) return;
+  saveDraft();
+});
+
+/* ============ INIT ============ */
+(function init(){
+  setVal('stockQty','0');
+  setVal('docNo', generateDocNo());
+  renderTimelineSkeleton();
+  calcAll();
+  try{
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(raw){
+      const draft = JSON.parse(raw);
+      if(draftHasContent(draft)) document.getElementById('draftBanner').style.display = 'block';
+      else clearDraft();
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
