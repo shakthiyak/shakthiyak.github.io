@@ -118,6 +118,8 @@
   table.log input[type=date]{width:118px;}
   table.log input[type=number]{width:56px;text-align:right;}
   table.log tr.off td{opacity:0.4;}
+  table.log tr.sunday:not(.off) td{background:rgba(251,191,36,0.08);}
+  table.log tr.sunday:not(.off) td:nth-child(2){color:#fbbf24;font-weight:700;}
   table.log tr.hit td{background:var(--blue-bg);}
   table.log td.cum{text-align:right;color:var(--muted);}
   table.log .rm{border:none;background:none;color:var(--dim);cursor:pointer;font-size:15px;}
@@ -410,7 +412,13 @@ let logEntries = [];
 function $(id){ return document.getElementById(id); }
 function fmt(n,d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:d}); }
 function pct(n){ return (n*100).toFixed(1)+'%'; }
-function todayISO(){ return new Date().toISOString().slice(0,10); }
+function toISODateLocal(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function todayISO(){ return toISODateLocal(new Date()); }
 
 // ---- init header fields ----
 $('statusDate').value = todayISO();
@@ -431,6 +439,20 @@ WIP_STAGES.forEach(s=>{
   `;
   wipBody.appendChild(tr);
 });
+
+function calcDaysNeeded(startDateStr, dailyQty, castingReq, skipSundays){
+  if(dailyQty<=0 || castingReq<=0) return 0;
+  let cum=0, days=0, guard=0;
+  let d=new Date(startDateStr+'T00:00:00');
+  while(cum<castingReq && guard<20000){
+    const isOff = skipSundays && d.getDay()===0;
+    if(!isOff) cum+=dailyQty;
+    days++;
+    d.setDate(d.getDate()+1);
+    guard++;
+  }
+  return days;
+}
 
 function calculate(){
   const f1a=+$('f1a').value||0, f1r=+$('f1r').value||0, f1l=+$('f1l').value||0;
@@ -488,7 +510,9 @@ function calculate(){
   // auto-calc Days to generate = Casting Required / Daily Casting Qty
   const dailyQtyForDays=+$('dailyQty').value||0;
   if(dailyQtyForDays>0 && castingReq>0){
-    $('logDays').value = Math.ceil(castingReq/dailyQtyForDays);
+    const startForCalc = $('logStart').value || todayISO();
+    const skipSundays = !$('castWeekends').checked;
+    $('logDays').value = calcDaysNeeded(startForCalc, dailyQtyForDays, castingReq, skipSundays);
   }
 
   renderLog(castingReq);
@@ -497,9 +521,12 @@ function calculate(){
 
 // ---- casting log ----
 const logBody=$('logBody');
+function isSunday(dateStr){
+  return new Date(dateStr+'T00:00:00').getDay()===0;
+}
 function isWeekendOff(dateStr){
   if($('castWeekends').checked) return false;
-  return new Date(dateStr+'T00:00:00').getDay()===0; // Sunday
+  return isSunday(dateStr);
 }
 
 function renderLog(castingReq){
@@ -515,14 +542,16 @@ function renderLog(castingReq){
   cum=0;
   sorted.forEach((e,i)=>{
     const off=isWeekendOff(e.date);
+    const sunday=isSunday(e.date);
     const effQty = off ? 0 : (+e.qty||0);
     cum+=effQty;
     const tr=document.createElement('tr');
     if(off) tr.classList.add('off');
+    if(sunday) tr.classList.add('sunday');
     if(hitIndex===i) tr.classList.add('hit');
     tr.innerHTML=`
       <td><input type="date" value="${e.date}" data-idx="${i}" class="logDate"></td>
-      <td>${off?'SUNDAY':''}</td>
+      <td>${sunday?'SUNDAY':''}</td>
       <td><input type="number" value="${e.qty}" data-idx="${i}" class="logQty" ${off?'disabled':''}></td>
       <td class="cum">${fmt(cum,2)}</td>
       <td><button class="rm" data-idx="${i}">×</button></td>
@@ -603,7 +632,7 @@ $('genLog').addEventListener('click', ()=>{
   logEntries=[];
   let d=new Date(start+'T00:00:00');
   for(let i=0;i<days;i++){
-    const iso=d.toISOString().slice(0,10);
+    const iso=toISODateLocal(d);
     const isOff = !castWeekends && d.getDay()===0;
     logEntries.push({date:iso, qty: isOff?0:dailyQty});
     d.setDate(d.getDate()+1);
@@ -616,7 +645,7 @@ $('addRow').addEventListener('click', ()=>{
   const base=last?new Date(last.date+'T00:00:00'):new Date();
   base.setDate(base.getDate()+1);
   const dailyQty=+$('dailyQty').value || 0;
-  logEntries.push({date:base.toISOString().slice(0,10), qty:dailyQty});
+  logEntries.push({date:toISODateLocal(base), qty:dailyQty});
   calculate();
 });
 
