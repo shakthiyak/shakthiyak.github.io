@@ -66,13 +66,17 @@
             .clc-main-container { flex-direction: column; }
             .tool-header { flex-direction: column; gap: 15px; text-align: center; }
         }
+        @media (max-width: 480px) {
+            .clc-input-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="index.html" class="logo">
-            <img src="sc-logo.png" alt="SC. Portal logo">        </a>
+            <img src="sc-logo.png" alt="SC. Portal logo">
+        </a>
         <ul class="nav-tabs">
             <li><a href="index.html">Home</a></li>
             <li><a href="tools.html" class="active">Production Tools</a></li>
