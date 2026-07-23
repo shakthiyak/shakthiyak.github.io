@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceramic Tile Manufacturing · Field Guide</title>
+<meta name="description" content="A practical field guide to ceramic tile manufacturing for newcomers: the production flow, product families, machinery, and terminology.">
+<meta property="og:title" content="Ceramic Tile Manufacturing · Field Guide">
+<meta property="og:description" content="A practical field guide to ceramic tile manufacturing for newcomers.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel-2:#151f32;
+    --accent:#38bdf8; --accent-2:#0ea5e9; --accent-3:#818cf8;
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --line:rgba(255,255,255,0.08); --ok:#22c55e; --warn:#f87171;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+  .subnav{display:flex;gap:22px;flex-wrap:wrap;padding:12px 50px;background:rgba(15,23,42,0.6);border-bottom:1px solid var(--line);font-size:.82rem;}
+  .subnav a{color:var(--muted);text-decoration:none;}
+  .subnav a:hover{color:var(--accent);}
+  @media (max-width:600px){.subnav{padding:12px 20px;gap:14px;}}
+  .card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;}
+  main{max-width:1000px;margin:0 auto;padding:0 20px 80px;}
+
+  .hero{padding:70px 0 50px;text-align:left;display:flex;gap:36px;align-items:center;justify-content:space-between;}
+  .hero-text{flex:1;min-width:280px;}
+  .hero .eyebrow{color:var(--accent);font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;}
+  .hero h1{font-size:2.4rem;font-weight:800;margin:0 0 16px;line-height:1.15;}
+  .hero h1 span{background:linear-gradient(to right,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--muted);font-size:1.05rem;max-width:640px;margin:0;}
+  .hero-art{flex-shrink:0;width:220px;height:220px;}
+  .hero-art svg{width:100%;height:100%;}
+  @media (max-width:760px){.hero{flex-direction:column;}.hero-art{width:160px;height:160px;order:-1;}}
+
+  section{padding:56px 0;border-top:1px solid var(--line);}
+  section h2{font-size:1.5rem;font-weight:700;margin:0 0 8px;}
+  section .section-sub{color:var(--muted);font-size:.95rem;margin:0 0 32px;max-width:640px;}
+
+  .process{display:flex;flex-direction:column;gap:0;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:20px;position:relative;padding-bottom:28px;}
+  .step:last-child{padding-bottom:0;}
+  .step .num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent-2),var(--accent-3));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;position:relative;z-index:2;}
+  .step .line{position:absolute;left:19px;top:40px;bottom:-28px;width:2px;background:var(--line);}
+  .step:last-child .line{display:none;}
+  .step .content{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .step .content h3{margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:10px;}
+  .step .content p{margin:0;color:var(--muted);font-size:.9rem;}
+  .step .tag{display:inline-block;font-size:.68rem;font-weight:700;color:var(--accent);background:rgba(56,189,248,0.1);padding:2px 8px;border-radius:6px;margin-left:8px;letter-spacing:.03em;}
+  .step-icon{flex-shrink:0;width:26px;height:26px;padding:4px;border-radius:8px;background:rgba(56,189,248,0.1);color:var(--accent);}
+  .step-icon svg{width:100%;height:100%;display:block;}
+
+  .flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:10px;}
+  .flow-step{flex:1;min-width:130px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 14px;position:relative;text-align:center;}
+  .flow-step .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent-2),var(--accent-3));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;color:#fff;margin:0 auto 10px;}
+  .flow-step h3{margin:0 0 6px;font-size:.92rem;}
+  .flow-step p{margin:0;color:var(--muted);font-size:.76rem;line-height:1.45;}
+  .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:1.2rem;padding:0 4px;flex-shrink:0;}
+  @media (max-width:900px){
+    .flow{flex-direction:column;}
+    .flow-arrow{transform:rotate(90deg);padding:6px 0;}
+  }
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:640px){.compare{grid-template-columns:1fr;}}
+  .compare-card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:14px;padding:22px;}
+  .compare-card h3{margin:0 0 4px;font-size:1.1rem;color:var(--accent);}
+  .compare-card .full-name{color:var(--dim);font-size:.78rem;margin-bottom:14px;}
+  .compare-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem;}
+  .compare-card li{margin-bottom:6px;}
+
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .product-chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.88rem;}
+  .product-chip .icon{font-size:1.3rem;display:block;margin-bottom:6px;}
+  .product-chip .name{font-weight:600;}
+  .product-chip .body-type{color:var(--dim);font-size:.72rem;}
+
+  .machine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+  .machine-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .machine-card h3{margin:0 0 6px;font-size:1rem;color:var(--accent-3);}
+  .machine-card p{margin:0;color:var(--muted);font-size:.85rem;}
+
+  .glossary-search{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:rgba(15,23,42,0.6);color:var(--ink);font-size:.95rem;margin-bottom:20px;}
+  .glossary-search:focus{outline:2px solid var(--accent);}
+  .glossary-list{display:grid;gap:2px;}
+  .gterm{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px;}
+  .gterm .term{font-weight:700;color:var(--accent);font-size:.92rem;}
+  .gterm .def{color:var(--muted);font-size:.86rem;margin-top:4px;}
+  .gterm.hidden{display:none;}
+
+  .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .metric-card{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;}
+  .metric-card .value{font-size:1.6rem;font-weight:800;color:var(--accent);}
+  .metric-card .label{color:var(--muted);font-size:.82rem;margin-top:4px;}
+  .metric-card .note{color:var(--dim);font-size:.72rem;margin-top:8px;}
+  .metric-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,0.3),0 8px 24px rgba(56,189,248,0.12);position:relative;}
+  .metric-card .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#0f172a;font-size:.65rem;font-weight:800;padding:2px 10px;border-radius:8px;letter-spacing:.03em;}
+
+  .callout{background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:12px;padding:16px 20px;font-size:.88rem;color:var(--muted);margin-top:24px;}
+  .subhead{font-size:.75rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin:36px 0 14px;}
+  .subhead:first-child{margin-top:0;}
+  .branch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:760px){.branch-grid{grid-template-columns:1fr;}}
+  .branch-col{border-radius:14px;padding:16px;border:1px solid var(--line);}
+  .branch-col.grade-a{background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.25);}
+  .branch-col.refire{background:rgba(234,179,8,0.06);border-color:rgba(234,179,8,0.25);}
+  .branch-col.loss{background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.25);}
+  .branch-col h4{margin:0 0 10px;font-size:.9rem;}
+  .branch-col.grade-a h4{color:var(--ok);}
+  .branch-col.refire h4{color:#eab308;}
+  .branch-col.loss h4{color:var(--warn);}
+  .branch-col ol{margin:0;padding-left:18px;color:var(--muted);font-size:.82rem;}
+  .branch-col ol li{margin-bottom:6px;}
+  .loop-note{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px;font-size:.85rem;color:var(--muted);}
+  .loop-note .icon{flex-shrink:0;}
+  .support-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
+  .support-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center;}
+  .support-card .icon{font-size:1.3rem;display:block;margin-bottom:6px;}
+  .support-card .name{font-weight:600;font-size:.88rem;}
+  .support-card .desc{color:var(--dim);font-size:.72rem;margin-top:4px;}
+  .callout b{color:var(--ink);}
+
+  footer{text-align:center;color:var(--dim);font-size:.8rem;padding:30px 20px;border-top:1px solid var(--line);}
+  a.inline-link{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">
+        <img src="sc-logo.png" alt="SC. Portal logo">    </a>
+    <ul class="nav-tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tools.html">Production Tools</a></li>
+        <li><a href="ceramic_news.html">Ceramic News</a></li>
+        <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+        <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+        <li><a href="ceramic_tile_field_guide.html" class="active">Tile Field Guide</a></li>
+    </ul>
+</nav>
+
+<div class="subnav">
+  <a href="#full-flow">Production Process</a>
+  <a href="#families">Product Types</a>
+  <a href="#machinery">Machinery</a>
+  <a href="#defects">Common Defects</a>
+  <a href="#glossary">Glossary</a>
+  <a href="#metrics">Key Metrics</a>
+</div>
+
+<main>
+
+  <div class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">New to the tile floor?</div>
+      <h1>From raw powder to a <span>rectified porcelain tile</span> — everything a newcomer needs to know.</h1>
+      <p>A practical field guide to ceramic tile manufacturing: the production flow, the product families, the machines on the floor, and the terms everyone around you already knows.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="tileGrad1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <linearGradient id="tileGrad2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#6366f1"/>
+          </linearGradient>
+        </defs>
+        <g transform="translate(20,30)">
+          <rect x="0" y="90" width="150" height="18" rx="3" fill="url(#tileGrad1)" opacity="0.9" transform="skewX(-20)"/>
+          <rect x="0" y="60" width="150" height="18" rx="3" fill="url(#tileGrad2)" opacity="0.9" transform="skewX(-20)"/>
+          <rect x="0" y="30" width="150" height="18" rx="3" fill="url(#tileGrad1)" opacity="0.9" transform="skewX(-20)"/>
+          <rect x="0" y="0" width="150" height="18" rx="3" fill="url(#tileGrad2)" opacity="0.9" transform="skewX(-20)"/>
+          <g stroke="#f8fafc" stroke-opacity="0.35" stroke-width="1.5">
+            <line x1="30" y1="0" x2="0" y2="18" transform="skewX(-20)"/>
+            <line x1="30" y1="30" x2="0" y2="48" transform="skewX(-20)"/>
+            <line x1="30" y1="60" x2="0" y2="78" transform="skewX(-20)"/>
+            <line x1="30" y1="90" x2="0" y2="108" transform="skewX(-20)"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <section id="families">
+    <h2>Product Families</h2>
+    <p class="section-sub">Almost every tile on the floor belongs to one of two broad families. Which one depends on density, water absorption, and where the tile is meant to go.</p>
+    <div class="compare">
+      <div class="compare-card">
+        <h3>Glazed Ceramic Tile</h3>
+        <div class="full-name">Wall &amp; Floor Tile — Higher Porosity</div>
+        <ul>
+          <li>Red or white body, more porous before glazing seals the surface</li>
+          <li>Typical products: wall tiles, light-traffic floor tiles</li>
+          <li>Water absorption class BIII / BIIb (per ISO 13006) — lighter, generally cheaper</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h3>Porcelain / Vitrified Tile</h3>
+        <div class="full-name">GVT (Glazed) &amp; FBV (Full Body) — Low Porosity</div>
+        <ul>
+          <li>Dense, vitrified body, water absorption under 0.5% (class BIa)</li>
+          <li>Typical products: heavy-traffic floors, outdoor paving, large-format slabs</li>
+          <li>Often rectified (precision-cut edges) for near-zero grout lines; FBV carries colour through the whole body so chips don't show</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="full-flow">
+    <h2>The Production Process</h2>
+    <p class="section-sub">A single tile passes through around a dozen stages before it's ready to ship — including grading branches, reclaim loops, and returns. This reflects a typical fast-fire tile process chart, not a textbook simplification.</p>
+
+    <div class="card" style="overflow-x:auto;margin-bottom:32px;padding:20px;">
+      <svg viewBox="0 0 960 1470" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:Inter,sans-serif;">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+  </marker>
+</defs>
+<style>
+  .flow-edge{ stroke-dasharray:8,6; animation:flowmove 1.2s linear infinite; }
+  @keyframes flowmove{ to{ stroke-dashoffset:-28; } }
+</style>
+
+<path class="flow-edge" d="M190,90 L190,120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M290,145 L320,145 L320,65 L350,65" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,90 L460,200" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M820,90 L820,360" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,250 L460,280" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,330 L460,360" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M570,385 L720,385" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M820,410 L820,470 L570,470" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,410 L460,440" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,490 L460,520" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,570 L460,600" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,650 L460,680" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,730 L460,760" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M460,810 L460,830 L210,830 L210,860" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,810 L460,860" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,810 L460,830 L810,830 L810,860" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M210,910 L210,940" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,910 L460,940" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M810,910 L810,940" fill="none" stroke="#f87171" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M210,1000 L210,1155 L350,1155" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,990 L460,1130" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M810,990 L810,1020" fill="none" stroke="#f87171" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M810,1145 L660,1145 L660,1155 L570,1155" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,1180 L460,1210" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M460,1260 L460,1290" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M130,1260 L130,1290" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M220,1315 L260,1315 L260,1155 L350,1155" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M130,1340 L130,1370" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+<path class="flow-edge" d="M350,210 L300,210 L300,305 L280,305" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M60,305 L20,305 L20,15 L190,15 L190,40" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="flow-edge" d="M570,460 L950,460 L950,65 L920,65" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow)"/>
+
+<rect x="90" y="40" width="200" height="50" rx="10" fill="rgba(129,140,248,0.10)" stroke="#818cf8" stroke-width="1.5"/>
+<text x="190" y="62.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Raw Material</text>
+<text x="190" y="75.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Grinding (Wet Mill)</text>
+
+<rect x="90" y="120" width="200" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="190" y="149" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Spray Drying</text>
+
+<rect x="350" y="40" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="62.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Powder Storage</text>
+<text x="460" y="75.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">&amp; Ageing (Silos)</text>
+
+<rect x="350" y="200" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="229" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Pressing (Hydraulic)</text>
+
+<rect x="350" y="280" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="309" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Drying (Vertical Dryer)</text>
+
+<rect x="350" y="360" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="389" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Bisque Inspection</text>
+
+<rect x="350" y="440" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="469" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Glazing (Bell/Disc)</text>
+
+<rect x="350" y="520" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="549" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Digital Decoration</text>
+
+<rect x="350" y="600" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="622" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Kiln Loading</text>
+<text x="460" y="635" text-anchor="middle" font-size="11" font-weight="500" fill="#94a3b8">(Fast-Fire Roller Kiln)</text>
+
+<rect x="350" y="680" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="709" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Kiln Unloading</text>
+
+<rect x="350" y="760" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="789" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Sorting &amp; Grading</text>
+
+<rect x="720" y="360" width="200" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="820" y="389" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Engobe Application</text>
+
+<rect x="720" y="40" width="200" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="820" y="69" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Frit &amp; Glaze Prep.</text>
+
+<rect x="120" y="860" width="180" height="50" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" stroke-width="1.5"/>
+<text x="210" y="889" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Grade 1 (Premium)</text>
+
+<rect x="370" y="860" width="180" height="50" rx="10" fill="rgba(234,179,8,0.10)" stroke="#eab308" stroke-width="1.5"/>
+<text x="460" y="889" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Grade 2 (Commercial)</text>
+
+<rect x="720" y="860" width="180" height="50" rx="10" fill="rgba(248,113,113,0.10)" stroke="#f87171" stroke-width="1.5"/>
+<text x="810" y="889" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Reject / Broken</text>
+
+<rect x="120" y="940" width="180" height="60" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="210" y="967.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Rectification &amp;</text>
+<text x="210" y="980.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Polishing (GVT)</text>
+
+<rect x="370" y="940" width="180" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="962" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Quality Check</text>
+<text x="460" y="975" text-anchor="middle" font-size="11" font-weight="500" fill="#94a3b8">(Caliber &amp; Shade)</text>
+
+<rect x="720" y="940" width="180" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="810" y="969" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Crushing (Grog)</text>
+
+<rect x="720" y="1020" width="180" height="50" rx="10" fill="rgba(248,113,113,0.10)" stroke="#f87171" stroke-width="1.5"/>
+<text x="810" y="1049" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Disposed / Aggregate</text>
+
+<rect x="720" y="1120" width="180" height="50" rx="10" fill="rgba(129,140,248,0.10)" stroke="#818cf8" stroke-width="1.5"/>
+<text x="810" y="1142.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Delivery Order</text>
+<text x="810" y="1155.5" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">(from Sales)</text>
+
+<rect x="350" y="1130" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="1159" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Warehouse</text>
+
+<rect x="350" y="1210" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="1239" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Packing</text>
+
+<rect x="350" y="1290" width="220" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="460" y="1319" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Shipping</text>
+
+<rect x="40" y="1210" width="180" height="50" rx="10" fill="rgba(129,140,248,0.10)" stroke="#818cf8" stroke-width="1.5"/>
+<text x="130" y="1239" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Customer Return</text>
+
+<rect x="40" y="1290" width="180" height="50" rx="10" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="130" y="1319" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Inspection</text>
+
+<rect x="40" y="1370" width="180" height="50" rx="10" fill="rgba(248,113,113,0.10)" stroke="#f87171" stroke-width="1.5"/>
+<text x="130" y="1399" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">(Disposed)</text>
+
+<rect x="60" y="280" width="220" height="50" rx="10" fill="rgba(234,179,8,0.10)" stroke="#eab308" stroke-width="1.5"/>
+<text x="170" y="309" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Trim / Dust Reclaim</text>
+</svg>
+    </div>
+
+    <div class="subhead">Main Departments</div>
+    <div class="branch-grid">
+      <div class="branch-col" style="background:rgba(129,140,248,0.06);border-color:rgba(129,140,248,0.25);">
+        <h4 style="color:#818cf8;">⛏️ Body Preparation Line</h4>
+        <ol><li>Raw Material Grinding (Wet Ball Mill)</li><li>Spray Drying</li></ol>
+      </div>
+      <div class="branch-col" style="background:rgba(129,140,248,0.06);border-color:rgba(129,140,248,0.25);">
+        <h4 style="color:#818cf8;">📦 Powder Line</h4>
+        <ol><li>Powder Storage &amp; Ageing (Silos)</li></ol>
+      </div>
+      <div class="branch-col" style="background:rgba(129,140,248,0.06);border-color:rgba(129,140,248,0.25);">
+        <h4 style="color:#818cf8;">🎨 Glaze Line</h4>
+        <ol><li>Frit &amp; Glaze Preparation</li><li>Engobe Application</li></ol>
+      </div>
+    </div>
+    <div class="loop-note" style="margin-top:14px;"><span class="icon">🔀</span><span><b>Body Preparation</b> feeds the <b>Powder Line</b>, which in turn feeds <b>Pressing</b>. <b>Glaze Line</b> feeds <b>Engobe Application</b>, which rejoins the main line at <b>Glazing</b> — and reclaimed overspray loops back to <b>Frit &amp; Glaze Preparation</b> for reuse.</span></div>
+
+    <div class="subhead" style="margin-top:32px;">Main Line</div>
+    <div class="process">
+      <div class="step">
+        <div class="num">1</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M8 5v3"/><path d="M16 5v3"/><rect x="6" y="10" width="12" height="5" rx="1"/><path d="M12 15v4"/><path d="M8 19h8"/></svg></span>Pressing</h3><p>Aged powder from the silos is pressed at high pressure in a steel die (hydraulic press) to form the tile blank. Trim scrap and dust are reclaimed back to Raw Material Grinding (see Rework Loops below).</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h13a2.5 2.5 0 1 0-2-4"/><path d="M3 14h9a2 2 0 1 1-2 3.5"/><path d="M3 18h6"/></svg></span>Drying (Vertical Dryer)</h3><p>Removes residual moisture from the pressed tile before glazing, since any leftover moisture would cause defects when glaze hits the hot surface.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M20 20l-5.5-5.5"/></svg></span>Bisque Inspection</h3><p>The dried, unglazed tile is checked for cracks and dimension issues. It also branches off here to Engobe Application before rejoining the line.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">4</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 10.5a6 6 0 1 1-12 0C6 9.5 12 3 12 3z"/></svg></span>Glazing</h3><p>Glaze is applied by bell, disc, or waterfall application — fed by the main line and by the returning Engobe Application step.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">5</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg></span>Digital Decoration</h3><p>Inkjet printing lays down the pattern or design on the glazed surface before firing.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">6</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-3 4-3 8a3 3 0 0 0 6 0c0-1-1-2-1-2s2 1 2 4a5 5 0 1 1-10 0c0-5 4-6 4-10z"/></svg></span>Kiln Loading</h3><p>Decorated tiles are loaded into the fast-fire roller kiln.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">7</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="18" height="7" rx="1"/><path d="M12 3v7"/><path d="M9 7l3 3 3-3"/></svg></span>Kiln Unloading</h3><p>Fired tiles are removed from the kiln, ready for sorting.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">8</div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><path d="M12 9l-6 5"/><path d="M12 9l6 5"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/></svg></span>Sorting &amp; Grading</h3><p>Final sort into three outcomes: Grade 1, Grade 2, or Reject — see below.</p></div>
+      </div>
+    </div>
+
+    <div class="subhead">After Sorting — Three Outcomes</div>
+    <div class="branch-grid">
+      <div class="branch-col grade-a">
+        <h4>✅ Grade 1 (Premium)</h4>
+        <ol>
+          <li>Rectification &amp; Polishing (for GVT/Lappato lines)</li>
+          <li>→ Warehouse</li>
+        </ol>
+      </div>
+      <div class="branch-col refire">
+        <h4>🔶 Grade 2 (Commercial)</h4>
+        <ol>
+          <li>Quality Check (Caliber &amp; Shade Sort)</li>
+          <li>→ Warehouse, packed and labelled as commercial grade</li>
+        </ol>
+      </div>
+      <div class="branch-col loss">
+        <h4>❌ Reject / Broken</h4>
+        <ol>
+          <li>Crushed for grog recovery</li>
+          <li>Disposed or sold as aggregate — does not re-enter the line</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="subhead">Rework Loops</div>
+    <div class="loop-note"><span class="icon">♻️</span><span><b>Pressing → Raw Material Grinding:</b> unfired trim scrap and dust from pressing is reclaimed back into the wet mill instead of being wasted. Once a tile is fired and vitrified, though, it can no longer go back into slip — that's why Reject pieces are crushed for grog rather than reclaimed as raw material.</span></div>
+    <div class="loop-note"><span class="icon">♻️</span><span><b>Glazing ↔ Frit &amp; Glaze Preparation:</b> reclaimed overspray from the glazing line loops back into glaze preparation for reuse.</span></div>
+
+    <div class="subhead">Warehouse, Packing &amp; Returns</div>
+    <div class="process">
+      <div class="step">
+        <div class="num">→</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span>Warehouse</h3><p>Receives Grade 1 and Grade 2 stock, plus Delivery Orders from Sales.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">→</div><div class="line"></div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span>Packing</h3><p>Orders are packed for dispatch — often "nested" with matching batch/shade numbers so a room's tiles come from one firing.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">→</div>
+        <div class="content"><h3><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="12" height="8" rx="1"/><path d="M14 11h4l3 3v3h-7"/><circle cx="6" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg></span>Shipping</h3><p>Packed goods are dispatched to the customer.</p></div>
+      </div>
+    </div>
+    <div class="loop-note" style="margin-top:16px;"><span class="icon">↩️</span><span><b>Customer Return → Inspection:</b> returned goods are inspected — good condition items return to Warehouse stock, bad condition items are disposed.</span></div>
+
+    <div class="subhead">Support Functions</div>
+    <div class="support-grid">
+      <div class="support-card"><span class="icon">🔍</span><span class="name">QC</span><div class="desc">Quality oversight across inspection points</div></div>
+      <div class="support-card"><span class="icon">🧪</span><span class="name">Laboratory</span><div class="desc">Body, glaze, and frit testing</div></div>
+      <div class="support-card"><span class="icon">🛠️</span><span class="name">Maintenance</span><div class="desc">Equipment upkeep across the line</div></div>
+    </div>
+  </section>
+
+  <section id="products">
+    <h2>Common Product Types</h2>
+    <p class="section-sub">The vocabulary you'll hear on any tile production floor.</p>
+    <div class="product-grid">
+      <div class="product-chip"><span class="icon">🧱</span><span class="name">Wall Tile</span><div class="body-type">Glazed Ceramic</div></div>
+      <div class="product-chip"><span class="icon">⬛</span><span class="name">Floor Tile</span><div class="body-type">Glazed Ceramic or Porcelain</div></div>
+      <div class="product-chip"><span class="icon">💠</span><span class="name">GVT</span><div class="body-type">Glazed Vitrified Tile</div></div>
+      <div class="product-chip"><span class="icon">🔷</span><span class="name">FBV</span><div class="body-type">Full Body Vitrified</div></div>
+      <div class="product-chip"><span class="icon">🗺️</span><span class="name">Porcelain Slab</span><div class="body-type">Large format</div></div>
+      <div class="product-chip"><span class="icon">🔳</span><span class="name">Mosaic</span><div class="body-type">Small-format sheet-mounted</div></div>
+      <div class="product-chip"><span class="icon">🪜</span><span class="name">Step / Riser Tile</span><div class="body-type">Anti-skid profile</div></div>
+      <div class="product-chip"><span class="icon">📏</span><span class="name">Skirting / Border</span><div class="body-type">Trim piece</div></div>
+      <div class="product-chip"><span class="icon">🅿️</span><span class="name">Parking Tile</span><div class="body-type">High R-rating, anti-skid</div></div>
+      <div class="product-chip"><span class="icon">🌳</span><span class="name">Wood-look Plank</span><div class="body-type">Digitally printed porcelain</div></div>
+    </div>
+  </section>
+
+  <section id="machinery">
+    <h2>Machinery You'll Hear Named</h2>
+    <p class="section-sub">Equipment brand names get used like common nouns on the floor — worth knowing what each one actually does.</p>
+    <div class="machine-grid">
+      <div class="machine-card">
+        <h3>SACMI</h3>
+        <p>Italian manufacturer best known in this industry for spray dryers and hydraulic presses — the machines that turn slurry into powder and powder into a pressed tile blank.</p>
+      </div>
+      <div class="machine-card">
+        <h3>SITI B&amp;T / System Ceramics</h3>
+        <p>Associated with kilns and complete glazing lines — the equipment that fires the ware and applies glaze with consistent, repeatable coverage.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Durst / EFI Cretaprint</h3>
+        <p>Names that come up around digital inkjet decoration — the printers that lay down the pattern or design on the tile surface before firing.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Barbieri</h3>
+        <p>Associated with spectrophotometer-based shade sorting — automated equipment that groups finished tiles into consistent colour batches.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Roller Kiln (Fast-Fire)</h3>
+        <p>Not a brand — the firing furnace itself. Tiles ride on rollers through a single, fast firing cycle (often under an hour), unlike the slower shuttle kilns used elsewhere in ceramics.</p>
+      </div>
+    </div>
+    <div class="callout">Machine names and their exact roles vary by plant and supplier contracts — treat these as general orientation, not a substitute for your own factory's equipment list.</div>
+  </section>
+
+  <section id="defects">
+    <h2>Common Defects</h2>
+    <p class="section-sub">The defects QC is actually looking for at Bisque Inspection and Sorting &amp; Grading — what they look like, and what usually causes them.</p>
+    <div class="machine-grid">
+      <div class="machine-card">
+        <h3>Pinholing</h3>
+        <p>Tiny holes in the fired glaze surface, caused by trapped air or gas escaping through the glaze during firing. Caught at Sorting &amp; Grading.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Crawling</h3>
+        <p>Glaze pulls back and bunches up, leaving bare patches of exposed body. Usually caused by dust, grease, or moisture on the surface before spraying.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Crazing</h3>
+        <p>A fine network of hairline cracks across the glaze surface, caused by a mismatch between how much the glaze and the body shrink during cooling.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Black Core (Black Coring)</h3>
+        <p>A dark grey or black band left in the centre of the tile, from organic matter or sulphur not fully burning out before the fast firing cycle seals the surface.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Warping / Bowing</h3>
+        <p>The tile loses its true flatness — often from uneven drying, uneven kiln heat, or inconsistent pressing density across the tile.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Lamination / Delamination</h3>
+        <p>Layers separate inside the body, usually from air trapped in the powder during pressing that couldn't escape before the die closed.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Chipping / Edge Damage</h3>
+        <p>Small chips at corners or edges from handling, mostly after firing when the tile is at its hardest but also most brittle.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Shade Variation</h3>
+        <p>Colour differs slightly between tiles from the same or different batches, from small shifts in glaze application, firing temperature, or raw material lots.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Caliber (Size) Variation</h3>
+        <p>The fired tile's actual size drifts from its nominal size, mainly from shrinkage variation. Sorted into caliber groups so a room's tiles fit together evenly.</p>
+      </div>
+      <div class="machine-card">
+        <h3>Efflorescence</h3>
+        <p>A whitish salt deposit that migrates to the surface, usually appearing after installation as moisture carries soluble salts from the body or adhesive outward.</p>
+      </div>
+    </div>
+    <div class="callout"><b>Note:</b> defect names and root causes can vary slightly by plant and by whoever trained the QC team — this is the general pattern used across the industry, not a substitute for your own factory's defect catalogue.</div>
+  </section>
+
+  <section id="glossary">
+    <h2>Glossary</h2>
+    <p class="section-sub">Type to filter.</p>
+    <input class="glossary-search" id="glossarySearch" placeholder="Search a term, e.g. 'rectified'...">
+    <div class="glossary-list" id="glossaryList">
+      <div class="gterm"><div class="term">Slip / Slurry</div><div class="def">Liquid clay-and-mineral mixture produced by wet ball milling, before it's spray dried into powder.</div></div>
+      <div class="gterm"><div class="term">Spray Dried Powder</div><div class="def">Fine, free-flowing granulate made by atomising slurry in a spray dryer — the feedstock for pressing.</div></div>
+      <div class="gterm"><div class="term">Green Tile</div><div class="def">A pressed but not-yet-fired tile, still fragile and reworkable.</div></div>
+      <div class="gterm"><div class="term">Bisque</div><div class="def">Dried, unglazed tile checked at Bisque Inspection before glaze and decoration are applied.</div></div>
+      <div class="gterm"><div class="term">Engobe</div><div class="def">An opaque base coat applied before the glaze, used to mask the body colour or improve glaze adhesion.</div></div>
+      <div class="gterm"><div class="term">Frit</div><div class="def">Pre-melted, powdered glass used as a base ingredient in glaze — melted and quenched in advance so the glaze fires predictably.</div></div>
+      <div class="gterm"><div class="term">Digital / Inkjet Decoration</div><div class="def">Printing the surface pattern with ceramic ink via inkjet heads, rather than screen printing or rotocolour rollers.</div></div>
+      <div class="gterm"><div class="term">Rectified / Rectification</div><div class="def">Tiles with edges precision-ground after firing to an exact, uniform size — allowing very thin grout lines.</div></div>
+      <div class="gterm"><div class="term">Caliber / Calibration</div><div class="def">The actual fired size group a tile falls into after shrinkage — tiles are sorted by caliber so a batch lays flush.</div></div>
+      <div class="gterm"><div class="term">Shade / Tono</div><div class="def">The colour batch a tile is sorted into — tiles from the same shade group are meant to be installed together.</div></div>
+      <div class="gterm"><div class="term">Water Absorption Class</div><div class="def">ISO 13006 grouping (BIa, BIb, BIIa, BIIb, BIII) ranking tiles from least porous (BIa, porcelain) to most porous (BIII, wall tile).</div></div>
+      <div class="gterm"><div class="term">PEI Rating</div><div class="def">A I–V scale (Porcelain Enamel Institute) rating a glazed tile's resistance to surface abrasion — higher numbers suit heavier foot traffic.</div></div>
+      <div class="gterm"><div class="term">R-Rating</div><div class="def">A slip-resistance rating (R9–R13) used mainly for floor and outdoor tiles, based on a ramp test.</div></div>
+      <div class="gterm"><div class="term">Lappato</div><div class="def">A semi-polished finish — the surface is lightly ground to bring out a soft sheen without full mirror polish.</div></div>
+      <div class="gterm"><div class="term">GVT (Glazed Vitrified Tile)</div><div class="def">A vitrified (low-porosity) body with a glazed surface on top — see Product Families above.</div></div>
+      <div class="gterm"><div class="term">FBV (Full Body Vitrified)</div><div class="def">A vitrified tile where colour and pattern run through the entire body, so chips and wear don't reveal a different colour underneath.</div></div>
+      <div class="gterm"><div class="term">MOR (Modulus of Rupture)</div><div class="def">A standard measure of a fired tile's breaking strength, tested by loading a sample until it fractures.</div></div>
+      <div class="gterm"><div class="term">Nesting</div><div class="def">Packing tiles of two related sizes together in the same box to fill space efficiently during shipping.</div></div>
+      <div class="gterm"><div class="term">Grog</div><div class="def">Crushed, pre-fired ceramic material recovered from rejects — reused as an aggregate rather than fed back into fresh slip.</div></div>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <h2>Numbers You'll See Everywhere</h2>
+    <p class="section-sub">These show up in planning sheets constantly — here's what they mean in plain terms.</p>
+    <div class="metric-grid">
+      <div class="metric-card featured">
+        <div class="badge">★ Key Metric</div>
+        <div class="value">Water Absorption %</div>
+        <div class="label">How porous the fired body is</div>
+        <div class="note">Sets the tile's classification (BIa–BIII) and which applications it's suitable for — floors, walls, or outdoor use.</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">Firing Shrinkage %</div>
+        <div class="label">Green-to-fired size reduction</div>
+        <div class="note">Die design must oversize the pattern to compensate, and it drives caliber sorting after firing.</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">MOR (Breaking Strength)</div>
+        <div class="label">Load a fired tile withstands before fracture</div>
+        <div class="note">A core structural spec, especially for large-format and floor tiles.</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">PEI Rating</div>
+        <div class="label">Surface abrasion resistance, I–V</div>
+        <div class="note">Determines whether a glazed tile is suited to light residential or heavy commercial foot traffic.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+<script>
+document.getElementById('glossarySearch').addEventListener('input', (e)=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.gterm').forEach(el=>{
+    const text = el.textContent.toLowerCase();
+    el.classList.toggle('hidden', q && !text.includes(q));
+  });
+});
+</script>
+
+</body>
+</html>
