@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tile Order · Delivery Date Calculator</title>
+<meta name="description" content="Calculate ceramic tile order delivery dates from order details through the press-line and process timeline, built by Shakthi Chathuranga.">
+<meta property="og:title" content="Tile Order · Delivery Date Calculator | Shakthi Chathuranga">
+<meta property="og:description" content="Calculate ceramic tile production delivery dates from order details through the full process timeline.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a; --card:#1e293b; --card2:#141f36; --line:rgba(255,255,255,0.07);
+    --ink:#f8fafc; --muted:#94a3b8; --dim:#64748b;
+    --blue:#38bdf8; --blue2:#818cf8; --blue-bg:rgba(56,189,248,0.1); --blue-bd:rgba(56,189,248,0.25);
+    --green:#4ade80; --green-bg:rgba(34,197,94,0.1); --green-bd:rgba(34,197,94,0.3);
+    --red:#f87171; --red-bg:rgba(239,68,68,0.1); --red-bd:rgba(239,68,68,0.3);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+  body{background:var(--bg);color:var(--ink);padding:36px 20px 80px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1150px;margin:0 auto;}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:26px;}
+  .topbar .sub{color:var(--muted);font-size:13px;margin-top:4px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:9999px;color:var(--blue);font-size:12px;font-weight:600;}
+
+  .id-card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;
+  }
+  @media (max-width:800px){.id-card{grid-template-columns:1fr 1fr;}}
+  .id-field label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+  .id-field input, .id-field select{
+    width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;
+    padding:8px 10px;color:var(--ink);font-size:13px;
+  }
+  .id-field input:focus, .id-field select:focus{outline:none;border-color:var(--blue);}
+
+  .section{margin-bottom:24px;}
+  .section-title{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--blue);margin:0 0 10px 2px;display:flex;align-items:center;gap:8px;
+  }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:800px){.grid2{grid-template-columns:1fr;}}
+
+  .unit-toggle{
+    display:inline-flex;border:1px solid var(--line);border-radius:9999px;padding:3px;margin-bottom:18px;background:var(--card2);
+  }
+  .unit-toggle button{
+    font-size:12.5px;font-weight:600;border:none;background:transparent;color:var(--muted);
+    padding:7px 18px;border-radius:9999px;cursor:pointer;transition:.15s;
+  }
+  .unit-toggle button.active{background:linear-gradient(to right,#38bdf8,#818cf8);color:#0f172a;}
+
+  .stock-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media (max-width:800px){.stock-grid{grid-template-columns:repeat(2,1fr);}}
+  .stock-field label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px;}
+  .stock-field input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--ink);font-size:14px;}
+  .stock-result{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .stock-result .val{font-size:19px;font-weight:700;color:var(--blue);}
+
+  .oee-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:6px;}
+  @media (max-width:800px){.oee-grid{grid-template-columns:repeat(2,1fr);}}
+  .oee-field label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px;}
+  .oee-field input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--ink);font-size:14px;}
+  .oee-readout{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--dim);}
+  .oee-readout b{color:var(--ink);}
+  .oee-chip{padding:6px 12px;border-radius:9999px;background:var(--blue-bg);border:1px solid var(--blue-bd);color:var(--blue);font-weight:700;}
+
+  .results-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:800px){.results-strip{grid-template-columns:1fr 1fr;}}
+  .result-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .result-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--dim);margin-bottom:6px;}
+  .result-box .value{font-size:20px;font-weight:700;}
+  .result-box.accent{border-color:var(--blue-bd);background:linear-gradient(135deg,var(--card),var(--card2));}
+  .result-box.accent .value{color:var(--blue);}
+
+  table.timeline{width:100%;border-collapse:collapse;font-size:13px;}
+  table.timeline th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--dim);font-weight:700;padding:8px;border-bottom:1px solid var(--line);}
+  table.timeline td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  table.timeline tr.highlight td{background:var(--blue-bg);}
+  table.timeline td.stage{font-weight:600;}
+  table.timeline td.num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums;}
+  table.timeline input{width:64px;text-align:right;background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:5px 6px;color:var(--ink);font-size:12.5px;}
+  table.timeline tr.totals td{font-weight:700;border-top:1px solid var(--blue-bd);color:var(--ink);}
+
+  .checkbox-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:14px 0 4px;}
+
+  .promised-final{
+    margin-top:22px;text-align:center;background:linear-gradient(to right,#0ea5e9,#2563eb);
+    border-radius:14px;padding:24px;
+  }
+  .promised-final .pf-label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:#dceefd;}
+  .promised-final .pf-value{font-size:30px;font-weight:700;margin-top:6px;color:#fff;}
+  .promised-final .pf-note{font-size:12px;color:#dceefd;margin-top:6px;}
+
+  .top-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);cursor:pointer;}
+  .btn:hover{border-color:var(--blue);color:var(--blue);}
+  .btn.primary{background:linear-gradient(to right,#0ea5e9,#2563eb);border-color:transparent;color:#fff;}
+  .btn.primary:hover{background:linear-gradient(to right,#38bdf8,#2563eb);}
+
+  footer{text-align:center;color:var(--dim);font-size:11px;margin-top:34px;}
+
+  /* SITE NAV offset (shared style.css) */
+  nav{ margin: -36px -20px 0; }
+  .tool-page-header{
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:1150px;margin:0 auto;padding:32px 0 6px;
+  }
+  .tool-page-header h1{font-size:24px;font-weight:700;color:#fff;}
+  .back-to-tools{
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--ink);
+    text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .back-to-tools:hover{ background: rgba(255, 255, 255, 0.1); border-color: var(--blue); }
+  @media (max-width:900px){
+    .tool-page-header{flex-direction:column;gap:12px;text-align:center;padding-top:20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <img src="sc-logo.png" alt="SC. Portal logo">  </a>
+  <ul class="nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+    <li><a href="ceramic_tile_field_guide.html">Tile Field Guide</a></li>
+  </ul>
+</nav>
+<div class="tool-page-header">
+  <h1>🧱 Tile Order · Delivery Date Calculator</h1>
+  <a href="tools.html" class="back-to-tools">← Back to Tools</a>
+</div>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="sub" style="margin-top:4px;">Order qty → press-line output (OEE method) → process timeline → delivery date</div>
+    <div class="top-actions">
+      <span class="badge">⏱ Live calculation</span>
+      <button class="btn" id="emailBtn">✉️ Email</button>
+      <button class="btn" id="waBtn">💬 WhatsApp</button>
+      <button class="btn primary" id="printBtn">🖨 Print Summary</button>
+    </div>
+  </div>
+
+  <div class="id-card">
+    <div class="id-field"><label>Order No</label><input id="orderId" value=""></div>
+    <div class="id-field"><label>Customer Name</label><input id="customer" placeholder="e.g. ABC Traders"></div>
+    <div class="id-field"><label>Item / Design Code</label><input id="itemCode" placeholder="e.g. GT-600x600-GLOSS"></div>
+    <div class="id-field"><label>Order Date</label><input type="date" id="orderDate"></div>
+  </div>
+
+  <!-- ORDER QTY -->
+  <div class="section">
+    <div class="section-title">Order &amp; Stock</div>
+    <div class="card">
+      <div class="unit-toggle" id="unitToggle">
+        <button class="active" data-unit="ft">sq.ft</button>
+        <button data-unit="m">sq.meter</button>
+      </div>
+      <div class="stock-grid">
+        <div class="stock-field"><label>Order Qty <span id="ordUnit1">(sq.ft)</span></label><input type="number" id="orderQty" value="10000"></div>
+        <div class="stock-field"><label>Stock in Warehouse <span id="ordUnit2">(sq.ft)</span></label><input type="number" id="stockQty" value="0"></div>
+        <div class="stock-field"><label>Tile Size <span id="ordUnit3">(sq.ft/pc)</span></label><input type="number" id="tileSize" value="4" step="0.1"></div>
+        <div class="stock-field"><label>Pieces per Box</label><input type="number" id="piecesPerBox" value="4"></div>
+      </div>
+      <div class="stock-result"><span>Balance to Make 🎯</span><span class="val" id="balanceToMake">0</span></div>
+    </div>
+  </div>
+
+  <!-- PRESS LINE / OEE -->
+  <div class="section">
+    <div class="section-title">Press Line Output (OEE Method)</div>
+    <div class="card">
+      <div class="oee-grid">
+        <div class="oee-field"><label>Line Speed <span id="ordUnit4">(sq.ft/hr)</span></label><input type="number" id="speed" value="500"></div>
+        <div class="oee-field"><label>Number of Lines</label><input type="number" id="lines" value="2"></div>
+        <div class="oee-field"><label>Planned Hours/Day</label><input type="number" id="plannedHours" value="20"></div>
+        <div class="oee-field"><label>Stoppage Hrs/Day</label><input type="number" id="downtime" value="2" step="0.25"></div>
+      </div>
+      <div class="oee-grid">
+        <div class="oee-field"><label>Performance %</label><input type="number" id="performance" value="90"></div>
+        <div class="oee-field"><label>Quality %</label><input type="number" id="quality" value="95"></div>
+        <div class="oee-field"><label>Skip Sunday?</label>
+          <select id="skipSunday" style="width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--ink);font-size:14px;">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="oee-field"><label>&nbsp;</label></div>
+      </div>
+      <div class="oee-readout">
+        <span>Availability <b id="roAvail">0%</b></span>
+        <span>Performance <b id="roPerf">0%</b></span>
+        <span>Quality <b id="roQual">0%</b></span>
+        <span class="oee-chip">OEE <span id="roOEE">0%</span></span>
+        <span>Effective Output <b id="roOutput">0</b> /day</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="section">
+    <div class="section-title">Position</div>
+    <div class="results-strip">
+      <div class="result-box"><div class="label">Effective Daily Output</div><div class="value" id="dailyOutputBox">0</div></div>
+      <div class="result-box"><div class="label">Pressing Days Required</div><div class="value" id="pressDaysBox">0</div></div>
+      <div class="result-box accent"><div class="label">Press Finish Date</div><div class="value" id="pressFinishBox">—</div></div>
+      <div class="result-box"><div class="label">Total Process Days</div><div class="value" id="totalDaysBox">0</div></div>
+    </div>
+  </div>
+
+  <!-- PROCESS TIMELINE -->
+  <div class="section">
+    <div class="section-title">Process Timeline</div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="timeline" id="timelineTable">
+        <thead><tr><th>Stage</th><th>Days</th><th>Cumulative Days</th><th>Expected Date</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="promised-final">
+    <div class="pf-label">Confirmed Delivery Date</div>
+    <div class="pf-value" id="promisedDate">—</div>
+    <div class="pf-note" id="promisedNote">Fill in the order and press-line details above</div>
+  </div>
+
+  <footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const CONV = 10.7639; // 1 sq.m = 10.7639 sq.ft
+let unit = 'ft';
+
+const STAGES_AFTER_PRESS = [
+  { key:'dry',     label:'DRYER',            days:1   },
+  { key:'glaze',   label:'GLAZING & PRINTING', days:0.5 },
+  { key:'kiln',    label:'KILN (FIRING)',    days:1   },
+  { key:'sort',    label:'SORTING & GRADING', days:0.5 },
+  { key:'pack',    label:'PACKING',          days:0.5 },
+  { key:'wh',      label:'WAREHOUSE / DESPATCH', days:0.5 },
+];
+
+function fmt(n,d=0){ if(!isFinite(n)) return '0'; return Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function toISODateLocal(d){ const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
+function todayISO(){ return toISODateLocal(new Date()); }
+
+$('orderDate').value = todayISO();
+$('orderId').value = 'TO-'+todayISO().replace(/-/g,'')+'-'+Math.floor(100+Math.random()*900);
+
+function addWorkDays(startDate, days, skipSunday){
+  // adds "days" (can be fractional) of production time, skipping Sundays if required, returns finish Date object
+  let d = new Date(startDate.getTime());
+  let remaining = days;
+  let guard = 0;
+  // whole days loop
+  while(remaining > 0 && guard < 5000){
+    const isOff = skipSunday && d.getDay()===0;
+    if(!isOff){
+      if(remaining <= 1){
+        // partial day - still counts as finishing that day
+        remaining = 0;
+        break;
+      }
+      remaining -= 1;
+    }
+    d.setDate(d.getDate()+1);
+    guard++;
+  }
+  return d;
+}
+
+function updateUnitLabels(){
+  const ft = unit === 'ft';
+  const areaLbl = ft ? 'sq.ft' : 'sq.meter';
+  $('ordUnit1').textContent = `(${areaLbl})`;
+  $('ordUnit2').textContent = `(${areaLbl})`;
+  $('ordUnit3').textContent = `(${areaLbl}/pc)`;
+  $('ordUnit4').textContent = `(${areaLbl}/hr)`;
+}
+
+function switchUnit(newUnit){
+  if(newUnit === unit) return;
+  const factor = newUnit === 'm' ? (1/CONV) : CONV;
+  ['orderQty','stockQty','tileSize','speed'].forEach(id=>{
+    const el = $(id);
+    el.value = (parseFloat(el.value||0)*factor).toFixed(id==='tileSize'?3:2);
+  });
+  unit = newUnit;
+  document.querySelectorAll('#unitToggle button').forEach(b=>b.classList.toggle('active', b.dataset.unit===unit));
+  updateUnitLabels();
+  calculate();
+}
+document.querySelectorAll('#unitToggle button').forEach(b=> b.addEventListener('click', ()=>switchUnit(b.dataset.unit)));
+
+function calculate(){
+  const orderQty = parseFloat($('orderQty').value)||0;
+  const stockQty = parseFloat($('stockQty').value)||0;
+  const tileSize = parseFloat($('tileSize').value)||1;
+  const perBox = parseFloat($('piecesPerBox').value)||1;
+
+  const balance = Math.max(orderQty - stockQty, 0);
+  $('balanceToMake').textContent = fmt(balance,0) + (unit==='ft' ? ' sq.ft' : ' sq.m');
+
+  const speed = parseFloat($('speed').value)||0;
+  const lines = parseFloat($('lines').value)||0;
+  const planned = parseFloat($('plannedHours').value)||0;
+  const downtime = parseFloat($('downtime').value)||0;
+  const perf = (parseFloat($('performance').value)||0)/100;
+  const qual = (parseFloat($('quality').value)||0)/100;
+  const skipSunday = $('skipSunday').value === 'yes';
+
+  const effHours = Math.max(planned-downtime,0);
+  const availability = planned>0 ? effHours/planned : 0;
+  const oee = availability*perf*qual;
+
+  const dailyOutput = speed*lines*planned*oee;
+
+  $('roAvail').textContent = fmt(availability*100,0)+'%';
+  $('roPerf').textContent = fmt(perf*100,0)+'%';
+  $('roQual').textContent = fmt(qual*100,0)+'%';
+  $('roOEE').textContent = fmt(oee*100,1)+'%';
+  $('roOutput').textContent = fmt(dailyOutput,0) + (unit==='ft' ? ' sq.ft' : ' sq.m');
+
+  const pressDays = dailyOutput>0 ? balance/dailyOutput : 0;
+  $('dailyOutputBox').textContent = fmt(dailyOutput,0) + (unit==='ft' ? ' sq.ft' : ' sq.m');
+  $('pressDaysBox').textContent = fmt(pressDays,2) + ' days';
+
+  const orderDateVal = $('orderDate').value || todayISO();
+  const startDate = new Date(orderDateVal+'T00:00:00');
+
+  let sundaysSkipped = 0;
+  // compute press finish date, counting skipped sundays
+  let pressFinish;
+  {
+    let d = new Date(startDate.getTime());
+    let remaining = pressDays;
+    let guard=0;
+    while(remaining>0 && guard<5000){
+      const isOff = skipSunday && d.getDay()===0;
+      if(isOff){ sundaysSkipped++; }
+      else{
+        if(remaining<=1){ remaining=0; break; }
+        remaining -= 1;
+      }
+      d.setDate(d.getDate()+1);
+      guard++;
+    }
+    pressFinish = d;
+  }
+  $('pressFinishBox').textContent = pressDays>0 ? pressFinish.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'}) : '—';
+
+  // build timeline table
+  const tbody = document.querySelector('#timelineTable tbody');
+  tbody.innerHTML = '';
+  let cumDays = pressDays;
+  let cursorDate = new Date(pressFinish.getTime());
+
+  function addRow(label, days, cum, dateObj, highlight){
+    const tr = document.createElement('tr');
+    if(highlight) tr.classList.add('highlight');
+    tr.innerHTML = `<td class="stage">${label}</td><td class="num">${fmt(days,2)}</td><td class="num">${fmt(cum,2)}</td><td class="num">${dateObj.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'})}</td>`;
+    tbody.appendChild(tr);
+  }
+
+  addRow('PRESSING', pressDays, cumDays, pressFinish, true);
+
+  STAGES_AFTER_PRESS.forEach(s=>{
+    cumDays += s.days;
+    cursorDate = addWorkDays(cursorDate, s.days, skipSunday);
+    addRow(s.label, s.days, cumDays, cursorDate, false);
+  });
+
+  $('totalDaysBox').textContent = fmt(cumDays,2) + ' days';
+
+  if(balance<=0){
+    $('promisedDate').textContent = 'In Stock';
+    $('promisedNote').textContent = 'Order quantity is already covered by warehouse stock.';
+  } else if(dailyOutput<=0){
+    $('promisedDate').textContent = '—';
+    $('promisedNote').textContent = 'Enter press line speed and OEE details to calculate.';
+  } else {
+    $('promisedDate').textContent = cursorDate.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+    $('promisedNote').textContent = `${fmt(cumDays,1)} total production days from ${startDate.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'})}${skipSunday?' (Sundays skipped: '+sundaysSkipped+')':''}`;
+  }
+}
+
+$('printBtn').addEventListener('click', ()=> window.print());
+
+function buildShareText(){
+  return [
+    `TILE ORDER — DELIVERY DATE SUMMARY`,
+    `Order No: ${$('orderId').value}`,
+    `Customer: ${$('customer').value||'—'}`,
+    `Item: ${$('itemCode').value||'—'}`,
+    `Order Date: ${$('orderDate').value}`,
+    ``,
+    `Order Qty: ${$('orderQty').value} ${unit==='ft'?'sq.ft':'sq.m'}`,
+    `Balance to Make: ${$('balanceToMake').textContent}`,
+    `OEE: ${$('roOEE').textContent}  |  Daily Output: ${$('roOutput').textContent}`,
+    `Pressing Days: ${$('pressDaysBox').textContent}`,
+    `Total Process Days: ${$('totalDaysBox').textContent}`,
+    ``,
+    `>> CONFIRMED DELIVERY DATE: ${$('promisedDate').textContent} <<`,
+  ].join('\n');
+}
+$('emailBtn').addEventListener('click', ()=>{
+  const subject = encodeURIComponent(`Tile Order Delivery Date - ${$('itemCode').value||$('orderId').value}`);
+  const body = encodeURIComponent(buildShareText());
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+});
+$('waBtn').addEventListener('click', ()=>{
+  window.open(`https://wa.me/?text=${encodeURIComponent(buildShareText())}`, '_blank');
+});
+
+document.addEventListener('input', calculate);
+document.addEventListener('change', calculate);
+
+updateUnitLabels();
+calculate();
+</script>
+
+</body>
+</html>
