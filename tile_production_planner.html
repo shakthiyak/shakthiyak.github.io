@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tile Production Planning Calculator | Production Tools</title>
+<meta name="description" content="Calculate realistic tile press-line output using the OEE method, built by Shakthi Chathuranga.">
+<meta property="og:title" content="Tile Production Planning Calculator | Shakthi Chathuranga">
+<meta property="og:description" content="Calculate realistic tile press-line daily and monthly output.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B1220;
+    --panel: #121B2E;
+    --panel-2: #17233A;
+    --line: #24324B;
+    --text: #EAF0FA;
+    --text-dim: #8CA0BE;
+    --amber: #F5A623;
+    --green: #34D399;
+    --red: #F0625B;
+    --steel: #4C6FA3;
+    --clay: #4CA5C9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 15% -10%, #142238 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:0 0 60px;
+    min-height:100vh;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px;}
+
+  .tool-page-header{
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:1000px;margin:0 auto;padding:32px 20px 6px;
+  }
+  .tool-page-header h1{font-size:24px;font-weight:700;color:#fff;font-family:'Space Grotesk',sans-serif;}
+  .back-to-tools{
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--text);
+    text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .back-to-tools:hover{ background: rgba(255, 255, 255, 0.1); border-color: var(--amber); }
+  @media (max-width:900px){
+    .tool-page-header{flex-direction:column;gap:12px;text-align:center;padding-top:20px;}
+  }
+
+  .top-spacer{padding-top:8px;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--amber);
+    display:flex; align-items:center; gap:10px; margin-bottom:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; background:var(--amber);
+    display:inline-block; box-shadow:0 0 10px var(--amber);
+  }
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:640px;line-height:1.55;margin-bottom:22px;}
+
+  /* Process flow strip */
+  .flow{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); border-radius:2px; padding:18px 20px 20px; margin-bottom:26px;
+    overflow-x:auto; position:relative;
+  }
+  .flow::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--amber),transparent 60%);
+  }
+  .flow-title{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:14px;
+  }
+  .flow-row{ display:flex; align-items:center; min-width:max-content; }
+  .node{
+    font-size:12px; font-weight:500; padding:8px 13px; border-radius:999px;
+    border:1px solid var(--line); background:#0C1526; color:var(--text-dim); white-space:nowrap;
+  }
+  .node.active{
+    background:var(--amber); border-color:var(--amber); color:#1c1608; font-weight:700;
+    box-shadow:0 0 0 4px rgba(245,166,35,0.18);
+  }
+  .arrow{ color:var(--line); margin:0 6px; font-size:14px; }
+  .flow-note{
+    font-size:12.5px; color:var(--text-dim); margin-top:12px; padding-top:12px;
+    border-top:1px dashed var(--line);
+  }
+  .flow-note b{color:var(--clay);}
+
+  .grid{ display:grid; grid-template-columns: 1fr 1.1fr; gap:20px; }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); padding:26px; position:relative;
+  }
+  .panel::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--amber),transparent 60%);
+  }
+  .panel-title{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:6px;
+  }
+  .panel-sub{ font-size:12.5px; color:#5b6f8f; margin-bottom:18px; }
+
+  .unit-toggle{
+    display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:3px;
+    margin-bottom:20px; background:#0C1526;
+  }
+  .unit-toggle button{
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+    border:none; background:transparent; color:var(--text-dim); padding:7px 18px;
+    border-radius:999px; cursor:pointer; transition:.15s;
+  }
+  .unit-toggle button.active{ background:var(--amber); color:#1c1608; }
+
+  .section-label{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--amber); margin:22px 0 12px; opacity:.9;
+  }
+  .section-label:first-of-type{margin-top:0;}
+
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{ display:flex; justify-content:space-between; align-items:baseline; font-size:13px; color:var(--text-dim); margin-bottom:6px; }
+  .field label b{color:var(--text); font-weight:600;}
+  .field label .hint{ position:relative; display:inline-flex; align-items:center; cursor:help; }
+  .field label .hint .dot{
+    width:15px;height:15px;border-radius:50%;border:1px solid var(--text-dim);color:var(--text-dim);
+    font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
+  }
+  .field label .hint .tip{
+    display:none; position:absolute; right:0; top:22px; width:240px; background:#050a14;
+    border:1px solid var(--line); color:var(--text); font-size:11.5px; font-weight:400; line-height:1.5;
+    padding:10px 12px; border-radius:8px; z-index:5;
+  }
+  .field label .hint:hover .tip{display:block;}
+
+  .input-row{position:relative;}
+  input[type=number]{
+    width:100%; background:#0C1526; border:1px solid var(--line); color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:16px; padding:12px 90px 12px 14px;
+  }
+  input[type=number]:focus{outline:none; border-color:var(--amber);}
+  .unit{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    color:var(--text-dim); font-size:11.5px; font-family:'JetBrains Mono',monospace;
+  }
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+
+  /* Output readouts */
+  .gauge-wrap{
+    display:flex; align-items:center; gap:18px; padding-bottom:18px;
+    border-bottom:1px solid var(--line); margin-bottom:18px;
+  }
+  .gauge-num{ font-family:'Space Grotesk',sans-serif; font-size:38px; font-weight:700; color:var(--amber); line-height:1; }
+  .gauge-label{ font-size:12px; color:var(--text-dim); line-height:1.5; }
+  .oee-bars{flex:1;}
+  .oee-bar-row{ display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:11.5px; }
+  .oee-bar-row span:first-child{width:78px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
+  .oee-bar-track{flex:1; height:6px; background:#0C1526; border:1px solid var(--line); overflow:hidden;}
+  .oee-bar-fill{height:100%; background:var(--steel);}
+  .oee-bar-row span:last-child{width:38px; text-align:right; font-family:'JetBrains Mono',monospace; color:var(--text);}
+
+  .readout{
+    display:flex; justify-content:space-between; align-items:baseline; padding:11px 0;
+    border-bottom:1px solid #0C1526;
+  }
+  .readout:last-child{border-bottom:none;}
+  .readout .r-label{font-size:13px; color:var(--text-dim);}
+  .readout .r-value{ font-family:'JetBrains Mono', monospace; font-size:16px; font-weight:700; }
+  .readout.total .r-value{color:var(--amber); font-size:19px;}
+
+  .formula-box{
+    margin-top:18px; padding:14px 16px; background:#0C1526; border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); line-height:1.8;
+  }
+  .formula-box b{color:var(--text);}
+
+  footer{text-align:center;color:#5b6f8f;font-size:11px;margin-top:34px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <img src="sc-logo.png" alt="SC. Portal logo">  </a>
+  <ul class="nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+  </ul>
+</nav>
+<div class="tool-page-header">
+  <h1>📐 Tile Production Planning Calculator</h1>
+  <a href="tools.html" class="back-to-tools">← Back to Tools</a>
+</div>
+
+<div class="wrap top-spacer">
+
+  <div class="eyebrow">Production Tools Suite</div>
+  <p class="sub">Estimates realistic press-line output using the OEE method (Availability × Performance × Quality) — the same capacity-planning logic used across ceramic tile and sanitaryware factories worldwide.</p>
+
+  <div class="flow">
+    <div class="flow-title">Tile manufacturing flow — this calculator models the Press stage</div>
+    <div class="flow-row">
+      <span class="node">Raw Material</span><span class="arrow">→</span>
+      <span class="node">Ball Mill</span><span class="arrow">→</span>
+      <span class="node">Spray Dryer</span><span class="arrow">→</span>
+      <span class="node">Powder Storage</span><span class="arrow">→</span>
+      <span class="node active">Press</span><span class="arrow">→</span>
+      <span class="node">Dryer</span><span class="arrow">→</span>
+      <span class="node">Glazing</span><span class="arrow">→</span>
+      <span class="node">Kiln</span><span class="arrow">→</span>
+      <span class="node">Sorting</span><span class="arrow">→</span>
+      <span class="node">Packing</span>
+    </div>
+    <div class="flow-note">
+      <b>Why the Press stage?</b> The hydraulic press sets the base tempo for the whole line — its rated speed, combined with real-world stoppages and rejections, determines how many tiles the factory can actually deliver per day.
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- INPUT PANEL -->
+    <div class="panel">
+      <div class="panel-title">Inputs</div>
+      <div class="panel-sub">Enter your press line's real operating figures.</div>
+
+      <div class="unit-toggle" id="unitToggle">
+        <button class="active" data-unit="ft">sq.ft</button>
+        <button data-unit="m">sq.meter</button>
+      </div>
+
+      <div class="section-label">Line Setup</div>
+      <div class="field">
+        <label><b>Rated Press Line Speed</b> <span class="hint"><span class="dot">i</span>
+          <span class="tip">The manufacturer-rated ("nameplate") output speed of the press — from the machine spec sheet, not the real-world average.</span></span>
+        </label>
+        <div class="input-row">
+          <input type="number" id="speed" value="450" step="1">
+          <span class="unit" id="speedUnit">sq.ft/hr</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label><b>Number of Lines</b></label>
+          <div class="input-row"><input type="number" id="lines" value="2" step="1"></div>
+        </div>
+        <div class="field">
+          <label><b>Planned Hours/Day</b></label>
+          <div class="input-row"><input type="number" id="plannedHours" value="22" step="0.5"></div>
+        </div>
+      </div>
+
+      <div class="section-label">OEE Factors</div>
+      <div class="field">
+        <label><b>Stoppage Time/Day</b> <span class="hint"><span class="dot">i</span>
+          <span class="tip">Mould/size changeovers, cleaning, breakdowns, and planned maintenance — anything that stops the line during planned hours.</span></span>
+        </label>
+        <div class="input-row">
+          <input type="number" id="downtime" value="2" step="0.25">
+          <span class="unit">hrs/day</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label><b>Performance</b> <span class="hint"><span class="dot">i</span>
+            <span class="tip">How close the line runs to its rated speed once running (small stops, minor slowdowns reduce this).</span></span>
+          </label>
+          <div class="input-row"><input type="number" id="performance" value="92" step="1"><span class="unit">%</span></div>
+        </div>
+        <div class="field">
+          <label><b>Quality</b> <span class="hint"><span class="dot">i</span>
+            <span class="tip">Percentage of pressed tiles that pass inspection without rejection or rework.</span></span>
+          </label>
+          <div class="input-row"><input type="number" id="quality" value="96" step="1"><span class="unit">%</span></div>
+        </div>
+      </div>
+
+      <div class="section-label">Packing Conversion</div>
+      <div class="field-row">
+        <div class="field">
+          <label><b>Tile Size</b></label>
+          <div class="input-row"><input type="number" id="tileSize" value="4" step="0.1"><span class="unit" id="tileSizeUnit">sq.ft/pc</span></div>
+        </div>
+        <div class="field">
+          <label><b>Pieces/Box</b></label>
+          <div class="input-row"><input type="number" id="piecesPerBox" value="4" step="1"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label><b>Working Days/Month</b></label>
+        <div class="input-row"><input type="number" id="workDays" value="26" step="1"></div>
+      </div>
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="panel">
+      <div class="panel-title">Realistic Output</div>
+      <div class="panel-sub">Calculated automatically from your inputs.</div>
+
+      <div class="gauge-wrap">
+        <div>
+          <div class="gauge-num" id="oeeVal">0%</div>
+          <div class="gauge-label">Overall Equipment<br>Effectiveness (OEE)</div>
+        </div>
+        <div class="oee-bars">
+          <div class="oee-bar-row"><span>Availability</span><div class="oee-bar-track"><div class="oee-bar-fill" id="barAvail" style="width:0%"></div></div><span id="valAvail">0%</span></div>
+          <div class="oee-bar-row"><span>Performance</span><div class="oee-bar-track"><div class="oee-bar-fill" id="barPerf" style="width:0%"></div></div><span id="valPerf">0%</span></div>
+          <div class="oee-bar-row"><span>Quality</span><div class="oee-bar-track"><div class="oee-bar-fill" id="barQual" style="width:0%"></div></div><span id="valQual">0%</span></div>
+        </div>
+      </div>
+
+      <div class="readout"><span class="r-label">Effective Running Hours/Day</span><span class="r-value" id="outHours">-</span></div>
+      <div class="readout total"><span class="r-label">Daily Output (area)</span><span class="r-value" id="outArea">-</span></div>
+      <div class="readout"><span class="r-label">Daily Output (pieces)</span><span class="r-value" id="outPieces">-</span></div>
+      <div class="readout"><span class="r-label">Daily Output (boxes)</span><span class="r-value" id="outBoxes">-</span></div>
+      <div class="readout total"><span class="r-label">Monthly Output (area)</span><span class="r-value" id="outMonthArea">-</span></div>
+      <div class="readout"><span class="r-label">Monthly Output (boxes)</span><span class="r-value" id="outMonthBoxes">-</span></div>
+
+      <div class="formula-box">
+        <b>OEE</b> = Availability × Performance × Quality<br>
+        <b>Daily Output</b> = Rated Speed × Lines × Planned Hours × OEE
+      </div>
+    </div>
+
+  </div>
+
+  <footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+</div>
+
+<script>
+  let unit = 'ft';
+  const CONV = 10.7639; // 1 sq.m = 10.7639 sq.ft
+  const $ = id => document.getElementById(id);
+
+  function fmt(n, d=0){
+    if(!isFinite(n)) return '-';
+    return n.toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d});
+  }
+
+  function calc(){
+    const speed = parseFloat($('speed').value) || 0;
+    const lines = parseFloat($('lines').value) || 0;
+    const planned = parseFloat($('plannedHours').value) || 0;
+    const downtime = parseFloat($('downtime').value) || 0;
+    const perf = (parseFloat($('performance').value) || 0) / 100;
+    const qual = (parseFloat($('quality').value) || 0) / 100;
+    const tileSize = parseFloat($('tileSize').value) || 1;
+    const perBox = parseFloat($('piecesPerBox').value) || 1;
+    const workDays = parseFloat($('workDays').value) || 0;
+
+    const effHours = Math.max(planned - downtime, 0);
+    const availability = planned > 0 ? effHours / planned : 0;
+    const oee = availability * perf * qual;
+
+    const dailyArea = speed * lines * planned * oee;
+    const dailyPieces = tileSize > 0 ? dailyArea / tileSize : 0;
+    const dailyBoxes = perBox > 0 ? dailyPieces / perBox : 0;
+    const monthArea = dailyArea * workDays;
+    const monthBoxes = dailyBoxes * workDays;
+
+    $('oeeVal').textContent = fmt(oee*100,1) + '%';
+    $('barAvail').style.width = (availability*100) + '%';
+    $('valAvail').textContent = fmt(availability*100,0)+'%';
+    $('barPerf').style.width = (perf*100) + '%';
+    $('valPerf').textContent = fmt(perf*100,0)+'%';
+    $('barQual').style.width = (qual*100) + '%';
+    $('valQual').textContent = fmt(qual*100,0)+'%';
+
+    $('outHours').textContent = fmt(effHours,2) + ' hrs';
+    const unitLabel = unit === 'ft' ? 'sq.ft' : 'sq.m';
+    $('outArea').textContent = fmt(dailyArea,0) + ' ' + unitLabel;
+    $('outPieces').textContent = fmt(dailyPieces,0) + ' pcs';
+    $('outBoxes').textContent = fmt(dailyBoxes,1) + ' boxes';
+    $('outMonthArea').textContent = fmt(monthArea,0) + ' ' + unitLabel;
+    $('outMonthBoxes').textContent = fmt(monthBoxes,0) + ' boxes';
+  }
+
+  function switchUnit(newUnit){
+    if(newUnit === unit) return;
+    const speedEl = $('speed');
+    const tileEl = $('tileSize');
+    if(newUnit === 'm'){
+      speedEl.value = (parseFloat(speedEl.value)/CONV).toFixed(2);
+      tileEl.value = (parseFloat(tileEl.value)/CONV).toFixed(3);
+      $('speedUnit').textContent = 'sq.m/hr';
+      $('tileSizeUnit').textContent = 'sq.m/pc';
+    } else {
+      speedEl.value = (parseFloat(speedEl.value)*CONV).toFixed(2);
+      tileEl.value = (parseFloat(tileEl.value)*CONV).toFixed(3);
+      $('speedUnit').textContent = 'sq.ft/hr';
+      $('tileSizeUnit').textContent = 'sq.ft/pc';
+    }
+    unit = newUnit;
+    document.querySelectorAll('#unitToggle button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.unit === unit);
+    });
+    calc();
+  }
+
+  document.querySelectorAll('#unitToggle button').forEach(b=>{
+    b.addEventListener('click', ()=>switchUnit(b.dataset.unit));
+  });
+  document.querySelectorAll('input').forEach(inp=> inp.addEventListener('input', calc));
+
+  calc();
+</script>
+
+</body>
+</html>

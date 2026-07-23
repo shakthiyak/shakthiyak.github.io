@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OEE Calculator — Ceramic Tiles | Production Tools</title>
+<meta name="description" content="Calculate real-world OEE (Availability x Performance x Quality) for ceramic tile press, glazing, and roller kiln lines, built by Shakthi Chathuranga.">
+<meta property="og:title" content="OEE Calculator - Ceramic Tiles | Shakthi Chathuranga">
+<meta property="og:description" content="Calculate real-world OEE for ceramic tile production lines.">
+<meta property="og:image" content="sc-logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="sc-logo.png">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B1220;
+    --panel: #121B2E;
+    --panel-2: #17233A;
+    --line: #24324B;
+    --text: #EAF0FA;
+    --text-dim: #8CA0BE;
+    --amber: #F5A623;
+    --green: #34D399;
+    --red: #F0625B;
+    --steel: #4C6FA3;
+    --clay: #4CA5C9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 15% -10%, #142238 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:0 0 60px;
+    min-height:100vh;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px;}
+
+  /* SITE NAV: styled by shared style.css. */
+  .tool-page-header{
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:1000px;margin:0 auto;padding:32px 20px 6px;
+  }
+  .tool-page-header h1{font-size:24px;font-weight:700;color:#fff;font-family:'Space Grotesk',sans-serif;}
+  .back-to-tools{
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--text);
+    text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .back-to-tools:hover{ background: rgba(255, 255, 255, 0.1); border-color: var(--amber); }
+  @media (max-width:900px){
+    .tool-page-header{flex-direction:column;gap:12px;text-align:center;padding-top:20px;}
+  }
+
+  .top-spacer{padding-top:8px;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; background:var(--amber);
+    display:inline-block; box-shadow:0 0 10px var(--amber);
+  }
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:640px;line-height:1.55;margin-bottom:22px;}
+
+  .stage-select{
+    display:flex; gap:8px; margin-bottom:30px; flex-wrap:wrap;
+  }
+  .stage-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.05em;
+    background:var(--panel); border:1px solid var(--line); color:var(--text-dim);
+    padding:9px 16px; cursor:pointer; transition:all .15s;
+  }
+  .stage-btn.active{ border-color:var(--amber); color:var(--amber); background:#1c1608; }
+  .stage-btn:hover{ color:var(--text); }
+
+  .grid{ display:grid; grid-template-columns: 1fr 1.1fr; gap:20px; }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); padding:26px; position:relative;
+  }
+  .panel::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--amber),transparent 60%);
+  }
+  .panel-title{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:18px;
+  }
+  .field{margin-bottom:20px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px; }
+  .field label b{color:var(--text); font-weight:600;}
+  .input-row{position:relative;}
+  input[type=number]{
+    width:100%; background:#0C1526; border:1px solid var(--line); color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:16px; padding:12px 70px 12px 14px;
+    transition:border-color .15s;
+  }
+  input[type=number]:focus{outline:none; border-color:var(--amber);}
+  .unit{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    color:var(--text-dim); font-size:11.5px; font-family:'JetBrains Mono',monospace;
+  }
+  .helper{
+    font-size:12px; color:#5b6f8f; margin-top:6px; line-height:1.5;
+    border-left:2px solid var(--line); padding-left:10px;
+  }
+  .helper b{color:var(--clay);}
+  .section-label{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--amber); margin:24px 0 12px; opacity:.9;
+  }
+  .section-label:first-child{margin-top:0;}
+
+  .gauge-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:22px;
+  }
+  .gauge-value{ font-family:'Space Grotesk',sans-serif; font-size:50px; font-weight:700; margin-top:-62px; letter-spacing:-0.02em; }
+  .gauge-status{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; margin-top:2px; }
+  .bench{ font-size:11.5px; color:var(--text-dim); margin-top:10px; text-align:center; line-height:1.5; max-width:300px; }
+
+  .metric-block{margin-bottom:14px;}
+  .metric-block:last-child{margin-bottom:0;}
+  .metric-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; }
+  .metric-name{font-size:13.5px; color:var(--text-dim);}
+  .metric-name span{display:block; font-size:11px; color:#5b6f8f; margin-top:2px;}
+  .metric-value{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:19px; }
+  .bar-track{ height:5px; background:#0C1526; border:1px solid var(--line); margin-top:6px; overflow:hidden; }
+  .bar-fill{height:100%; transition:width .3s ease;}
+
+  .reality-box{
+    margin-top:22px; padding:16px; background:#0c1a24; border:1px solid #123342;
+    font-size:12px; color:#a9d3e6; line-height:1.6;
+  }
+  .reality-box b{color:var(--clay);}
+
+  .formula-box{
+    margin-top:16px; padding:14px 16px; background:#0C1526; border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); line-height:1.8;
+  }
+  .formula-box b{color:var(--text);}
+
+  .guide{
+    margin-top:36px; background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); padding:30px;
+  }
+  .guide-title{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; margin:0 0 6px;
+  }
+  .guide-sub{ color:var(--text-dim); font-size:13.5px; margin-bottom:22px; }
+  .guide-item{
+    display:grid; grid-template-columns: 200px 1fr; gap:18px;
+    padding:16px 0; border-top:1px solid var(--line);
+  }
+  .guide-item:first-of-type{border-top:none;}
+  @media (max-width:640px){ .guide-item{grid-template-columns:1fr; gap:6px;} }
+  .guide-field{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--amber);
+    letter-spacing:.02em;
+  }
+  .guide-desc{ font-size:13.5px; color:var(--text); line-height:1.65; }
+  .guide-desc .ex{ display:block; margin-top:6px; font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+
+  footer{text-align:center;color:#5b6f8f;font-size:11px;margin-top:34px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <img src="sc-logo.png" alt="SC. Portal logo">  </a>
+  <ul class="nav-tabs">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tools.html" class="active">Production Tools</a></li>
+    <li><a href="ceramic_news.html">Ceramic News</a></li>
+    <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
+    <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
+  </ul>
+</nav>
+<div class="tool-page-header">
+  <h1>🧱 OEE Calculator — Ceramic Tiles</h1>
+  <a href="tools.html" class="back-to-tools">← Back to Tools</a>
+</div>
+
+<div class="wrap top-spacer">
+
+  <div class="eyebrow">Production Tools Suite</div>
+  <p class="sub">Built for press, glazing, and roller kiln lines in ceramic tile production. Select your process stage below — field guidance and example values adjust to match. Tile production runs continuously, so the numbers and benchmarks here are different from batch-based sanitaryware.</p>
+
+  <div class="stage-select">
+    <button class="stage-btn active" data-stage="pressing">🗜️ Pressing Line</button>
+    <button class="stage-btn" data-stage="glazing">🎨 Glazing Line</button>
+    <button class="stage-btn" data-stage="kiln">🔥 Roller Kiln</button>
+  </div>
+
+  <div class="grid">
+
+    <div class="panel">
+      <div class="panel-title" id="panelTitle">Shift Inputs — Pressing Line</div>
+
+      <div class="section-label">Availability</div>
+      <div class="field">
+        <label><b>Planned production time</b></label>
+        <div class="input-row">
+          <input type="number" id="planned" value="480" min="0">
+          <span class="unit">min</span>
+        </div>
+        <div class="helper" id="help-planned"></div>
+      </div>
+      <div class="field">
+        <label><b>Downtime</b></label>
+        <div class="input-row">
+          <input type="number" id="downtime" value="45" min="0">
+          <span class="unit">min</span>
+        </div>
+        <div class="helper" id="help-downtime"></div>
+      </div>
+
+      <div class="section-label">Performance</div>
+      <div class="field">
+        <label><b>Ideal cycle time</b></label>
+        <div class="input-row">
+          <input type="number" id="cycletime" value="0.12" min="0" step="0.01">
+          <span class="unit">min/piece</span>
+        </div>
+        <div class="helper" id="help-cycle"></div>
+      </div>
+      <div class="field">
+        <label><b>Total units produced</b></label>
+        <div class="input-row">
+          <input type="number" id="total" value="2800" min="0">
+          <span class="unit">pieces</span>
+        </div>
+        <div class="helper" id="help-total"></div>
+      </div>
+
+      <div class="section-label">Quality</div>
+      <div class="field">
+        <label><b>Good units</b></label>
+        <div class="input-row">
+          <input type="number" id="good" value="2660" min="0">
+          <span class="unit">pieces</span>
+        </div>
+        <div class="helper" id="help-good"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Result</div>
+
+      <div class="gauge-wrap">
+        <svg id="gauge" width="220" height="130" viewBox="0 0 220 130">
+          <path d="M 15 115 A 95 95 0 0 1 205 115" fill="none" stroke="#1c2840" stroke-width="16" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M 15 115 A 95 95 0 0 1 205 115" fill="none" stroke="var(--amber)" stroke-width="16" stroke-linecap="round" stroke-dasharray="298.5" stroke-dashoffset="298.5"/>
+        </svg>
+        <div class="gauge-value" id="oeeValue">0%</div>
+        <div class="gauge-status" id="oeeStatus">—</div>
+        <div class="bench" id="benchText"></div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Availability<span>Run time vs planned time</span></div>
+          <div class="metric-value" id="availVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="availBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Performance<span>Actual speed vs ideal speed</span></div>
+          <div class="metric-value" id="perfVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="perfBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="metric-block">
+        <div class="metric-row">
+          <div class="metric-name">Quality<span>Good units vs total units</span></div>
+          <div class="metric-value" id="qualVal">0%</div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="qualBar" style="width:0%;background:var(--steel)"></div></div>
+      </div>
+
+      <div class="reality-box" id="realityBox"></div>
+
+      <div class="formula-box">
+        <b>OEE</b> = Availability × Performance × Quality<br>
+        <b>Availability</b> = (Planned Time − Downtime) ÷ Planned Time<br>
+        <b>Performance</b> = (Ideal Cycle Time × Total Units) ÷ Run Time<br>
+        <b>Quality</b> = Good Units ÷ Total Units
+      </div>
+    </div>
+
+  </div>
+
+  <div class="guide">
+    <div class="guide-title">How to fill this in — Tile Field Guide</div>
+    <div class="guide-sub">What each number means on the factory floor, by stage. Useful if you're new to tile manufacturing.</div>
+    <div id="guideContent"></div>
+  </div>
+
+  <footer>&copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.</footer>
+
+</div>
+
+<script>
+const stageData = {
+  pressing: {
+    title: 'Shift Inputs — Pressing Line',
+    fields: {
+      planned: { value: 480, unit: 'min', label: 'Planned production time', help: 'Shift length for the press line — e.g. one 8-hour shift (480 min). Tile presses usually run shift-based, not 24-hour continuous like the kiln.' },
+      downtime: { value: 45, unit: 'min', label: 'Downtime', help: 'Press line stoppages — mould/die changeover (different tile size or design), powder feed interruption, hydraulic fault, die cleaning.' },
+      cycletime: { value: 0.12, unit: 'min/piece', label: 'Ideal cycle time', help: 'Ideal press time per tile, from the machine\'s rated speed (e.g. a press rated at 500 pieces/hour = 0.12 min/piece). Check the press manufacturer\'s spec sheet.' },
+      total: { value: 2800, unit: 'pieces', label: 'Total units produced', help: 'Total tiles pressed in the shift (before drying/glazing), counted at the press line output.' },
+      good: { value: 2660, unit: 'pieces', label: 'Good units', help: 'Pressed tiles without cracks, lamination, chipped edges, or size/thickness defects caught right after pressing.' }
+    },
+    reality: 'The press sets the pace for the whole factory — everything downstream (glazing, kiln) is sized to match its output. Mould/size changeovers are the biggest Availability loss here, so minimizing them is the highest-leverage improvement.',
+    bench: 'Typical Pressing Line OEE: <b style="color:var(--text)">65–80%</b>. Frequent size changeovers pull this down; a well-scheduled changeover plan is the fastest way up.'
+  },
+  glazing: {
+    title: 'Shift Inputs — Glazing Line',
+    fields: {
+      planned: { value: 480, unit: 'min', label: 'Planned production time', help: 'Shift length for the glaze line — e.g. one 8-hour shift (480 min).' },
+      downtime: { value: 30, unit: 'min', label: 'Downtime', help: 'Glaze line stoppages — spray nozzle clogs, glaze/engobe changeover, digital printer head cleaning, line jam.' },
+      cycletime: { value: 0.1, unit: 'min/piece', label: 'Ideal cycle time', help: 'Ideal glazing + printing time per tile, based on line speed (conveyor speed through the glaze/print booths).' },
+      total: { value: 3200, unit: 'pieces', label: 'Total units produced', help: 'Total tiles that passed through glazing and digital printing in the shift.' },
+      good: { value: 3080, unit: 'pieces', label: 'Good units', help: 'Tiles with acceptable glaze coverage and print registration — no pinholes, uneven glaze, or misaligned pattern caught at pre-kiln inspection.' }
+    },
+    reality: 'Glazing and digital printing run as one continuous conveyor line, so a jam anywhere stops the whole line. Quality issues here (print misalignment, glaze defects) are cheap to catch — the tile hasn\'t used a kiln firing slot yet.',
+    bench: 'Typical Glazing Line OEE: <b style="color:var(--text)">70–85%</b>. This stage usually runs the highest OEE on the factory floor since it has fewer size changeovers than pressing.'
+  },
+  kiln: {
+    title: 'Shift Inputs — Roller Kiln',
+    fields: {
+      planned: { value: 1440, unit: 'min', label: 'Planned production time', help: 'Roller kilns run continuously — planned time is usually a full 24-hour day (1440 min), not a single shift.' },
+      downtime: { value: 60, unit: 'min', label: 'Downtime', help: 'Kiln stoppages — burner/gas supply fault, roller jam or breakage, temperature control fault, planned maintenance window.' },
+      cycletime: { value: 0.9, unit: 'min/piece', label: 'Ideal cycle time', help: 'Ideal firing time per tile at the kiln\'s rated roller speed. Roller kilns fire tiles continuously (not in batches like a sanitaryware kiln), so this is a per-piece rate, not per-batch.' },
+      total: { value: 1450, unit: 'pieces', label: 'Total units produced', help: 'Total tiles that passed through the kiln in the planned period.' },
+      good: { value: 1400, unit: 'pieces', label: 'Good units', help: 'Fired tiles without cracking, warping, black-core, or under/over-firing defects, confirmed at post-kiln sorting.' }
+    },
+    reality: 'Unlike a sanitaryware kiln (which fires in batches and stops between loads), a roller kiln is a continuous conveyor — so it can sustain much higher Availability. Firing curve (temperature profile) is fixed by the tile body chemistry, so Performance gains come from roller speed tuning, not from "running it harder."',
+    bench: 'Typical Roller Kiln OEE: <b style="color:var(--text)">75–88%</b>. Because it\'s continuous, tile kiln OEE is naturally higher than a batch sanitaryware kiln (35–55%) — don\'t compare the two directly.'
+  }
+};
+
+function loadStage(stage){
+  const d = stageData[stage];
+  document.getElementById('panelTitle').textContent = d.title;
+
+  const order = ['planned','downtime','cycletime','total','good'];
+  order.forEach(key=>{
+    document.getElementById(key).value = d.fields[key].value;
+  });
+
+  document.getElementById('help-planned').innerHTML = '<b>' + d.fields.planned.label + ':</b> ' + d.fields.planned.help;
+  document.getElementById('help-downtime').innerHTML = '<b>' + d.fields.downtime.label + ':</b> ' + d.fields.downtime.help;
+  document.getElementById('help-cycle').innerHTML = '<b>' + d.fields.cycletime.label + ':</b> ' + d.fields.cycletime.help;
+  document.getElementById('help-total').innerHTML = '<b>' + d.fields.total.label + ':</b> ' + d.fields.total.help;
+  document.getElementById('help-good').innerHTML = '<b>' + d.fields.good.label + ':</b> ' + d.fields.good.help;
+
+  const unitEls = document.querySelectorAll('.unit');
+  order.forEach((key,i)=>{ unitEls[i].textContent = d.fields[key].unit; });
+
+  document.getElementById('realityBox').innerHTML = '<b>Why the number looks the way it does:</b> ' + d.reality;
+  document.getElementById('benchText').innerHTML = d.bench;
+
+  buildGuide(stage);
+  calc();
+}
+
+function buildGuide(stage){
+  const d = stageData[stage];
+  const order = ['planned','downtime','cycletime','total','good'];
+  let html = '';
+  order.forEach(key=>{
+    const f = d.fields[key];
+    html += '<div class="guide-item">' +
+      '<div class="guide-field">' + f.label + '</div>' +
+      '<div class="guide-desc">' + f.help + '<span class="ex">Example: ' + f.value + ' ' + f.unit + '</span></div>' +
+    '</div>';
+  });
+  document.getElementById('guideContent').innerHTML = html;
+}
+
+document.querySelectorAll('.stage-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.stage-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loadStage(btn.dataset.stage);
+  });
+});
+
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+function calc(){
+  const planned = parseFloat(document.getElementById('planned').value) || 0;
+  const downtime = parseFloat(document.getElementById('downtime').value) || 0;
+  const cycle = parseFloat(document.getElementById('cycletime').value) || 0;
+  const total = parseFloat(document.getElementById('total').value) || 0;
+  const good = parseFloat(document.getElementById('good').value) || 0;
+
+  const runTime = Math.max(planned - downtime, 0);
+  const availability = planned > 0 ? clamp(runTime / planned, 0, 1) : 0;
+
+  const idealTime = cycle * total;
+  const performance = runTime > 0 ? clamp(idealTime / runTime, 0, 1) : 0;
+
+  const quality = total > 0 ? clamp(good / total, 0, 1) : 0;
+
+  const oee = availability * performance * quality;
+
+  document.getElementById('availVal').textContent = Math.round(availability*100) + '%';
+  document.getElementById('perfVal').textContent = Math.round(performance*100) + '%';
+  document.getElementById('qualVal').textContent = Math.round(quality*100) + '%';
+
+  document.getElementById('availBar').style.width = (availability*100) + '%';
+  document.getElementById('perfBar').style.width = (performance*100) + '%';
+  document.getElementById('qualBar').style.width = (quality*100) + '%';
+
+  const oeePct = Math.round(oee*100);
+  document.getElementById('oeeValue').textContent = oeePct + '%';
+
+  const statusEl = document.getElementById('oeeStatus');
+  const valueEl = document.getElementById('oeeValue');
+  let color, label;
+  if(oeePct >= 75){ color = 'var(--green)'; label = 'Strong for continuous tile line'; }
+  else if(oeePct >= 55){ color = 'var(--amber)'; label = 'Typical range'; }
+  else { color = 'var(--red)'; label = 'Below typical — investigate'; }
+  statusEl.textContent = label;
+  statusEl.style.color = color;
+  valueEl.style.color = color;
+
+  document.getElementById('availBar').style.background = color;
+  document.getElementById('perfBar').style.background = color;
+  document.getElementById('qualBar').style.background = color;
+
+  const arc = document.getElementById('gaugeArc');
+  const totalLength = 298.5;
+  const offset = totalLength - (totalLength * oee);
+  arc.style.stroke = color;
+  arc.style.strokeDashoffset = offset;
+}
+
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
+
+loadStage('pressing');
+</script>
+
+</body>
+</html>
