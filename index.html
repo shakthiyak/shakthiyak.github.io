@@ -3,136 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Production Tools | Shakthi Chathuranga</title>
-    <meta name="description" content="A collection of production and operations tools built by Shakthi Chathuranga for ceramic manufacturing workflows.">
-    <meta property="og:title" content="Production Tools | Shakthi Chathuranga">
-    <meta property="og:description" content="A collection of production and operations tools built by Shakthi Chathuranga for ceramic manufacturing workflows.">
-    <meta property="og:image" content="sc-logo.png">
-    <meta property="og:type" content="website">
-
-    <link rel="icon" href="sc-logo.png">
+    <title>Shakthi Chathuranga | Production Planning & Operations Portfolio</title>
     <link rel="stylesheet" href="style.css">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZBHZ86LKE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4ZBHZ86LKE');
+    </script>   
+
+    <meta name="description" content="Shakthi Chathuranga - Production Planning & Operations Professional with 12 years of ERP, MIS & Inventory Control experience in ceramic manufacturing (UAE). Now based in Sri Lanka.">
+    <meta property="og:title" content="Shakthi Chathuranga | Production Planning & Operations Portfolio">
+    <meta property="og:description" content="Production & Operations professional with 12 years of experience in ceramic manufacturing, ERP systems, MIS reporting & inventory control.">
+    <meta property="og:image" content="my-profile.jpg">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="sc-logo.png">
+
+    <meta name="google-site-verification" content="yPGnw2UnZEPm_yf92hNUtMgcuIrORqYuyYEKzWy5QZ8" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Shakthi Chathuranga",
+      "jobTitle": "Production Planning & Operations Professional",
+      "description": "Production Planning and Operations professional with 12 years of experience in ceramic manufacturing, specializing in production planning, operational coordination, ERP systems, and inventory control.",
+      "url": "https://shakthiyak.github.io/index.html",
+      "image": "https://shakthiyak.github.io/my-profile.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/shakthi-chathuranga/"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ambalangoda",
+        "addressCountry": "LK"
+      },
+      "knowsAbout": ["Production Planning", "ERP Systems", "MIS Reporting", "Inventory Control", "SAP PP", "SAP MM", "Ceramic Manufacturing"],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "IMBS Green Campus"
+      }
+    }
+    </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; }
+        body { background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
 
-        .page-header {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px 20px 20px;
-            text-align: center;
-            scroll-margin-top: 90px;
+        .hero {
+            position: relative; min-height: 90vh; display: flex; align-items: center; justify-content: center;
+            padding: 80px 20px;
+            background: linear-gradient(rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.97)), 
+                        url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
         }
-        .page-header h1 { font-size: 34px; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
-        .page-header p { font-size: 15px; color: #94a3b8; max-width: 600px; margin: 0 auto; }
+        .hero-container { max-width: 1200px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 60px; }
+        .profile-img-container { flex: 1; display: flex; justify-content: center; }
+        .profile-img {
+            width: 340px; height: 340px; border-radius: 50%; object-fit: cover; object-position: center 20%;
+            border: 4px solid rgba(56, 189, 248, 0.2); box-shadow: 0 0 40px rgba(56, 189, 248, 0.25);
+        }
+        .hero-content { flex: 1.5; }
+        .profile-badge {
+            display: inline-block; padding: 6px 14px; background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 9999px; color: #38bdf8;
+            font-size: 13px; font-weight: 600; margin-bottom: 14px;
+        }
+        .open-to-work-badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+            background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 9999px; color: #4ade80; font-size: 13px; font-weight: 600;
+            margin-bottom: 20px; margin-left: 10px;
+        }
+        .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+        .hero h1 { font-size: clamp(28px, 6vw, 48px); font-weight: 700; color: #ffffff; line-height: 1.25; margin-bottom: 20px; overflow-wrap: break-word; }
+        .hero h1 span {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 17px; color: #94a3b8; line-height: 1.6; margin-bottom: 30px; }
+        .stats-bar { display: flex; gap: 40px; margin-bottom: 35px; }
+        .stat-item h3 { font-size: 28px; color: #38bdf8; font-weight: 700; }
+        .stat-item p { font-size: 13px; color: #64748b; margin: 0; }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .linkedin-btn {
+            display: inline-flex; align-items: center; gap: 10px; background-color: #0077b5; color: white;
+            text-decoration: none; padding: 14px 28px; font-weight: 600; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .linkedin-btn:hover { background-color: #005987; transform: translateY(-2px); }
+        .resume-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(to right, #0ea5e9, #2563eb); color: white; text-decoration: none;
+            padding: 14px 28px; font-weight: 600; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .resume-btn:hover { transform: translateY(-2px); background: linear-gradient(to right, #38bdf8, #2563eb); }
 
-        .category-label {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px 0 20px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        .section-title {
+            font-size: 28px; font-weight: 700; color: #ffffff; margin-bottom: 35px; text-align: center;
+            position: relative; scroll-margin-top: 100px;
         }
-        .category-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-        }
-        .category-sub {
-            max-width: 1200px;
-            margin: 6px auto 0;
-            padding: 0 20px;
-            font-size: 13.5px;
-            color: #64748b;
+        .section-title::after {
+            content: ''; display: block; width: 50px; height: 3px; background: #38bdf8;
+            margin: 10px auto 0 auto; border-radius: 2px;
         }
 
-        .tools-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px 80px 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+        .about-container {
+            max-width: 800px; margin: 0 auto 80px auto; text-align: center;
         }
-
-        .tool-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
+        .about-container p {
+            font-size: 15.5px; color: #cbd5e1; line-height: 1.8; margin-bottom: 18px;
         }
-        .tool-card:hover { transform: translateY(-5px); border-color: rgba(56, 189, 248, 0.3); }
+        .about-container p:last-child { margin-bottom: 0; }
 
-        .tool-icon { font-size: 32px; margin-bottom: 16px; }
-        .tool-card h2 { font-size: 20px; color: #ffffff; margin-bottom: 10px; }
-        .tool-card p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 22px; }
-
-        .tool-status {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            width: fit-content;
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 80px; }
+        .skill-card {
+            background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px;
+            padding: 25px; transition: all 0.3s ease;
         }
-        .status-live { color: #4ade80; background: rgba(34, 197, 94, 0.1); }
-        .status-soon { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+        .skill-card:hover { transform: translateY(-5px); border-color: rgba(56, 189, 248, 0.3); }
+        .skill-card h3 { font-size: 18px; color: #38bdf8; margin-bottom: 12px; }
+        .skill-card p { font-size: 14px; color: #94a3b8; line-height: 1.5; }
 
+        .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 80px; }
+        .panel-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px; padding: 35px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .panel-header-layout { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; margin-bottom: 15px; }
+        .panel-info h2 { font-size: 24px; color: #ffffff; margin-bottom: 8px; }
+        .panel-info p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+        .project-tag {
+            color: #818cf8; font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 4px; display: block;
+        }
+        .company-badge-img {
+            height: 50px; width: auto; background: #ffffff; padding: 6px; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); object-fit: contain;
+        }
+        .visual-box { height: 160px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .tool-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+        .tool-chip {
+            font-size: 12px; font-weight: 600; color: #94a3b8; background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 6px 12px; border-radius: 8px; white-space: nowrap;
+        }
+        .factory-img {
+            background: linear-gradient(rgba(30, 41, 59, 0.2), rgba(15, 23, 42, 0.4)),
+                        url('https://images.pexels.com/photos/3094030/pexels-photo-3094030.jpeg?auto=compress&cs=tinysrgb&w=600') no-repeat center center/cover;
+        }
+        .erp-img {
+            background: linear-gradient(rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6)),
+                        url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop') no-repeat center center/cover;
+        }
+        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; }
         .cta-btn {
             display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(to right, #0ea5e9, #2563eb);
-            color: #ffffff; text-decoration: none; padding: 12px 24px;
-            font-size: 14px; font-weight: 600; border-radius: 10px;
-            transition: all 0.3s ease; align-self: flex-start;
+            background: linear-gradient(to right, #0ea5e9, #2563eb); color: #ffffff; text-decoration: none;
+            padding: 12px 24px; font-size: 14px; font-weight: 600; border-radius: 10px; transition: all 0.3s ease;
         }
         .cta-btn:hover { transform: translateY(-2px); background: linear-gradient(to right, #38bdf8, #2563eb); }
+        .cta-btn.gold { background: linear-gradient(to right, #d97706, #f59e0b); }
+        .cta-btn.gold:hover { background: linear-gradient(to right, #f59e0b, #fbbf24); }
 
-        .disabled-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: #334155; color: #94a3b8; text-decoration: none;
-            padding: 12px 24px; font-size: 14px; font-weight: 600;
-            border-radius: 10px; cursor: not-allowed; opacity: 0.7; align-self: flex-start;
+        .timeline {
+            position: relative; max-width: 900px; margin: 0 auto 80px auto; padding-left: 30px;
+            border-left: 2px solid rgba(56, 189, 248, 0.25);
+        }
+        .timeline-item { position: relative; margin-bottom: 35px; padding-left: 30px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -39px; top: 4px; width: 16px; height: 16px;
+            border-radius: 50%; background: #0f172a; border: 3px solid #38bdf8;
+        }
+        .timeline-date { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .timeline-item h3 { font-size: 19px; color: #ffffff; margin-bottom: 4px; }
+        .timeline-item .timeline-company { font-size: 14px; color: #38bdf8; margin-bottom: 10px; font-weight: 500; }
+        .timeline-item p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+
+        .leadership-container {
+            max-width: 900px; margin: 0 auto 80px auto; background: rgba(30, 41, 59, 0.4);
+            border-radius: 20px; padding: 35px; border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .leadership-intro { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px; text-align: center; }
+        .leadership-list { display: flex; flex-direction: column; gap: 16px; }
+        .leadership-item {
+            display: flex; align-items: flex-start; gap: 15px; background: rgba(15, 23, 42, 0.5);
+            padding: 18px; border-radius: 12px; transition: all 0.3s ease;
+        }
+        .leadership-item:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-2px); }
+        .leadership-icon {
+            font-size: 20px; flex-shrink: 0; width: 34px; height: 34px; display: flex; align-items: center;
+            justify-content: center; background: rgba(56, 189, 248, 0.1); border-radius: 8px;
+        }
+        .leadership-item p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+        .leadership-item p strong { color: #ffffff; }
+
+        .certs-container {
+            background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 80px;
+        }
+        .certs-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .cert-item { display: flex; align-items: flex-start; gap: 15px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 12px; }
+        .cert-icon { font-size: 24px; }
+        .cert-details h4 { font-size: 15px; color: #ffffff; margin-bottom: 4px; }
+        .cert-details p { font-size: 13px; color: #64748b; }
+        .certs-more { text-align: center; margin-top: 20px; font-size: 13px; color: #64748b; }
+        .certs-more a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+        .certs-more a:hover { text-decoration: underline; }
+
+        .edu-lang-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 25px; max-width: 900px; margin: 0 auto 80px auto; }
+        .edu-card, .lang-card { background: rgba(30, 41, 59, 0.4); border-radius: 20px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .edu-card h3, .lang-card h3 { font-size: 16px; color: #38bdf8; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .edu-entry { margin-bottom: 16px; }
+        .edu-entry:last-child { margin-bottom: 0; }
+        .edu-entry h4 { font-size: 15px; color: #ffffff; margin-bottom: 3px; }
+        .edu-entry p { font-size: 13px; color: #94a3b8; }
+        .lang-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .lang-tag {
+            padding: 8px 16px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 9999px; color: #e2e8f0; font-size: 13px; font-weight: 500;
         }
 
-        /* Placeholder card for future tools */
-        .tool-card.upcoming {
-            border-style: dashed;
-            border-color: rgba(255, 255, 255, 0.15);
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+        .speech-container { max-width: 900px; margin: 0 auto 80px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .speech-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between;
         }
-        .tool-card.upcoming .tool-icon { opacity: 0.5; }
-        .tool-card.upcoming h2 { color: #64748b; }
-        .tool-card.upcoming p { margin-bottom: 0; }
-
-        footer {
-            padding: 30px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #64748b;
-            font-size: 13px;
-            text-align: center;
+        .speech-quote { font-size: 15px; color: #e2e8f0; line-height: 1.6; font-style: italic; margin-bottom: 16px; }
+        .speech-quote::before { content: '"'; color: #38bdf8; font-size: 20px; }
+        .speech-quote::after { content: '"'; color: #38bdf8; font-size: 20px; }
+        .speech-attribution {
+            font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px;
         }
 
-        @media (max-width: 640px) {
-            nav { padding: 0 20px; }
+        .testimonials-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-bottom: 80px; align-items: start; }
+        .testimonial-card { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 30px; }
+        .testimonial-card .quote-icon { width: 32px; height: 32px; color: #38bdf8; opacity: 0.6; margin-bottom: 14px; }
+        .testimonial-card p.quote { font-size: 14px; color: #cbd5e1; line-height: 1.7; margin-bottom: 18px; }
+        .testimonial-author { font-size: 14px; color: #38bdf8; font-weight: 600; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 14px; }
+        .testimonial-author span { display: block; font-size: 12px; color: #64748b; font-weight: 400; margin-top: 3px; }
+
+        .awards-container { display: flex; flex-direction: column; gap: 20px; }
+        .award-subcard { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(30, 41, 59, 0.6); border-radius: 16px; padding: 22px; transition: all 0.3s ease; }
+        .award-subcard:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-2px); }
+        .award-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; margin-bottom: 12px; }
+        .award-title-area { flex: 1; }
+        .award-year-badge {
+            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); color: #38bdf8;
+            padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; white-space: nowrap; align-self: flex-start;
+        }
+        .award-subcard h4 { font-size: 16px; color: #ffffff; margin-bottom: 4px; }
+        .award-subcard .award-meta { font-size: 12px; color: #64748b; font-weight: 500; }
+        .award-subcard p { font-size: 13.5px; color: #94a3b8; line-height: 1.6; margin-bottom: 15px; }
+
+        .award-img-preview {
+            width: 100%; height: 140px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer; transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .award-img-preview:hover { opacity: 0.85; transform: scale(1.01); }
+
+        .lightbox-modal {
+            display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .lightbox-modal.show { display: flex; opacity: 1; }
+        .lightbox-content { max-width: 85%; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
+        .lightbox-close { position: absolute; top: 25px; right: 35px; color: #94a3b8; font-size: 35px; font-weight: 300; cursor: pointer; transition: color 0.2s; }
+        .lightbox-close:hover { color: #ffffff; }
+
+        .gallery-container {
+            max-width: 1100px; margin: 0 auto 80px auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+        }
+        .gallery-card {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px; padding: 14px; transition: all 0.3s ease;
+        }
+        .gallery-card:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-3px); }
+        .gallery-card img {
+            width: 100%; height: 170px; object-fit: cover; object-position: top;
+            border-radius: 10px; cursor: pointer; border: 1px solid rgba(255,255,255,0.08);
+        }
+        .gallery-caption { padding: 12px 4px 4px; font-size: 13.5px; color: #cbd5e1; font-weight: 600; text-align: center; }
+
+        .contact-container {
+            max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px; margin-bottom: 20px;
+        }
+        .contact-card {
+            background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 22px;
+            text-align: center; text-decoration: none; transition: all 0.3s ease;
+        }
+        .contact-card:hover { transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.3); }
+        .contact-icon { font-size: 26px; margin-bottom: 10px; }
+        .contact-card h4 { font-size: 14px; color: #64748b; margin-bottom: 4px; font-weight: 500; }
+        .contact-card p { font-size: 15px; color: #ffffff; font-weight: 600; word-break: break-word; }
+
+        footer { padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); color: #64748b; font-size: 13px; text-align: center; margin-top: 60px; }
+
+        @media (max-width: 968px) {
+            .hero-container, .certs-list, .testimonials-grid, .edu-lang-grid { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
+            .hero-content { width: 100%; }
+            .stats-bar { justify-content: center; }
+            .btn-group, .btn-row { justify-content: center; }
+            .panel-header-layout { flex-direction: column; align-items: center; text-align: center; }
+            .timeline { padding-left: 20px; }
+            .timeline-item { padding-left: 20px; }
+            .timeline-item::before { left: -29px; }
+            .lang-tags { justify-content: center; }
+            .leadership-item { flex-direction: column; text-align: center; align-items: center; }
         }
     </style>
 </head>
@@ -140,11 +327,10 @@
 
     <nav>
         <a href="index.html" class="logo">
-            <img src="sc-logo.png" alt="SC. Portal logo">
-        </a>
+            <img src="sc-logo.png" alt="SC. Portal logo">        </a>
         <ul class="nav-tabs">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="tools.html" class="active">Production Tools</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="tools.html">Production Tools</a></li>
             <li><a href="ceramic_news.html">Ceramic News</a></li>
             <li><a href="Ceramic_Industry_Network.html">Industry Network</a></li>
             <li><a href="ceramic_field_guide.html">Ceramic Field Guide</a></li>
@@ -152,231 +338,359 @@
         </ul>
     </nav>
 
-    <div class="page-header">
-        <h1>Production Tools</h1>
-        <p>A growing set of small tools built to solve real problems on the ceramic production floor — starting with a delivery date & yield calculator, with more on the way.</p>
+    <div class="hero">
+        <div class="hero-container">
+            <div class="profile-img-container">
+                <img src="my-profile.jpg" alt="Shakthi Chathuranga" class="profile-img">
+            </div>
+            <div class="hero-content">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 20px;">
+                    <div class="profile-badge" style="margin-bottom: 0;">💼 Senior Operations & Planning Portfolio</div>
+                    <div class="open-to-work-badge" style="margin: 0;"><span class="pulse-dot"></span> Open to Senior Production/Operations roles in Sri Lanka</div>
+                </div>
+                <h1>Hi, I'm <span>Shakthi Chathuranga</span><br>Production Planning & ERP Specialist</h1>
+                <p>An Operations professional with 12 years of international experience in ceramic manufacturing. Specializing in factory data management, yield tracking, and ERP workflows to streamline shop-floor productivity. Recently returned to Sri Lanka after a successful career in the UAE.</p>
+
+                <div class="stats-bar">
+                    <div class="stat-item"><h3>12+ Years</h3><p>UAE Industrial Exp</p></div>
+                    <div class="stat-item"><h3>3+ Core</h3><p>ERP Ecosystems</p></div>
+                    <div class="stat-item"><h3>100%</h3><p>Data Accuracy</p></div>
+                </div>
+
+                <div class="btn-row">
+                    <a href="https://www.linkedin.com/in/shakthi-chathuranga/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        💼 Connect on LinkedIn
+                    </a>
+                    <a href="Shakthi_Chathuranga_CV.pdf" target="_blank" rel="noopener noreferrer" class="resume-btn">
+                        📄 Download CV
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="category-label">🏭 Production Tools</div>
-    <p class="category-sub">Built specifically for ceramic sanitaryware production workflows.</p>
-    <div class="tools-container">
+    <div class="main-container">
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🧮</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Ceramic Production Calculator</h2>
-                <p>Factors in Clay Loss %, Firing Yield %, and dynamic variables to estimate required production days and instantly secure a Confirmed Delivery Date.</p>
+        <h2 class="section-title">About Me</h2>
+        <div class="about-container">
+            <p>I'm a Production and Operations professional with 12 years of experience in ceramic manufacturing, specializing in production planning, operational coordination, ERP systems, and inventory control. My work has centered on monitoring production performance, coordinating teams, and stepping into leadership responsibilities when required to keep daily production targets and operational efficiency on track.</p>
+            <p>Across my career I've built deep experience in ERP reporting, production scheduling, and cross-functional coordination between production, stores, and sales departments — always with the goal of ensuring timely order fulfillment and meeting customer delivery expectations. I've also developed a strong ability to analyze operational data and support management decisions that optimize productivity and streamline workflows.</p>
+            <p>Beyond day-to-day execution, I was regularly trusted to step up when it mattered most — independently managing production planning and reporting for around 10 months during the COVID-19 travel restrictions, and serving as Production Meeting Secretary for over a year. I recently returned to Sri Lanka after a 12-year career in the UAE, and this site is where I document the tools, systems, and lessons from that journey.</p>
+        </div>
+
+        <h2 class="section-title">Core Competencies</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Production Planning</h3>
+                <p>Optimizing daily manufacturing schedules, resource allocation, and shop-floor workflow execution to achieve aggressive targets.</p>
             </div>
-            <a href="production_calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🧱</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Ceramic Pallet Builder</h2>
-                <p>Provides interactive 2D and 3D isometric visualization to optimize box stacking, layer counts, total cargo weight, and overall pallet efficiency.</p>
+            <div class="skill-card">
+                <h3>MIS & Data Analytics</h3>
+                <p>Developing structured daily, weekly, and monthly yield reports, manpower metrics, and operational KPIs for management review.</p>
             </div>
-            <a href="ceramic_pallet_builder.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🚢</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Container Loading Calculator</h2>
-                <p>Optimizes volumetric container loading with interactive 2D floor blueprints and 3D isometric models for standard 20ft, 40ft, or custom cargo layout space.</p>
+            <div class="skill-card">
+                <h3>ERP Operations</h3>
+                <p>Managing system entries and master data across FACTS, xAct, and Infos ERP ecosystems with precision accuracy.</p>
             </div>
-            <a href="container_loader.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">📅</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Promised Date Calculator</h2>
-                <p>Tracks casting through 1st and 2nd firing yields, WIP by stage, and daily casting logs to calculate FG balance, casting required, and a live Promised Date — mirrors the WIP / Promised Date workbook.</p>
+            <div class="skill-card">
+                <h3>Inventory Control</h3>
+                <p>Executing stock reconciliation and structured variance analysis to minimize operational downtime and stop material waste.</p>
             </div>
-            <a href="promised-date-calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🔄</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Ceramic Unit Converter</h2>
-                <p>Quick conversions between weight, pieces, volume, pallets, tons, and containers — with editable reference rates for your product mix.</p>
+            <div class="skill-card">
+                <h3>Team Leadership & Coordination</h3>
+                <p>Stepping into operational leadership when required — manpower/workforce monitoring, supervising teams, and driving cross-functional alignment between production, stores, and sales.</p>
             </div>
-            <a href="ceramic-unit-converter.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">📊</div>
-                <span class="tool-status status-soon">● Coming Soon</span>
-                <h2>Excel Production Tracker</h2>
-                <p>A downloadable Excel-based tracker for daily production, inventory, and manpower KPIs — for teams that prefer offline reporting.</p>
+            <div class="skill-card">
+                <h3>Process Improvement</h3>
+                <p>Identifying operational trends and workflow bottlenecks, then implementing structured improvements that lift productivity and efficiency.</p>
             </div>
-            <a href="javascript:void(0);" class="disabled-btn" title="Coming soon">📥 Coming Soon</a>
         </div>
 
-    </div>
-
-    <div class="category-label">🧱 Tile Production Tools</div>
-    <p class="category-sub">Built for ceramic tile press, glazing, and roller kiln lines — using the same OEE capacity-planning method used worldwide.</p>
-    <div class="tools-container">
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🚚</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Tile Order · Delivery Date Calculator</h2>
-                <p>Order Qty → press-line output (OEE method) → full process timeline (Press, Dry, Glaze, Kiln, Sort, Pack) → Confirmed Delivery Date, with a sq.ft / sq.meter toggle.</p>
+        <h2 class="section-title" id="experience">Professional Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">November 2014 – May 2026</div>
+                <h3>Production Planning & System Operation Executive</h3>
+                <div class="timeline-company">General Ceramics Co. Sharjah J.S.C · UAE</div>
+                <p>Owned MIS reporting and ERP data accuracy (FACTS, xAct, Infos) across production, inventory, and workforce operations — cutting inventory discrepancies through structured stock reconciliation.</p>
             </div>
-            <a href="tile_order_calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">📐</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Tile Production Planning Calculator</h2>
-                <p>Estimates realistic daily and monthly press-line output (area, pieces, boxes) using the OEE method — Availability × Performance × Quality — with a sq.ft / sq.meter toggle.</p>
+            <div class="timeline-item">
+                <div class="timeline-date">October 2011 – September 2014</div>
+                <h3>Assistant System Administrator</h3>
+                <div class="timeline-company">Virtual System Solutions (Pvt) Ltd · Sri Lanka</div>
+                <p>Provided ERP end-user support, server/database configuration, and IT troubleshooting across teams.</p>
             </div>
-            <a href="tile_production_planner.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
         </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">⚙️</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>OEE Calculator — Ceramic Tiles</h2>
-                <p>Calculates real-world OEE for the Pressing, Glazing, and Roller Kiln stages of tile production, with realistic industry benchmarks for each stage.</p>
+        <div class="featured-grid">
+            <div class="panel-card">
+                <div class="panel-header-layout">
+                    <div class="panel-info">
+                        <span class="project-tag">Major System Project</span>
+                        <h2>FACTS ERP Implementation</h2>
+                    </div>
+                    <img src="general-ceramics-logo.jpg" alt="General Ceramics Logo" class="company-badge-img">
+                </div>
+                <div class="panel-info" style="margin-top: -15px;">
+                    <p>Central point of contact between production teams and development programmers, driving the system hands-on from requirements mapping and data validation through to user acceptance testing and rollout.</p>
+                </div>
+                <div class="visual-box erp-img"></div>
             </div>
-            <a href="oee_calculator_tiles.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
 
-    </div>
-
-    <div class="category-label">🛠️ Generic Tools</div>
-    <p class="category-sub">General-purpose utilities — useful on any factory floor, not just ceramics.</p>
-    <div class="tools-container">
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">⏱️</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>Overtime Calculator</h2>
-                <p>Select a country to auto-switch currency and suggested OT multiplier, then calculate overtime hours and pay for production staff.</p>
+            <div class="panel-card">
+                <div class="panel-info">
+                    <span class="project-tag">Internal Systems &amp; Tools</span>
+                    <h2>Production Tools Suite</h2>
+                    <p>A growing set of tools built for the ceramic production floor — production &amp; delivery date calculators, pallet/container loading optimizers, unit converters, plus generic payroll and QR tools.</p>
+                    <div class="btn-group">
+                        <a href="tools.html" class="cta-btn">Explore Tools (8 Live) 🚀</a>
+                    </div>
+                </div>
+                <div class="tool-chip-row">
+                    <span class="tool-chip">🧮 Production Calculator</span>
+                    <span class="tool-chip">🧱 Pallet Builder</span>
+                    <span class="tool-chip">🚢 Container Loader</span>
+                    <span class="tool-chip">📅 Promised Date Calculator</span>
+                    <span class="tool-chip">🔄 Unit Converter</span>
+                    <span class="tool-chip">⏱️ Overtime Calculator</span>
+                    <span class="tool-chip">💼 EOSB Calculator</span>
+                    <span class="tool-chip">🔗 QR Generator</span>
+                </div>
             </div>
-            <a href="ot-calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">💼</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>EOSB / Gratuity Calculator</h2>
-                <p>Select a country to auto-fill its typical End-of-Service Benefit structure, then estimate gratuity payouts for production staff.</p>
+            <div class="panel-card">
+                <div class="panel-info">
+                    <span class="project-tag" style="color: #fbbf24;">For Sale &middot; Excel Systems</span>
+                    <h2>Templates & Systems for Sale</h2>
+                    <p>Real, production-tested Excel systems built from 12 years of running a ceramic factory floor — casting, drying, glazing, warehousing, and sales tracking, all linked together.</p>
+                    <div class="btn-group">
+                        <a href="tools.html#systems-for-sale" class="cta-btn gold">View All Systems 💰</a>
+                        <a href="#gallery" class="cta-btn" style="background: rgba(255,255,255,0.06);">See Dashboard Previews 📊</a>
+                    </div>
+                </div>
+                <div class="tool-chip-row">
+                    <span class="tool-chip">🏭 Full Factory Management System</span>
+                    <span class="tool-chip">📦 Warehouse & Sales Tracker</span>
+                    <span class="tool-chip">🧾 Production Incentive Tracker</span>
+                    <span class="tool-chip">💰 Production Budget Tracker</span>
+                    <span class="tool-chip">🧱 Raw Material Management</span>
+                    <span class="tool-chip">⏱️ WIP Management System</span>
+                </div>
             </div>
-            <a href="eosb-calculator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
         </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🔗</div>
-                <span class="tool-status status-live">● Live</span>
-                <h2>QR Code Generator</h2>
-                <p>Turn any link, WhatsApp number, email, or plain text into a scannable QR code — for a CV, LinkedIn, or a factory floor SOP poster.</p>
+        <h2 class="section-title" id="gallery">Dashboard Gallery</h2>
+        <div class="gallery-container">
+            <div class="gallery-card">
+                <img src="Images/dashboard-style-performance.png" alt="Style Performance Monthly Dashboard" onclick="openLightbox(this.src)">
+                <div class="gallery-caption">Style Performance Monthly Dashboard</div>
             </div>
-            <a href="qr-code-generator.html" target="_blank" rel="noopener noreferrer" class="cta-btn">Launch Tool 🚀</a>
-        </div>
-
-        <div class="tool-card upcoming">
-            <div class="tool-icon">➕</div>
-            <h2>More Tools Coming</h2>
-            <p>New production & operations tools will appear here as they're built.</p>
-        </div>
-
-    </div>
-
-    <div class="page-header" id="systems-for-sale" style="padding-top: 20px;">
-        <h1>Templates & Systems for Sale</h1>
-        <p>Real, production-tested Excel systems built for ceramic factory operations — casting, drying, glazing, warehousing, and sales tracking, all in one linked workflow. Built from 12 years of running these processes daily.</p>
-    </div>
-
-    <div class="tools-container">
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🏭</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>Full Ceramic Factory Management System</h2>
-                <p>A complete linked Excel system covering Casting, Dryer, Greenware, Trap Glaze, Spray, and Glost Inspection processes, plus Warehouse Input, Sales Records, and yearly performance summaries. Built and used to run a real factory floor.</p>
+            <div class="gallery-card">
+                <img src="Images/dashboard-wip.png" alt="WIP Management Dashboard" onclick="openLightbox(this.src)">
+                <div class="gallery-caption">WIP Management Dashboard</div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20Full%20Ceramic%20Factory%20Management%20System" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">📦</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>Warehouse & Sales Tracker</h2>
-                <p>Standalone module for warehouse input and sales records, with a total summary comparing warehouse stock vs. sales — yearly view, ready to plug into your own factory data.</p>
+            <div class="gallery-card">
+                <img src="Images/dashboard-raw-material.png" alt="Raw Material Management Dashboard" onclick="openLightbox(this.src)">
+                <div class="gallery-caption">Raw Material Management Dashboard</div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20Warehouse%20%26%20Sales%20Tracker" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
-        </div>
-
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🧾</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>Production Incentive Tracker</h2>
-                <p>Manpower incentive calculations linked to daily production output — the same format used to run payroll-linked incentive reporting for a full production team.</p>
+            <div class="gallery-card">
+                <img src="Images/dashboard-budget.png" alt="Production Budget Dashboard" onclick="openLightbox(this.src)">
+                <div class="gallery-caption">Production Budget Dashboard</div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20Production%20Incentive%20Tracker" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
         </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">💰</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>Production Budget Tracker</h2>
-                <p>Yearly production budget planning and tracking against actuals — built to keep department-level spend visible month over month.</p>
+        <h2 class="section-title" id="leadership">Leadership & Operational Coordination</h2>
+        <div class="leadership-container">
+            <p class="leadership-intro">Beyond day-to-day execution, consistently trusted to step up and take ownership of operations at a higher level.</p>
+            <div class="leadership-list">
+                <div class="leadership-item">
+                    <div class="leadership-icon">🧭</div>
+                    <p>Regularly assumed <strong>day-to-day operational monitoring responsibilities</strong> during the annual leave or extended absence of the immediate superior, ensuring continuity of production planning, reporting, and cross-functional coordination.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">🌍</div>
+                    <p>During the <strong>COVID-19 travel restriction period</strong>, independently carried operational responsibility for approximately <strong>10 months</strong> while the immediate superior was unable to return.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">📝</div>
+                    <p>Served as <strong>Production Meeting Secretary for over a year</strong> — preparing draft Minutes of Meeting (MOM), documenting action items, and driving follow-up across departments.</p>
+                </div>
+                <div class="leadership-item">
+                    <div class="leadership-icon">🤝</div>
+                    <p>Supported the Production Manager in cross-functional coordination, including <strong>participation in Sales meetings</strong> to align production capacity with customer delivery requirements.</p>
+                </div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20Production%20Budget%20Tracker" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
         </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">🧱</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>Raw Material Management</h2>
-                <p>Tracks raw material stock levels, consumption, and reordering for clay, glaze, and other production inputs — built to prevent shortages and reduce waste.</p>
+        <h2 class="section-title">Professional Certifications</h2>
+        <div class="certs-container">
+            <div class="certs-list">
+                <div class="cert-item">
+                    <div class="cert-icon">🎓</div>
+                    <div class="cert-details">
+                        <h4>Supply Chain Management Specialization</h4>
+                        <p>Rutgers University (via Coursera)</p>
+                    </div>
+                </div>
+                <div class="cert-item">
+                    <div class="cert-icon">⚙️</div>
+                    <div class="cert-details">
+                        <h4>SAP Production Planning (PP) & Materials Management (MM)</h4>
+                        <p>LinkedIn Learning</p>
+                    </div>
+                </div>
+                <div class="cert-item">
+                    <div class="cert-icon">📈</div>
+                    <div class="cert-details">
+                        <h4>Statistics and Data Analysis with Excel: Advanced</h4>
+                        <p>Macquarie University (via Coursera)</p>
+                    </div>
+                </div>
+                <div class="cert-item">
+                    <div class="cert-icon">💻</div>
+                    <div class="cert-details">
+                        <h4>Becoming an SAP Professional</h4>
+                        <p>SAP (via Coursera)</p>
+                    </div>
+                </div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20Raw%20Material%20Management%20system" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
+            <div class="certs-more">+ 4 more certifications — see full list on <a href="Shakthi_Chathuranga_CV.pdf" target="_blank" rel="noopener noreferrer">CV</a></div>
         </div>
 
-        <div class="tool-card">
-            <div>
-                <div class="tool-icon">⏱️</div>
-                <span class="tool-status status-live">● Available</span>
-                <h2>WIP Management System</h2>
-                <p>Tracks work-in-progress across every production stage — casting through glost inspection — so bottlenecks and delays are visible before they cost you a delivery date.</p>
+        <h2 class="section-title">Education & Languages</h2>
+        <div class="edu-lang-grid">
+            <div class="edu-card">
+                <h3>Education</h3>
+                <div class="edu-entry">
+                    <h4>Diploma in Information & Communication Technology</h4>
+                    <p>IMBS Green Campus, Sri Lanka · Currently Enrolled</p>
+                </div>
+                <div class="edu-entry">
+                    <h4>G.C.E. Advanced Level & Ordinary Level</h4>
+                    <p>Walisinghe Harischandra College, Anuradhapura, Sri Lanka · 2010 / 2006</p>
+                </div>
             </div>
-            <a href="https://wa.me/shakthiyak?text=Hi%2C%20I%27m%20interested%20in%20the%20WIP%20Management%20System" target="_blank" rel="noopener noreferrer" class="cta-btn">💬 Ask About This</a>
+            <div class="lang-card">
+                <h3>Languages</h3>
+                <div class="lang-tags">
+                    <span class="lang-tag">English</span>
+                    <span class="lang-tag">Hindi</span>
+                    <span class="lang-tag">Sinhala</span>
+                </div>
+            </div>
         </div>
 
-    </div>
+        <h2 class="section-title">Recognition & Testimonials</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 8C6.5 8 4 10.5 4 13.5S6.5 19 9.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C15.3 9.5 12.7 8 9.5 8zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 19 19.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C25.3 9.5 22.7 8 19.5 8z" transform="translate(-4,-8)"/></svg>
+                <p class="quote">In over 23 years of hiring, managing, and developing people, I can count on one hand the professionals who have genuinely impressed me at every level. Shakthi is one of them. I have worked with Shakthi for 12 years at General Ceramics JSC Sharjah, and I will be straightforward: I do not want to lose him. But great talent deserves great opportunity, and that is exactly why I am writing this.
+                <br><br>
+                Shakthi is the kind of professional every manager dreams of having on their team. He is meticulous with data, sharp in his analysis, and dependable in a way that is increasingly hard to find. Whether it is MIS reporting, production scheduling, ERP management, inventory reconciliation, or workforce planning — he handles it all with precision and calm.
+                <br><br>
+                What truly defines him, though, is what happens when he faces the unknown. Give Shakthi a task he has never done before, and he does not hesitate. He researches, he learns, and he delivers properly. I have seen this again and again over 12 years.
+                <br><br>
+                The project that best captures who he is: Shakthi single-handedly led the development and deployment of a custom Production Control ERP system for our facility. He built the entire workflow from scratch — mapping processes, working hand-in-hand with developers, troubleshooting, and ensuring a smooth, disruption-free rollout. That project required technical skill, creative thinking, and real ownership. He brought all three.</p>
+                <div class="testimonial-author">Rathna Kumara <span>Production Planner &middot; General Ceramics Co. Sharjah J.S.C</span></div>
+            </div>
 
-    <div style="max-width: 900px; margin: -40px auto 60px auto; padding: 0 20px; text-align: center;">
-        <p style="font-size: 13px; color: #64748b;">Prices shared directly over WhatsApp based on your factory's setup — every ceramic operation is a little different, so each system is configured before delivery.</p>
+            <div class="awards-container">
+                <div class="testimonial-card">
+                    <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 8C6.5 8 4 10.5 4 13.5S6.5 19 9.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C15.3 9.5 12.7 8 9.5 8zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 19 19.5 19c1 0 2-.3 2.8-.8-.5 2-2 3.5-4 4.3l1 1.5c3.5-1.3 6-4.5 6-8.5v-2C25.3 9.5 22.7 8 19.5 8z" transform="translate(-4,-8)"/></svg>
+                    <p class="quote">I had the pleasure of working closely with Shakthi in a challenging environment. His exceptional skills, dedication, and attention to detail were instrumental in its success. I highly recommend Shakthi here for their dedication, professionalism, and ability to deliver results.</p>
+                    <div class="testimonial-author">Pubudu Sampath Rathnayake <span>Virtual System Solutions (Pvt) Ltd</span></div>
+                </div>
+
+                <div class="award-subcard">
+                    <div class="award-header">
+                        <div class="award-title-area">
+                            <h4>12 Years of Distinguished Service</h4>
+                            <div class="award-meta">General Ceramics Co. Sharjah J.S.C &middot; MIS Dept.</div>
+                        </div>
+                        <span class="award-year-badge">🏆 2026</span>
+                    </div>
+                    <p>Awarded in grateful recognition of twelve years of unwavering dedication, exceptional talent, and milestones in ERP Leadership, Technical Support Setup, and COVID-19 Response.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <img src="award-12years.jpg" alt="12 Years Distinguished Service Trophy" class="award-img-preview" onclick="openLightbox(this.src)">
+                        <img src="farewell-group.jpg" alt="Office Farewell Group" class="award-img-preview" onclick="openLightbox(this.src)">
+                    </div>
+                </div>
+
+                <div class="award-subcard">
+                    <div class="award-header">
+                        <div class="award-title-area">
+                            <h4>Outstanding Achievement Award</h4>
+                            <div class="award-meta">General Ceramics Ltd &middot; UAE</div>
+                        </div>
+                        <span class="award-year-badge">⭐ 2018</span>
+                    </div>
+                    <p>Presented in appreciation of outstanding dedication and hard work committed to accomplishing corporate manufacturing objectives.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <img src="award-2018.jpg" alt="Outstanding Achievement Shield" class="award-img-preview" onclick="openLightbox(this.src)">
+                        <img src="award-ceremony.jpg" alt="Award Ceremony Event" class="award-img-preview" onclick="openLightbox(this.src)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-content" id="lightbox-img">
+        </div>
+
+        <h2 class="section-title">Farewell Speech Highlights</h2>
+        <div class="speech-container">
+            <div class="speech-card">
+                <p class="speech-quote">Shakthi, you are really a resource for the general company.</p>
+                <div class="speech-attribution">Lakmal Wijekoon &middot; Finance Manager</div>
+            </div>
+            <div class="speech-card">
+                <p class="speech-quote">He had that capability to absorb everything quickly and adapt.</p>
+                <div class="speech-attribution">Gamini Ilukkumbure &middot; Production Manager</div>
+            </div>
+            <div class="speech-card">
+                <p class="speech-quote">He was an immense help to me in the production planning and planning of workflow.</p>
+                <div class="speech-attribution">Gamini Ilukkumbure &middot; Production Manager</div>
+            </div>
+            <div class="speech-card">
+                <p class="speech-quote">He did his role completely.</p>
+                <div class="speech-attribution">Hossam Eldeen Mahmoud &middot; General Manager</div>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="contact">Get in Touch</h2>
+        <div class="contact-container">
+            <a href="https://wa.me/94778604185?text=Hello" target="_blank" rel="noopener noreferrer" class="contact-card">
+                <div class="contact-icon">📱</div>
+                <p>Chat on WhatsApp</p>
+            </a>
+            <a href="https://www.linkedin.com/in/shakthi-chathuranga/" target="_blank" rel="noopener noreferrer" class="contact-card">
+                <div class="contact-icon">💼</div>
+                <p>Connect on LinkedIn</p>
+            </a>
+        </div>
+
     </div>
 
     <footer>
         &copy; 2026 Developed by Shakthi Chathuranga &middot; All Rights Reserved.
     </footer>
+
+    <script>
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = src;
+            lightbox.classList.add('show');
+        }
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('show');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
 
 </body>
 </html>
